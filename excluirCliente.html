@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f1f1f1;
+      }
+      header {
+        background-color: #6a1b9a;
+        color: white;
+        padding: 1rem;
+        text-align: center;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+      .versao {
+        font-size: 0.8rem;
+        color: #e0e0e0;
+      }
+      .container {
+        margin-top: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 0 1rem;
+      }
+      .btn-voltar {
+        background-color: #757575;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        width: 100%;
+        max-width: 400px;
+        padding: 0.9rem;
+        font-size: 1rem;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      p {
+        font-size: 1rem;
+        color: #333;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1><i class="fas fa-trash"></i> Excluir Cliente</h1>
+      <span class="versao">Versão 1.0</span>
+    </header>
+    <div class="container">
+      <p>🗑️ Em breve: selecione um cliente da lista para excluir seu cadastro permanentemente.</p>
+      <button class="btn-voltar" onclick="voltarHome()">
+        <i class="fas fa-arrow-left"></i> Voltar ao Menu
+      </button>
+    </div>
+
+    <script>
+      function voltarHome() {
+        window.location.href =
+          "https://script.google.com/macros/s/AKfycby-OH1LKK1aJaBXWyK6CPtl30pk3FKfFrXSfjGz5fjbgqEXjJl_rRjTtxP-bbBoko8-3g/exec?pagina=home";
+      }
+    </script>
+  </body>
+</html>

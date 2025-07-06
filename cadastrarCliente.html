@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastrar Cliente</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+      }
+
+      header {
+        background-color: #6a1b9a;
+        color: white;
+        padding: 1rem;
+        text-align: center;
+        font-size: 1.5rem;
+      }
+
+      .container {
+        background-color: white;
+        max-width: 500px;
+        margin: 2rem auto;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 0.7rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1rem;
+      }
+
+      .btn {
+        display: block;
+        width: 70%;
+        margin: 1rem auto;
+        padding: 0.8rem;
+        font-size: 1rem;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        color: white;
+      }
+
+      .btn.salvar {
+        background-color: #7e57c2;
+      }
+
+      .btn.voltar {
+        background-color: #888;
+      }
+
+      .btn.add {
+  background: none;
+  border: none;
+  color: #6a1b9a;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: left;
+  padding: 0;
+  margin: 0.5rem 0;
+  cursor: pointer;
+}
+
+
+      #mensagem {
+        text-align: center;
+        font-weight: bold;
+        margin-top: 1rem;
+      }
+
+      .selo-tag {
+  background-color: #e0e0e0;
+  border-radius: 12px;
+  padding: 0.3rem 0.7rem;
+  margin: 0.3rem;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.9rem;
+  gap: 0.5rem;
+}
+
+.selo-tag i {
+  cursor: pointer;
+  color: #888;
+}
+
+
+      #listaSelos {
+        background: #fff;
+        border: 1px solid #ccc;
+        max-height: 150px;
+        overflow-y: auto;
+        border-radius: 5px;
+        margin-top: 0.5rem;
+        display: none;
+      }
+
+      #listaSelos div {
+        padding: 0.5rem;
+        cursor: pointer;
+      }
+
+      #listaSelos div:hover {
+        background-color: #f2f2f2;
+      }
+
+      #selosSelecionados {
+        margin-top: 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>Cadastrar Cliente</header>
+    <div class="container">
+      <div class="form-group">
+        <label for="rota">Rota:</label>
+        <input type="text" id="rota" placeholder="Ex: Norte / Sul" />
+      </div>
+
+      <div class="form-group">
+        <label for="cliente">Cliente:</label>
+        <input type="text" id="cliente" placeholder="Nome do cliente" />
+      </div>
+
+      <div class="form-group">
+        <label for="endereco">Endereço:</label>
+        <input type="text" id="endereco" placeholder="Rua, número..." />
+      </div>
+
+      <div class="form-group">
+        <label for="bairro">Bairro:</label>
+        <input type="text" id="bairro" placeholder="Ex: Centro" />
+      </div>
+
+      <div class="form-group">
+  <button class="btn add" onclick="mostrarBuscaSelos()">+ Adicionar Máquina</button>
+
+  <div id="buscaSelos" style="display:none;">
+    <input type="text" id="campoBusca" placeholder="Buscar selo..." oninput="filtrarSelos()" />
+    <div id="listaSelos"></div>
+  </div>
+
+  <div id="selosSelecionados"></div>
+</div>
+
+
+      <button class="btn salvar" onclick="salvarCliente()">
+        <i class="fas fa-save"></i> Salvar Cliente
+      </button>
+
+      <button class="btn voltar" onclick="voltarHome()">
+        <i class="fas fa-arrow-left"></i> Voltar ao Menu
+      </button>
+
+      <div id="mensagem"></div>
+    </div>
+
+    <script>
+      let todosSelos = [];
+      let selosSelecionados = [];
+
+      document.addEventListener("DOMContentLoaded", carregarSelos);
+
+      function carregarSelos() {
+        google.script.run.withSuccessHandler(function (selos) {
+          todosSelos = selos;
+        }).listarSelos();
+      }
+
+      function mostrarBuscaSelos() {
+        document.getElementById("buscaSelos").style.display = "block";
+        document.getElementById("campoBusca").focus();
+        filtrarSelos();
+      }
+
+      function filtrarSelos() {
+        const termo = document.getElementById("campoBusca").value.toLowerCase();
+        const lista = document.getElementById("listaSelos");
+        lista.innerHTML = "";
+
+        const filtrados = todosSelos.filter(s =>
+          s.toLowerCase().includes(termo)
+        );
+
+        if (filtrados.length === 0) {
+          lista.style.display = "none";
+          return;
+        }
+
+        lista.style.display = "block";
+
+        filtrados.forEach(selo => {
+          const item = document.createElement("div");
+          item.textContent = selo;
+          item.onclick = function () {
+            if (!selosSelecionados.includes(selo)) {
+              selosSelecionados.push(selo);
+              atualizarSelosSelecionados();
+            }
+            document.getElementById("campoBusca").value = "";
+            lista.innerHTML = "";
+            lista.style.display = "none";
+          };
+          lista.appendChild(item);
+        });
+      }
+
+      function atualizarSelosSelecionados() {
+  const container = document.getElementById("selosSelecionados");
+  container.innerHTML = "";
+  selosSelecionados.forEach((selo, index) => {
+    const tag = document.createElement("span");
+    tag.className = "selo-tag";
+    tag.textContent = selo;
+
+    const icon = document.createElement("i");
+    icon.className = "fas fa-times";
+    icon.title = "Remover";
+    icon.onclick = () => {
+      selosSelecionados.splice(index, 1);
+      atualizarSelosSelecionados();
+    };
+
+    tag.appendChild(icon);
+    container.appendChild(tag);
+  });
+}
+      function salvarCliente() {
+        const rota = document.getElementById("rota").value.trim();
+        const cliente = document.getElementById("cliente").value.trim();
+        const endereco = document.getElementById("endereco").value.trim();
+        const bairro = document.getElementById("bairro").value.trim();
+        const msg = document.getElementById("mensagem");
+
+        msg.innerText = "";
+
+        if (!rota || !cliente || !endereco || !bairro) {
+          msg.style.color = "red";
+          msg.textContent = "❌ Preencha todos os campos!";
+          return;
+        }
+
+        const dados = {
+          rota,
+          cliente,
+          endereco,
+          bairro,
+          selos: selosSelecionados,
+        };
+
+        google.script.run.withSuccessHandler(function (resposta) {
+          if (resposta.includes("sucesso")) {
+            msg.style.color = "green";
+            document.getElementById("rota").value = "";
+            document.getElementById("cliente").value = "";
+            document.getElementById("endereco").value = "";
+            document.getElementById("bairro").value = "";
+            selosSelecionados = [];
+            atualizarSelosSelecionados();
+          } else {
+            msg.style.color = "red";
+          }
+
+          msg.textContent = resposta;
+          setTimeout(() => (msg.textContent = ""), 4000);
+        }).salvarCliente(dados);
+      }
+
+      function voltarHome() {
+        window.location.href =
+          "https://script.google.com/macros/s/AKfycby-OH1LKK1aJaBXWyK6CPtl30pk3FKfFrXSfjGz5fjbgqEXjJl_rRjTtxP-bbBoko8-3g/exec?pagina=gerenciarClientes";
+      }
+    </script>
+  </body>
+</html>
