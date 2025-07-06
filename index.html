@@ -1,0 +1,92 @@
+<!-- index.html (PWA com Cadastrar Cliente offline) -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fechamento App - Offline</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="manifest" href="manifest.json" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f2f2f2; margin: 0; padding: 0; }
+    header { background: #6a1b9a; color: white; text-align: center; padding: 1rem; }
+    .container { max-width: 500px; margin: 2rem auto; padding: 2rem; background: white; border-radius: 8px; }
+    .form-group { margin-bottom: 1rem; }
+    label { font-weight: bold; }
+    input[type="text"] { width: 100%; padding: 0.7rem; border: 1px solid #ccc; border-radius: 5px; }
+    .btn { display: block; width: 100%; margin-top: 1rem; padding: 0.8rem; border: none; border-radius: 5px; color: white; font-size: 1rem; }
+    .btn.salvar { background-color: #7e57c2; }
+    #mensagem { text-align: center; margin-top: 1rem; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><i class="fas fa-user-plus"></i> Cadastrar Cliente (Offline)</h1>
+  </header>
+  <div class="container">
+    <div class="form-group">
+      <label for="cliente">Cliente:</label>
+      <input type="text" id="cliente" placeholder="Nome do cliente" />
+    </div>
+    <div class="form-group">
+      <label for="rota">Rota:</label>
+      <input type="text" id="rota" placeholder="Ex: Norte" />
+    </div>
+    <div class="form-group">
+      <label for="endereco">Endereço:</label>
+      <input type="text" id="endereco" placeholder="Rua, nº" />
+    </div>
+    <div class="form-group">
+      <label for="bairro">Bairro:</label>
+      <input type="text" id="bairro" placeholder="Centro" />
+    </div>
+    <button class="btn salvar" onclick="salvarClienteOffline()">
+      <i class="fas fa-save"></i> Salvar Cliente
+    </button>
+    <div id="mensagem"></div>
+  </div>
+
+  <script>
+    function salvarClienteOffline() {
+      const cliente = document.getElementById('cliente').value.trim();
+      const rota = document.getElementById('rota').value.trim();
+      const endereco = document.getElementById('endereco').value.trim();
+      const bairro = document.getElementById('bairro').value.trim();
+      const msg = document.getElementById('mensagem');
+
+      if (!cliente || !rota || !endereco || !bairro) {
+        msg.style.color = 'red';
+        msg.textContent = '❌ Preencha todos os campos!';
+        return;
+      }
+
+      const dados = { cliente, rota, endereco, bairro, data: new Date().toISOString() };
+
+      const request = indexedDB.open('fechamentoDB', 1);
+      request.onupgradeneeded = function (e) {
+        const db = e.target.result;
+        db.createObjectStore('clientes', { keyPath: 'data' });
+      };
+      request.onsuccess = function (e) {
+        const db = e.target.result;
+        const tx = db.transaction('clientes', 'readwrite');
+        const store = tx.objectStore('clientes');
+        store.put(dados);
+        tx.oncomplete = function () {
+          msg.style.color = 'green';
+          msg.textContent = '✅ Cliente salvo localmente!';
+          document.getElementById('cliente').value = '';
+          document.getElementById('rota').value = '';
+          document.getElementById('endereco').value = '';
+          document.getElementById('bairro').value = '';
+        };
+      };
+    }
+  </script>
+</body>
+</html>
