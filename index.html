@@ -1,57 +1,63 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <base target="_top" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <title>Menu Principal</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
       body {
         margin: 0;
         font-family: Arial, sans-serif;
         background-color: #f1f1f1;
       }
+
       header {
         background-color: #6a1b9a;
         color: white;
         padding: 1rem;
         text-align: center;
       }
+
       header h1 {
         margin: 0;
         font-size: 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
       }
-      .versao {
-        font-size: 0.8rem;
-        color: #e0e0e0;
-      }
+
       .container {
         margin-top: 2rem;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 1rem;
+        gap: 1.5rem;
+        padding: 0 1rem;
       }
+
       .menu-button {
         background-color: white;
         border: none;
         border-radius: 12px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        width: 90%;
+        width: 100%;
         max-width: 400px;
         padding: 1rem;
         display: flex;
         align-items: center;
+        justify-content: flex-start;
         font-size: 1.1rem;
         cursor: pointer;
         transition: transform 0.2s ease;
+        color: black;
+        text-decoration: none;
       }
+
       .menu-button:hover {
         transform: scale(1.02);
       }
+
       .menu-button i {
         margin-right: 1rem;
         font-size: 1.3rem;
@@ -59,31 +65,28 @@
         width: 24px;
         text-align: center;
       }
-      a {
-        text-decoration: none;
-        width: 100%;
-        max-width: 400px;
-      }
     </style>
   </head>
   <body>
     <header>
-      <h1><i class="fas fa-chart-line"></i> Fechamento WebApp</h1>
-      <span class="versao">Versão 1.0</span>
+      <h1>Menu Principal</h1>
     </header>
-    <div class="container">
-      <a href="https://script.google.com/macros/s/AKfycby-OH1LKK1aJaBXWyK6CPtl30pk3FKfFrXSfjGz5fjbgqEXjJl_rRjTtxP-bbBoko8-3g/exec?pagina=gerenciarClientes">
-  <button class="menu-button"><i class="fas fa-users-cog"></i> Gerenciar Clientes</button>
-</a>
 
-      <a href="https://script.google.com/macros/s/AKfycby-OH1LKK1aJaBXWyK6CPtl30pk3FKfFrXSfjGz5fjbgqEXjJl_rRjTtxP-bbBoko8-3g/exec?pagina=cadastrarMaquina">
-        <button class="menu-button"><i class="fas fa-cogs"></i> Cadastrar Máquina</button>
+    <div class="container">
+      <a class="menu-button" href="gerenciarClientes.html">
+        <i class="fas fa-users-cog"></i> Gerenciar Clientes
       </a>
-      <a href="https://script.google.com/macros/s/AKfycby-OH1LKK1aJaBXWyK6CPtl30pk3FKfFrXSfjGz5fjbgqEXjJl_rRjTtxP-bbBoko8-3g/exec?pagina=preFecho">
-        <button class="menu-button"><i class="fas fa-calculator"></i> Pré Fecho</button>
+
+      <a class="menu-button" href="cadastrarMaquina.html">
+        <i class="fas fa-cogs"></i> Cadastrar Máquina
       </a>
-      <a href="https://script.google.com/macros/s/AKfycby-OH1LKK1aJaBXWyK6CPtl30pk3FKfFrXSfjGz5fjbgqEXjJl_rRjTtxP-bbBoko8-3g/exec?pagina=calculoRetencao">
-        <button class="menu-button"><i class="fas fa-percent"></i> Cálculo de Retenção</button>
+
+      <a class="menu-button" href="preFecho.html">
+        <i class="fas fa-calculator"></i> Pré Fecho
+      </a>
+
+      <a class="menu-button" href="calculoRetencao.html">
+        <i class="fas fa-percent"></i> Cálculo de Retenção
       </a>
     </div>
   </body>

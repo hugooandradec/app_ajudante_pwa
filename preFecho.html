@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <base target="_top">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pré Fecho</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
       body {
-        font-family: Arial, sans-serif;
-        background-color: #f2f2f2;
         margin: 0;
-        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f1f1f1;
       }
 
       header {
@@ -18,7 +20,20 @@
         color: white;
         padding: 1rem;
         text-align: center;
+      }
+
+      header h1 {
+        margin: 0;
         font-size: 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .versao {
+        font-size: 0.8rem;
+        color: #e0e0e0;
       }
 
       .container {
@@ -28,33 +43,19 @@
         padding: 2rem;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
       }
 
-      .form-group {
-        margin-bottom: 1.5rem;
-        width: 90%;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      label {
-        display: block;
-        margin-bottom: 0.5rem;
-        font-weight: bold;
-      }
-
-      input[type="number"] {
-        width: 100%;
-        padding: 0.7rem;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+      p {
         font-size: 1rem;
+        color: #333;
+        margin-bottom: 2rem;
       }
 
       .btn {
         display: block;
         width: 70%;
-        margin: 1rem auto;
+        margin: 0 auto;
         padding: 0.8rem;
         font-size: 1rem;
         text-align: center;
@@ -62,10 +63,7 @@
         border-radius: 5px;
         cursor: pointer;
         color: white;
-      }
-
-      .btn.salvar {
-        background-color: #7e57c2;
+        text-decoration: none;
       }
 
       .btn.voltar {
@@ -74,50 +72,17 @@
     </style>
   </head>
   <body>
-    <header>Pré Fecho</header>
+    <header>
+      <h1><i class="fas fa-hourglass-half"></i> Pré Fecho</h1>
+      <span class="versao">Versão 1.0</span>
+    </header>
+
     <div class="container">
-      <div class="form-group">
-        <label for="anterior">Saldo Anterior</label>
-        <input type="number" id="anterior" placeholder="Ex: 150.00">
-      </div>
+      <p>📋 Em breve: você poderá informar valores antigos e atuais para calcular o saldo do dia.</p>
 
-      <div class="form-group">
-        <label for="atual">Entradas Atuais</label>
-        <input type="number" id="atual" placeholder="Ex: 80.00">
-      </div>
-
-      <button class="btn salvar" onclick="calcularPreFecho()">
-        <i class="fas fa-save"></i> Salvar
-      </button>
-
-      <button class="btn voltar" onclick="voltarHome()">
+      <a class="btn voltar" href="index.html">
         <i class="fas fa-arrow-left"></i> Voltar ao Menu
-      </button>
-
-      <div id="mensagem" style="text-align: center; font-weight: bold; margin-top: 1rem;"></div>
+      </a>
     </div>
-
-    <script>
-      function calcularPreFecho() {
-        const anterior = parseFloat(document.getElementById("anterior").value);
-        const atual = parseFloat(document.getElementById("atual").value);
-        const msg = document.getElementById("mensagem");
-
-        msg.innerText = '';
-        if (isNaN(anterior) || isNaN(atual)) {
-          msg.style.color = 'red';
-          msg.innerText = '❌ Preencha os dois campos corretamente!';
-          return;
-        }
-
-        const total = anterior + atual;
-        msg.style.color = 'green';
-        msg.innerText = `💰 Saldo Atual: R$ ${total.toFixed(2)}`;
-      }
-
-      function voltarHome() {
-        window.location.href = "https://script.google.com/macros/s/AKfycby-OH1LKK1aJaBXWyK6CPtl30pk3FKfFrXSfjGz5fjbgqEXjJl_rRjTtxP-bbBoko8-3g/exec?pagina=home";
-      }
-    </script>
   </body>
 </html>

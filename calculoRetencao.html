@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <base target="_top" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cálculo de Retenção</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -79,53 +79,48 @@
     <div class="container">
       <div class="form-group">
         <label for="maquina">Máquina</label>
-        <input type="text" id="maquina" placeholder="Ex: Selo 1">
+        <input type="text" id="maquina" placeholder="Ex: Selo 1" />
       </div>
 
       <div class="form-group">
         <label for="entrada">Entrada</label>
-        <input type="number" id="entrada" placeholder="Valor da entrada">
+        <input type="number" id="entrada" placeholder="Valor da entrada" />
       </div>
 
       <div class="form-group">
         <label for="saida">Saída</label>
-        <input type="number" id="saida" placeholder="Valor da saída">
+        <input type="number" id="saida" placeholder="Valor da saída" />
       </div>
 
       <button class="btn salvar" onclick="salvarRetencao()">
         <i class="fas fa-save"></i> Salvar Retenção
       </button>
 
-      <button class="btn voltar" onclick="voltarHome()">
+      <a class="btn voltar" href="index.html">
         <i class="fas fa-arrow-left"></i> Voltar ao Menu
-      </button>
+      </a>
 
       <div id="mensagem" style="text-align:center; font-weight: bold; margin-top: 1rem;"></div>
     </div>
 
     <script>
       function salvarRetencao() {
-        const maquina = document.getElementById('maquina').value.trim();
-        const entrada = parseFloat(document.getElementById('entrada').value);
-        const saida = parseFloat(document.getElementById('saida').value);
-        const msg = document.getElementById('mensagem');
+        const maquina = document.getElementById("maquina").value.trim();
+        const entrada = parseFloat(document.getElementById("entrada").value);
+        const saida = parseFloat(document.getElementById("saida").value);
+        const msg = document.getElementById("mensagem");
 
-        msg.innerText = '';
+        msg.innerText = "";
 
         if (!maquina || isNaN(entrada) || isNaN(saida)) {
-          msg.style.color = 'red';
-          msg.innerText = '❌ Preencha todos os campos corretamente!';
+          msg.style.color = "red";
+          msg.innerText = "❌ Preencha todos os campos corretamente!";
           return;
         }
 
         const saldo = entrada - saida;
-        msg.style.color = 'green';
+        msg.style.color = "green";
         msg.innerText = `🧮 Saldo da máquina ${maquina}: R$ ${saldo.toFixed(2)}`;
-      }
-
-      function voltarHome() {
-        window.location.href =
-          'https://script.google.com/macros/s/AKfycby-OH1LKK1aJaBXWyK6CPtl30pk3FKfFrXSfjGz5fjbgqEXjJl_rRjTtxP-bbBoko8-3g/exec?pagina=home';
       }
     </script>
   </body>

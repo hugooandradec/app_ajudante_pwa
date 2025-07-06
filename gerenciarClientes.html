@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <base target="_top" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <title>Gerenciar Clientes</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
       body {
         margin: 0;
@@ -37,13 +41,8 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 1rem;
-      }
-
-      a {
-        text-decoration: none;
-        width: 100%;
-        max-width: 400px;
+        gap: 1.5rem;
+        padding: 0 1rem;
       }
 
       .menu-button {
@@ -52,13 +51,16 @@
         border-radius: 12px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         width: 100%;
+        max-width: 400px;
         padding: 1rem;
         display: flex;
         align-items: center;
+        justify-content: flex-start;
         font-size: 1.1rem;
         cursor: pointer;
         transition: transform 0.2s ease;
         color: black;
+        text-decoration: none;
       }
 
       .menu-button:hover {
@@ -73,20 +75,23 @@
         text-align: center;
       }
 
-      .btn-voltar {
-        background-color: #757575;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        width: 100%;
+      .btn {
+        display: block;
+        width: 70%;
         max-width: 400px;
-        padding: 0.9rem;
+        margin: 1rem auto 0;
+        padding: 0.8rem;
         font-size: 1rem;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
         cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0.5rem;
+        color: white;
+        text-decoration: none;
+      }
+
+      .btn.voltar {
+        background-color: #888;
       }
     </style>
   </head>
@@ -95,23 +100,26 @@
       <h1><i class="fas fa-users-cog"></i> Gerenciar Clientes</h1>
       <span class="versao">Versão 1.0</span>
     </header>
+
     <div class="container">
-      <a href="https://script.google.com/macros/s/AKfycby-OH1LKK1aJaBXWyK6CPtl30pk3FKfFrXSfjGz5fjbgqEXjJl_rRjTtxP-bbBoko8-3g/exec?pagina=cadastrarCliente">
-        <button class="menu-button"><i class="fas fa-user-plus"></i> Cadastrar Cliente</button>
-      </a>
-      <a href="https://script.google.com/macros/s/AKfycby-OH1LKK1aJaBXWyK6CPtl30pk3FKfFrXSfjGz5fjbgqEXjJl_rRjTtxP-bbBoko8-3g/exec?pagina=editarCliente">
-        <button class="menu-button"><i class="fas fa-pen"></i> Editar Cliente</button>
-      </a>
-      <a href="https://script.google.com/macros/s/AKfycby-OH1LKK1aJaBXWyK6CPtl30pk3FKfFrXSfjGz5fjbgqEXjJl_rRjTtxP-bbBoko8-3g/exec?pagina=consultarCliente">
-        <button class="menu-button"><i class="fas fa-search"></i> Consultar Cliente</button>
-      </a>
-      <a href="https://script.google.com/macros/s/AKfycby-OH1LKK1aJaBXWyK6CPtl30pk3FKfFrXSfjGz5fjbgqEXjJl_rRjTtxP-bbBoko8-3g/exec?pagina=excluirCliente">
-        <button class="menu-button"><i class="fas fa-trash"></i> Excluir Cliente</button>
+      <a class="menu-button" href="cadastrarCliente.html">
+        <i class="fas fa-user-plus"></i> Cadastrar Cliente
       </a>
 
-      <!-- Botão Voltar como link completo -->
-      <a href="https://script.google.com/macros/s/AKfycby-OH1LKK1aJaBXWyK6CPtl30pk3FKfFrXSfjGz5fjbgqEXjJl_rRjTtxP-bbBoko8-3g/exec?pagina=home">
-        <button class="btn-voltar"><i class="fas fa-arrow-left"></i> Voltar ao Menu</button>
+      <a class="menu-button" href="editarCliente.html">
+        <i class="fas fa-pen"></i> Editar Cliente
+      </a>
+
+      <a class="menu-button" href="consultarCliente.html">
+        <i class="fas fa-search"></i> Consultar Cliente
+      </a>
+
+      <a class="menu-button" href="excluirCliente.html">
+        <i class="fas fa-trash"></i> Excluir Cliente
+      </a>
+
+      <a class="btn voltar" href="index.html">
+        <i class="fas fa-arrow-left"></i> Voltar ao Menu
       </a>
     </div>
   </body>

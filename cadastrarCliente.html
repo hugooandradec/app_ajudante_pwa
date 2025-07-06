@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <base target="_top" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cadastrar Cliente</title>
     <link
@@ -76,17 +76,16 @@
       }
 
       .btn.add {
-  background: none;
-  border: none;
-  color: #6a1b9a;
-  font-size: 1rem;
-  font-weight: bold;
-  text-align: left;
-  padding: 0;
-  margin: 0.5rem 0;
-  cursor: pointer;
-}
-
+        background: none;
+        border: none;
+        color: #6a1b9a;
+        font-size: 1rem;
+        font-weight: bold;
+        text-align: left;
+        padding: 0;
+        margin: 0.5rem 0;
+        cursor: pointer;
+      }
 
       #mensagem {
         text-align: center;
@@ -95,21 +94,20 @@
       }
 
       .selo-tag {
-  background-color: #e0e0e0;
-  border-radius: 12px;
-  padding: 0.3rem 0.7rem;
-  margin: 0.3rem;
-  display: inline-flex;
-  align-items: center;
-  font-size: 0.9rem;
-  gap: 0.5rem;
-}
+        background-color: #e0e0e0;
+        border-radius: 12px;
+        padding: 0.3rem 0.7rem;
+        margin: 0.3rem;
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.9rem;
+        gap: 0.5rem;
+      }
 
-.selo-tag i {
-  cursor: pointer;
-  color: #888;
-}
-
+      .selo-tag i {
+        cursor: pointer;
+        color: #888;
+      }
 
       #listaSelos {
         background: #fff;
@@ -159,39 +157,40 @@
       </div>
 
       <div class="form-group">
-  <button class="btn add" onclick="mostrarBuscaSelos()">+ Adicionar Máquina</button>
+        <button class="btn add" onclick="mostrarBuscaSelos()">+ Adicionar Máquina</button>
 
-  <div id="buscaSelos" style="display:none;">
-    <input type="text" id="campoBusca" placeholder="Buscar selo..." oninput="filtrarSelos()" />
-    <div id="listaSelos"></div>
-  </div>
+        <div id="buscaSelos" style="display:none;">
+          <input type="text" id="campoBusca" placeholder="Buscar selo..." oninput="filtrarSelos()" />
+          <div id="listaSelos"></div>
+        </div>
 
-  <div id="selosSelecionados"></div>
-</div>
-
+        <div id="selosSelecionados"></div>
+      </div>
 
       <button class="btn salvar" onclick="salvarCliente()">
         <i class="fas fa-save"></i> Salvar Cliente
       </button>
 
-      <button class="btn voltar" onclick="voltarHome()">
+      <a class="btn voltar" href="index.html">
         <i class="fas fa-arrow-left"></i> Voltar ao Menu
-      </button>
+      </a>
 
       <div id="mensagem"></div>
     </div>
 
     <script>
+      const API_URL = "https://script.google.com/macros/s/AKfycby-OH1LKK1aJaBXWyK6CPtl30pk3FKfFrXSfjGz5fjbgqEXjJl_rRjTtxP-bbBoko8-3g/exec";
       let todosSelos = [];
       let selosSelecionados = [];
 
-      document.addEventListener("DOMContentLoaded", carregarSelos);
-
-      function carregarSelos() {
-        google.script.run.withSuccessHandler(function (selos) {
-          todosSelos = selos;
-        }).listarSelos();
-      }
+      document.addEventListener("DOMContentLoaded", async () => {
+        try {
+          const resposta = await fetch(`${API_URL}?acao=listarSelos`);
+          todosSelos = await resposta.json();
+        } catch (err) {
+          console.error("Erro ao carregar selos:", err);
+        }
+      });
 
       function mostrarBuscaSelos() {
         document.getElementById("buscaSelos").style.display = "block";
@@ -204,9 +203,7 @@
         const lista = document.getElementById("listaSelos");
         lista.innerHTML = "";
 
-        const filtrados = todosSelos.filter(s =>
-          s.toLowerCase().includes(termo)
-        );
+        const filtrados = todosSelos.filter(s => s.toLowerCase().includes(termo));
 
         if (filtrados.length === 0) {
           lista.style.display = "none";
@@ -232,26 +229,27 @@
       }
 
       function atualizarSelosSelecionados() {
-  const container = document.getElementById("selosSelecionados");
-  container.innerHTML = "";
-  selosSelecionados.forEach((selo, index) => {
-    const tag = document.createElement("span");
-    tag.className = "selo-tag";
-    tag.textContent = selo;
+        const container = document.getElementById("selosSelecionados");
+        container.innerHTML = "";
+        selosSelecionados.forEach((selo, index) => {
+          const tag = document.createElement("span");
+          tag.className = "selo-tag";
+          tag.textContent = selo;
 
-    const icon = document.createElement("i");
-    icon.className = "fas fa-times";
-    icon.title = "Remover";
-    icon.onclick = () => {
-      selosSelecionados.splice(index, 1);
-      atualizarSelosSelecionados();
-    };
+          const icon = document.createElement("i");
+          icon.className = "fas fa-times";
+          icon.title = "Remover";
+          icon.onclick = () => {
+            selosSelecionados.splice(index, 1);
+            atualizarSelosSelecionados();
+          };
 
-    tag.appendChild(icon);
-    container.appendChild(tag);
-  });
-}
-      function salvarCliente() {
+          tag.appendChild(icon);
+          container.appendChild(tag);
+        });
+      }
+
+      async function salvarCliente() {
         const rota = document.getElementById("rota").value.trim();
         const cliente = document.getElementById("cliente").value.trim();
         const endereco = document.getElementById("endereco").value.trim();
@@ -267,6 +265,7 @@
         }
 
         const dados = {
+          acao: "salvarCliente",
           rota,
           cliente,
           endereco,
@@ -274,8 +273,15 @@
           selos: selosSelecionados,
         };
 
-        google.script.run.withSuccessHandler(function (resposta) {
-          if (resposta.includes("sucesso")) {
+        try {
+          const resposta = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(dados),
+          });
+          const resultado = await resposta.text();
+
+          if (resultado.includes("sucesso")) {
             msg.style.color = "green";
             document.getElementById("rota").value = "";
             document.getElementById("cliente").value = "";
@@ -287,14 +293,12 @@
             msg.style.color = "red";
           }
 
-          msg.textContent = resposta;
+          msg.textContent = resultado;
           setTimeout(() => (msg.textContent = ""), 4000);
-        }).salvarCliente(dados);
-      }
-
-      function voltarHome() {
-        window.location.href =
-          "https://script.google.com/macros/s/AKfycby-OH1LKK1aJaBXWyK6CPtl30pk3FKfFrXSfjGz5fjbgqEXjJl_rRjTtxP-bbBoko8-3g/exec?pagina=gerenciarClientes";
+        } catch (err) {
+          msg.style.color = "red";
+          msg.textContent = "Erro ao salvar. Verifique sua conexão.";
+        }
       }
     </script>
   </body>
