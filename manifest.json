@@ -1,9 +1,9 @@
 {
-  "name": "Fechamento WebApp",
-  "short_name": "Fechamento",
-  "start_url": "./index.html",
+  "name": "App Ajudante",
+  "short_name": "Ajudante",
+  "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#f2f2f2",
+  "background_color": "#ffffff",
   "theme_color": "#6a1b9a",
   "icons": [
     {

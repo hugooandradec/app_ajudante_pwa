@@ -1,39 +1,38 @@
-const CACHE_NAME = 'fechamento-cache-v1';
+const CACHE_NAME = 'ajudante-pwa-v1';
 const urlsToCache = [
-  './',
-  './index.html',
-  './manifest.json',
-  './service-worker.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+  '/',
+  '/index.html',
+  '/cadastrarCliente.html',
+  '/cadastrarMaquina.html',
+  '/calculoRetencao.html',
+  '/consultarCliente.html',
+  '/editarCliente.html',
+  '/excluirCliente.html',
+  '/gerenciarClientes.html',
+  '/preFecho.html',
+  '/manifest.json',
+  '/icon-192.png',
+  '/icon-512.png'
 ];
 
-// Instala o Service Worker e faz cache dos arquivos
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(urlsToCache);
-    })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
   );
 });
 
-// Ativa e limpa caches antigos (se houver)
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames
-          .filter(name => name !== CACHE_NAME)
-          .map(name => caches.delete(name))
-      );
-    })
-  );
-});
-
-// Intercepta requisições para servir do cache quando offline
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request);
-    })
+    caches.match(event.request).then(response => response || fetch(event.request))
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+      )
+    )
   );
 });
