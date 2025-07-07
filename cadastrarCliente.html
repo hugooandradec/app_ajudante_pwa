@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <base target="_top" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastrar Cliente</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <style>
-      /* [ESTILOS IGUAIS AOS ORIGINAIS, MANTIDOS AQUI SEM ALTERAÇÃO] */
       body {
         margin: 0;
         font-family: Arial, sans-serif;
@@ -150,12 +150,22 @@
     <script type="module">
       import { URL_BACKEND } from './js/navegacao.js';
 
-      const selosDisponiveis = [
-        'SELO 001', 'SELO 002', 'SELO 003',
-        'SELO ALFA', 'SELO BETA', 'SELO GAMMA',
-        'MAQ 01', 'MAQ 02', 'MAQ XYZ'
-      ];
+      let selosDisponiveis = [];
       const selecionados = [];
+
+      async function carregarSelos() {
+        try {
+          const resposta = await fetch(URL_BACKEND, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ acao: 'listarSelos' })
+          });
+          const json = await resposta.json();
+          if (json.sucesso) selosDisponiveis = json.selos;
+        } catch (e) {
+          console.error("Erro ao carregar selos:", e);
+        }
+      }
 
       window.mostrarCampoBusca = function () {
         document.getElementById('inputBuscaSelo').focus();
@@ -165,9 +175,7 @@
         const input = document.getElementById('inputBuscaSelo').value.toUpperCase();
         const lista = document.getElementById('listaSelos');
         lista.innerHTML = '';
-
-        const filtrados = selosDisponiveis.filter(selo => selo.includes(input));
-
+        const filtrados = selosDisponiveis.filter(s => s.includes(input));
         filtrados.forEach(selo => {
           const li = document.createElement('li');
           li.textContent = selo;
@@ -218,7 +226,7 @@
           enviarParaPlanilha(dados);
         } else {
           salvarLocalmente(dados);
-          alert("Sem conexão! Dados salvos localmente e serão enviados quando a internet voltar.");
+          alert("Sem conexão! Dados salvos localmente.");
         }
       };
 
@@ -228,20 +236,20 @@
           body: JSON.stringify(dados),
           headers: { 'Content-Type': 'application/json' }
         })
-        .then(res => res.json())
-        .then(res => {
-          if (res.sucesso) {
-            alert("✅ Cliente cadastrado com sucesso!");
-            limparFormulario();
-          } else {
-            throw new Error("Erro na resposta do servidor");
-          }
-        })
-        .catch(err => {
-          console.error("Erro ao enviar:", err);
-          salvarLocalmente(dados);
-          alert("⚠️ Erro ao enviar. Dados salvos localmente.");
-        });
+          .then(res => res.json())
+          .then(res => {
+            if (res.sucesso) {
+              alert("✅ Cliente cadastrado com sucesso!");
+              limparFormulario();
+            } else {
+              throw new Error("Erro na resposta do servidor");
+            }
+          })
+          .catch(err => {
+            console.error("Erro ao enviar:", err);
+            salvarLocalmente(dados);
+            alert("⚠️ Erro ao enviar. Dados salvos localmente.");
+          });
       }
 
       function salvarLocalmente(dados) {
@@ -252,7 +260,6 @@
 
       function sincronizarPendentes() {
         if (!navigator.onLine) return;
-
         const pendentes = JSON.parse(localStorage.getItem('clientesPendentes') || '[]');
         if (pendentes.length === 0) return;
 
@@ -264,15 +271,11 @@
             body: JSON.stringify(dados),
             headers: { 'Content-Type': 'application/json' }
           })
-          .then(res => res.json())
-          .then(res => {
-            if (!res.sucesso) {
-              restante.push(dados);
-            }
-          })
-          .catch(() => {
-            restante.push(dados);
-          });
+            .then(res => res.json())
+            .then(res => {
+              if (!res.sucesso) restante.push(dados);
+            })
+            .catch(() => restante.push(dados));
         });
 
         setTimeout(() => {
@@ -298,6 +301,8 @@
           .then(() => console.log('✅ SW registrado'))
           .catch(err => console.error('Erro no SW:', err));
       }
+
+      carregarSelos();
     </script>
   </body>
 </html>

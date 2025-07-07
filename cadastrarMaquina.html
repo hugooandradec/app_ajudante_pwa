@@ -7,10 +7,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
       body {
-        font-family: Arial, sans-serif;
-        background-color: #f2f2f2;
         margin: 0;
-        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f1f1f1;
       }
 
       header {
@@ -18,135 +17,129 @@
         color: white;
         padding: 1rem;
         text-align: center;
+      }
+
+      header h1 {
+        margin: 0;
         font-size: 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
       }
 
       .container {
-        background-color: white;
-        max-width: 500px;
         margin: 2rem auto;
-        padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
       }
 
       .form-group {
-        margin-bottom: 1.5rem;
-        width: 90%;
-        margin-left: auto;
-        margin-right: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
       }
 
       label {
-        display: block;
-        margin-bottom: 0.5rem;
         font-weight: bold;
       }
 
-      input[type="text"] {
-        width: 100%;
+      input {
         padding: 0.7rem;
+        border-radius: 6px;
         border: 1px solid #ccc;
-        border-radius: 5px;
         font-size: 1rem;
       }
 
       .btn {
-        display: block;
-        width: 70%;
-        margin: 1rem auto;
-        padding: 0.8rem;
-        font-size: 1rem;
-        text-align: center;
+        padding: 0.9rem;
         border: none;
-        border-radius: 5px;
+        border-radius: 8px;
+        font-size: 1rem;
         cursor: pointer;
-        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        width: 70%;
+        max-width: 400px;
+        margin: 0 auto;
       }
 
       .btn.salvar {
-        background-color: #7e57c2;
+        background-color: #6a1b9a;
+        color: white;
       }
 
       .btn.voltar {
-        background-color: #888;
-        text-decoration: none;
-        text-align: center;
+        background-color: #757575;
+        color: white;
       }
     </style>
   </head>
   <body>
-    <header>Cadastrar Máquina</header>
+    <header>
+      <h1><i class="fas fa-cogs"></i> Cadastrar Máquina</h1>
+    </header>
+
     <div class="container">
       <div class="form-group">
-        <label for="nome">Selo</label>
-        <input type="text" id="nome" placeholder="Ex: Selo 1, Selo X..." />
+        <label for="nome">Selo:</label>
+        <input type="text" id="nome" placeholder="Ex: YZS001" />
       </div>
 
       <div class="form-group">
-        <label for="tipo">Jogo</label>
-        <input type="text" id="tipo" placeholder="Ex: Jogo A, Jogo 2..." />
+        <label for="tipo">Jogo:</label>
+        <input type="text" id="tipo" placeholder="Ex: Dragon" />
       </div>
 
-      <button class="btn salvar" onclick="salvarMaquina()">
-        <i class="fas fa-save"></i> Salvar Máquina
-      </button>
-
-      <a class="btn voltar" href="index.html">
-        <i class="fas fa-arrow-left"></i> Voltar ao Menu
-      </a>
-
-      <div id="mensagem" style="text-align:center; font-weight: bold; margin-top: 1rem;"></div>
+      <button class="btn salvar" onclick="salvarMaquina()"><i class="fas fa-save"></i> Salvar Máquina</button>
+      <a href="index.html" class="btn voltar"><i class="fas fa-arrow-left"></i> Voltar ao Menu</a>
     </div>
 
     <script type="module">
-      import { URL_BACKEND } from "./js/navegacao.js";
+      import { URL_BACKEND } from './js/navegacao.js';
 
-      window.salvarMaquina = async function () {
+      function salvarMaquina() {
         const nome = document.getElementById("nome").value.trim().toUpperCase();
         const tipo = document.getElementById("tipo").value.trim();
-        const msg = document.getElementById("mensagem");
-
-        msg.innerText = "";
 
         if (!nome || !tipo) {
-          msg.style.color = "red";
-          msg.innerText = "❌ Preencha todos os campos!";
+          alert("Preencha todos os campos.");
           return;
         }
 
         const dados = {
-          acao: "salvarMaquina",
+          acao: "cadastrarMaquina",
           nome,
-          tipo,
+          tipo
         };
 
-        try {
-          const resposta = await fetch(URL_BACKEND, {
-            method: "POST",
-            body: JSON.stringify(dados),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-
-          const resultado = await resposta.text();
-
-          if (resultado.includes("sucesso")) {
-            msg.style.color = "green";
+        fetch(URL_BACKEND, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(dados)
+        })
+        .then(res => res.json())
+        .then(json => {
+          if (json.sucesso) {
+            alert("✅ Máquina cadastrada com sucesso!");
             document.getElementById("nome").value = "";
             document.getElementById("tipo").value = "";
           } else {
-            msg.style.color = "red";
+            alert(json.mensagem || "❌ Erro ao salvar.");
           }
+        })
+        .catch(err => {
+          console.error("Erro:", err);
+          alert("❌ Falha ao conectar com o servidor.");
+        });
+      }
 
-          msg.innerText = resultado;
-          setTimeout(() => (msg.innerText = ""), 4000);
-        } catch (err) {
-          msg.style.color = "red";
-          msg.innerText = "Erro ao salvar. Verifique sua conexão.";
-        }
-      };
+      window.salvarMaquina = salvarMaquina;
     </script>
   </body>
 </html>

@@ -1,7 +1,7 @@
 {
   "name": "Ajudante PWA",
   "short_name": "APWA",
-  "start_url": "/frontend_ajudante_pwa/index.html?homescreen=1",
+  "start_url": "/ajudante_pwa/index.html?homescreen=1",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#6a1b9a",
