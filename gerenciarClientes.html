@@ -25,28 +25,15 @@
       header h1 {
         margin: 0;
         font-size: 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-      }
-
-      .versao {
-        font-size: 0.8rem;
-        color: #e0e0e0;
       }
 
       .container {
-        margin: 2rem auto;
-        padding: 1rem;
-        max-width: 500px;
-        background-color: white;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 2rem;
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 1.5rem;
+        padding: 0 1rem;
       }
 
       .menu-button {
@@ -79,32 +66,31 @@
         text-align: center;
       }
 
-      .btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        width: 70%;
-        max-width: 400px;
-        margin-top: 1rem;
-        padding: 0.9rem;
-        font-size: 1rem;
+      .btn-voltar {
+        background-color: #666;
+        color: white;
         border: none;
         border-radius: 8px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
         cursor: pointer;
         text-decoration: none;
-        color: white;
+        margin-top: 1.5rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 400px;
       }
 
-      .btn.voltar {
-        background-color: #757575;
+      .btn-voltar i {
+        margin-right: 0.5rem;
       }
     </style>
   </head>
   <body>
     <header>
-      <h1><i class="fas fa-users-cog"></i> Gerenciar Clientes</h1>
-      <span class="versao">Versão 1.0</span>
+      <h1>Gerenciar Clientes</h1>
     </header>
 
     <div class="container">
@@ -124,7 +110,7 @@
         <i class="fas fa-trash"></i> Excluir Cliente
       </a>
 
-      <a class="btn voltar" href="index.html">
+      <a class="btn-voltar" href="index.html">
         <i class="fas fa-arrow-left"></i> Voltar ao Menu
       </a>
     </div>
