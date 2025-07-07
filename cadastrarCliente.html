@@ -79,7 +79,6 @@
         color: white;
       }
 
-      /* Estilo do campo de selo */
       .lista-selos {
         list-style: none;
         padding: 0;
@@ -120,22 +119,21 @@
     <div class="container">
       <div class="form-group">
         <label>Rota:</label>
-        <input type="text" placeholder="Ex: Zona Sul" />
+        <input type="text" id="rota" placeholder="Ex: Zona Sul" />
       </div>
       <div class="form-group">
         <label>Cliente:</label>
-        <input type="text" placeholder="Nome do cliente" />
+        <input type="text" id="cliente" placeholder="Nome do cliente" />
       </div>
       <div class="form-group">
         <label>Endereço:</label>
-        <input type="text" placeholder="Rua, número..." />
+        <input type="text" id="endereco" placeholder="Rua, número..." />
       </div>
       <div class="form-group">
         <label>Bairro:</label>
-        <input type="text" placeholder="Ex: Centro" />
+        <input type="text" id="bairro" placeholder="Ex: Centro" />
       </div>
 
-      <!-- Campo de selos -->
       <div class="form-group">
         <label style="color: #6a1b9a; font-weight: bold; cursor: pointer;" onclick="mostrarCampoBusca()">
           + Adicionar Máquina
@@ -145,7 +143,7 @@
         <div id="selosSelecionados" class="selecionados"></div>
       </div>
 
-      <button class="btn salvar"><i class="fas fa-save"></i> Salvar Cliente</button>
+      <button class="btn salvar" onclick="salvarCliente()"><i class="fas fa-save"></i> Salvar Cliente</button>
       <a href="gerenciarClientes.html" class="btn voltar"><i class="fas fa-arrow-left"></i> Voltar ao Menu</a>
     </div>
 
@@ -195,11 +193,111 @@
         });
       }
 
-      // Registrar SW (opcional, já está no index também)
+      const URL_BACKEND = 'https://script.google.com/macros/s/AKfycby-OH1LKK1aJaBXWyK6CPtl30pk3FKfFrXSfjGz5fjbgqEXjJl_rRjTtxP-bbBoko8-3g/exec';
+
+      function salvarCliente() {
+        const rota = document.getElementById('rota').value.trim();
+        const cliente = document.getElementById('cliente').value.trim();
+        const endereco = document.getElementById('endereco').value.trim();
+        const bairro = document.getElementById('bairro').value.trim();
+
+        if (!rota || !cliente || !endereco || !bairro) {
+          alert("Por favor, preencha todos os campos.");
+          return;
+        }
+
+        const dados = {
+          acao: 'cadastrarCliente',
+          rota,
+          cliente,
+          endereco,
+          bairro
+        };
+
+        if (navigator.onLine) {
+          enviarParaPlanilha(dados);
+        } else {
+          salvarLocalmente(dados);
+          alert("Sem conexão! Dados salvos localmente e serão enviados quando a internet voltar.");
+        }
+      }
+
+      function enviarParaPlanilha(dados) {
+        fetch(URL_BACKEND, {
+          method: 'POST',
+          body: JSON.stringify(dados),
+          headers: { 'Content-Type': 'application/json' }
+        })
+        .then(res => res.json())
+        .then(res => {
+          if (res.sucesso) {
+            alert("✅ Cliente cadastrado com sucesso!");
+            limparFormulario();
+          } else {
+            throw new Error("Erro na resposta do servidor");
+          }
+        })
+        .catch(err => {
+          console.error("Erro ao enviar:", err);
+          salvarLocalmente(dados);
+          alert("⚠️ Erro ao enviar. Dados salvos localmente.");
+        });
+      }
+
+      function salvarLocalmente(dados) {
+        const pendentes = JSON.parse(localStorage.getItem('clientesPendentes') || '[]');
+        pendentes.push(dados);
+        localStorage.setItem('clientesPendentes', JSON.stringify(pendentes));
+      }
+
+      function sincronizarPendentes() {
+        if (!navigator.onLine) return;
+
+        const pendentes = JSON.parse(localStorage.getItem('clientesPendentes') || '[]');
+        if (pendentes.length === 0) return;
+
+        const restante = [];
+
+        pendentes.forEach(dados => {
+          fetch(URL_BACKEND, {
+            method: 'POST',
+            body: JSON.stringify(dados),
+            headers: { 'Content-Type': 'application/json' }
+          })
+          .then(res => res.json())
+          .then(res => {
+            if (!res.sucesso) {
+              restante.push(dados);
+            }
+          })
+          .catch(() => {
+            restante.push(dados);
+          });
+        });
+
+        setTimeout(() => {
+          localStorage.setItem('clientesPendentes', JSON.stringify(restante));
+        }, 1000);
+      }
+
+      function limparFormulario() {
+        document.getElementById('rota').value = '';
+        document.getElementById('cliente').value = '';
+        document.getElementById('endereco').value = '';
+        document.getElementById('bairro').value = '';
+        document.getElementById('inputBuscaSelo').value = '';
+        selecionados.length = 0;
+        atualizarSelosSelecionados();
+      }
+
+      window.addEventListener('online', sincronizarPendentes);
+      setInterval(sincronizarPendentes, 10000);
+
+      // Optional: registra service worker
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('service-worker.js')
-          .then(() => console.log('✅ Service Worker registrado'))
-          .catch(error => console.error('❌ Erro ao registrar SW:', error));
+          .then(() => console.log('✅ SW registrado'))
+          .catch(err => console.error('Erro no SW:', err));
       }
     </script>
   </body>
