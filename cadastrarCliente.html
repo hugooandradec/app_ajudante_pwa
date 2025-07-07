@@ -143,11 +143,11 @@
       </div>
 
       <button class="btn salvar" onclick="salvarCliente()"><i class="fas fa-save"></i> Salvar Cliente</button>
-      <a href="gerenciarClientes.html" class="btn voltar"><i class="fas fa-arrow-left"></i> Voltar ao Menu</a>
+      <a href="/ajudante_pwa/gerenciarClientes.html" class="btn voltar"><i class="fas fa-arrow-left"></i> Voltar ao Menu</a>
     </div>
 
     <script type="module">
-      import { URL_BACKEND } from './js/navegacao.js';
+      import { URL_BACKEND } from '/ajudante_pwa/js/navegacao.js';
 
       let selosDisponiveis = [];
       const selecionados = [];
@@ -303,7 +303,7 @@
       setInterval(sincronizarPendentes, 10000);
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('service-worker.js')
+        navigator.serviceWorker.register('/ajudante_pwa/service-worker.js')
           .then(() => console.log('✅ SW registrado'))
           .catch(err => console.error('Erro no SW:', err));
       }

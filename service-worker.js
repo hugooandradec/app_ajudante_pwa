@@ -1,6 +1,6 @@
 const CACHE_NAME = 'ajudante-cache-v1';
 const urlsToCache = [
-  '/ajudante_pwa/', // Força carregar index.html como raiz
+  '/ajudante_pwa/',
   '/ajudante_pwa/index.html',
   '/ajudante_pwa/cadastrarCliente.html',
   '/ajudante_pwa/cadastrarMaquina.html',
@@ -13,10 +13,11 @@ const urlsToCache = [
   '/ajudante_pwa/icon-192.png',
   '/ajudante_pwa/icon-512.png',
   '/ajudante_pwa/manifest.json',
-  'hajudante_pware.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
 ];
 
 self.addEventListener('install', event => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       return cache.addAll(urlsToCache);
