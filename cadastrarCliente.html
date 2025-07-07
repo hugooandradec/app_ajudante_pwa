@@ -8,6 +8,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <style>
+      /* [ESTILOS IGUAIS AOS ORIGINAIS, MANTIDOS AQUI SEM ALTERAÇÃO] */
       body {
         margin: 0;
         font-family: Arial, sans-serif;
@@ -78,7 +79,6 @@
         background-color: #757575;
         color: white;
       }
-
       .lista-selos {
         list-style: none;
         padding: 0;
@@ -113,7 +113,7 @@
   </head>
   <body>
     <header>
-      <h1><i class="fas fa-user-plus"></i> Cadastrar Cliente (Offline)</h1>
+      <h1><i class="fas fa-user-plus"></i> Cadastrar Cliente</h1>
       <span class="versao">Versão 1.0</span>
     </header>
     <div class="container">
@@ -147,7 +147,9 @@
       <a href="gerenciarClientes.html" class="btn voltar"><i class="fas fa-arrow-left"></i> Voltar ao Menu</a>
     </div>
 
-    <script>
+    <script type="module">
+      import { URL_BACKEND } from './js/navegacao.js';
+
       const selosDisponiveis = [
         'SELO 001', 'SELO 002', 'SELO 003',
         'SELO ALFA', 'SELO BETA', 'SELO GAMMA',
@@ -155,11 +157,11 @@
       ];
       const selecionados = [];
 
-      function mostrarCampoBusca() {
+      window.mostrarCampoBusca = function () {
         document.getElementById('inputBuscaSelo').focus();
-      }
+      };
 
-      function filtrarSelos() {
+      window.filtrarSelos = function () {
         const input = document.getElementById('inputBuscaSelo').value.toUpperCase();
         const lista = document.getElementById('listaSelos');
         lista.innerHTML = '';
@@ -172,7 +174,7 @@
           li.onclick = () => adicionarSelo(selo);
           lista.appendChild(li);
         });
-      }
+      };
 
       function adicionarSelo(selo) {
         if (!selecionados.includes(selo)) {
@@ -180,7 +182,7 @@
           atualizarSelosSelecionados();
         }
         document.getElementById('inputBuscaSelo').value = '';
-        filtrarSelos();
+        window.filtrarSelos();
       }
 
       function atualizarSelosSelecionados() {
@@ -193,9 +195,7 @@
         });
       }
 
-      const URL_BACKEND = 'https://script.google.com/macros/s/AKfycby-OH1LKK1aJaBXWyK6CPtl30pk3FKfFrXSfjGz5fjbgqEXjJl_rRjTtxP-bbBoko8-3g/exec';
-
-      function salvarCliente() {
+      window.salvarCliente = function () {
         const rota = document.getElementById('rota').value.trim();
         const cliente = document.getElementById('cliente').value.trim();
         const endereco = document.getElementById('endereco').value.trim();
@@ -220,7 +220,7 @@
           salvarLocalmente(dados);
           alert("Sem conexão! Dados salvos localmente e serão enviados quando a internet voltar.");
         }
-      }
+      };
 
       function enviarParaPlanilha(dados) {
         fetch(URL_BACKEND, {
@@ -293,7 +293,6 @@
       window.addEventListener('online', sincronizarPendentes);
       setInterval(sincronizarPendentes, 10000);
 
-      // Optional: registra service worker
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('service-worker.js')
           .then(() => console.log('✅ SW registrado'))

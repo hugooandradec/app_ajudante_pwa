@@ -1,18 +1,18 @@
 const CACHE_NAME = 'ajudante-cache-v1';
 const urlsToCache = [
-  '/app_ajudante_pwa/', // Força carregar index.html como raiz
-  '/app_ajudante_pwa/index.html',
-  '/app_ajudante_pwa/cadastrarCliente.html',
-  '/app_ajudante_pwa/cadastrarMaquina.html',
-  '/app_ajudante_pwa/calculoRetencao.html',
-  '/app_ajudante_pwa/preFecho.html',
-  '/app_ajudante_pwa/gerenciarClientes.html',
-  '/app_ajudante_pwa/consultarCliente.html',
-  '/app_ajudante_pwa/editarCliente.html',
-  '/app_ajudante_pwa/excluirCliente.html',
-  '/app_ajudante_pwa/icon-192.png',
-  '/app_ajudante_pwa/icon-512.png',
-  '/app_ajudante_pwa/manifest.json',
+  '/frontend_ajudante_pwa/', // Força carregar index.html como raiz
+  '/frontend_ajudante_pwa/index.html',
+  '/frontend_ajudante_pwa/cadastrarCliente.html',
+  '/frontend_ajudante_pwa/cadastrarMaquina.html',
+  '/frontend_ajudante_pwa/calculoRetencao.html',
+  '/frontend_ajudante_pwa/preFecho.html',
+  '/frontend_ajudante_pwa/gerenciarClientes.html',
+  '/frontend_ajudante_pwa/consultarCliente.html',
+  '/frontend_ajudante_pwa/editarCliente.html',
+  '/frontend_ajudante_pwa/excluirCliente.html',
+  '/frontend_ajudante_pwa/icon-192.png',
+  '/frontend_ajudante_pwa/icon-512.png',
+  '/frontend_ajudante_pwa/manifest.json',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
 ];
 
