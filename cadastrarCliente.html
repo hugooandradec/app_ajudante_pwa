@@ -1,314 +1,197 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <base target="_top" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <style>
-      body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background-color: #f1f1f1;
-      }
-      header {
-        background-color: #6a1b9a;
-        color: white;
-        padding: 1rem;
-        text-align: center;
-      }
-      header h1 {
-        margin: 0;
-        font-size: 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-      }
-      .versao {
-        font-size: 0.8rem;
-        color: #e0e0e0;
-      }
-      .container {
-        margin: 2rem auto;
-        background-color: white;
-        padding: 2rem;
-        border-radius: 10px;
-        max-width: 500px;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-      }
-      .form-group {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-      }
-      label {
-        font-weight: bold;
-        margin-bottom: 0.3rem;
-      }
-      input[type="text"] {
-        padding: 0.6rem;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 1rem;
-      }
-      .btn {
-        padding: 0.9rem;
-        border: none;
-        border-radius: 8px;
-        font-size: 1rem;
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0.5rem;
-        width: 70%;
-        max-width: 400px;
-        margin: 0 auto;
-      }
-      .btn.salvar {
-        background-color: #6a1b9a;
-        color: white;
-      }
-      .btn.voltar {
-        background-color: #757575;
-        color: white;
-      }
-      .lista-selos {
-        list-style: none;
-        padding: 0;
-        margin-top: 0.5rem;
-        max-height: 150px;
-        overflow-y: auto;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-      }
-      .lista-selos li {
-        padding: 0.6rem;
-        border-bottom: 1px solid #eee;
-        cursor: pointer;
-      }
-      .lista-selos li:hover {
-        background-color: #f3e5f5;
-      }
-      .selecionados {
-        margin-top: 1rem;
-        font-size: 0.9rem;
-      }
-      .selecionados span {
-        display: inline-block;
-        background-color: #6a1b9a;
-        color: white;
-        padding: 0.3rem 0.6rem;
-        border-radius: 15px;
-        margin: 0.2rem;
-        font-size: 0.85rem;
-      }
-    </style>
-  </head>
-  <body>
-    <header>
-      <h1><i class="fas fa-user-plus"></i> Cadastrar Cliente</h1>
-      <span class="versao">Versão 1.0</span>
-    </header>
-    <div class="container">
-      <div class="form-group">
-        <label>Rota:</label>
-        <input type="text" id="rota" placeholder="Ex: Zona Sul" />
-      </div>
-      <div class="form-group">
-        <label>Cliente:</label>
-        <input type="text" id="cliente" placeholder="Nome do cliente" />
-      </div>
-      <div class="form-group">
-        <label>Endereço:</label>
-        <input type="text" id="endereco" placeholder="Rua, número..." />
-      </div>
-      <div class="form-group">
-        <label>Bairro:</label>
-        <input type="text" id="bairro" placeholder="Ex: Centro" />
-      </div>
-
-      <div class="form-group">
-        <label style="color: #6a1b9a; font-weight: bold; cursor: pointer;" onclick="mostrarCampoBusca()">
-          + Adicionar Máquina
-        </label>
-        <input type="text" id="inputBuscaSelo" placeholder="Buscar selo..." oninput="filtrarSelos()" />
-        <ul id="listaSelos" class="lista-selos"></ul>
-        <div id="selosSelecionados" class="selecionados"></div>
-      </div>
-
-      <button class="btn salvar" onclick="salvarCliente()"><i class="fas fa-save"></i> Salvar Cliente</button>
-      <a href="/ajudante_pwa/gerenciarClientes.html" class="btn voltar"><i class="fas fa-arrow-left"></i> Voltar ao Menu</a>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastrar Cliente</title>
+  <script src="navegacao.js"></script>
+  <script src="https://kit.fontawesome.com/a2e0bf0f49.js" crossorigin="anonymous"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f2f2f2;
+    }
+    header {
+      background-color: #6a1b9a;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .container {
+      background-color: white;
+      max-width: 500px;
+      margin: 2rem auto;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .form-group {
+      margin-bottom: 1.2rem;
+      width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: bold;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .btn {
+      display: block;
+      width: 70%;
+      padding: 0.8rem;
+      margin: 1rem auto;
+      font-size: 1rem;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .btn.salvar {
+      background-color: #6a1b9a;
+      color: white;
+      border: none;
+    }
+    .btn.voltar {
+      background-color: #ccc;
+      color: black;
+      border: none;
+    }
+    #listaSelos {
+      list-style: none;
+      padding: 0;
+      margin-top: 0.5rem;
+      max-height: 150px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      display: none;
+    }
+    #listaSelos li {
+      padding: 0.5rem;
+      cursor: pointer;
+    }
+    #listaSelos li:hover {
+      background-color: #eee;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><i class="fas fa-user-plus"></i> Cadastrar Cliente</h1>
+  </header>
+  <div class="container">
+    <div class="form-group">
+      <label for="nome">Nome do Cliente</label>
+      <input type="text" id="nome" required />
     </div>
+    <div class="form-group">
+      <label for="endereco">Endereço</label>
+      <input type="text" id="endereco" required />
+    </div>
+    <div class="form-group">
+      <label for="rota">Rota</label>
+      <input type="text" id="rota" required />
+    </div>
+    <div class="form-group">
+      <label for="buscaSelo">Máquinas (buscar selo)</label>
+      <input type="text" id="buscaSelo" placeholder="Buscar selo..." oninput="filtrarSelos()" />
+      <ul id="listaSelos"></ul>
+    </div>
+    <button class="btn salvar" onclick="salvarCliente()">
+      <i class="fas fa-save"></i> Salvar
+    </button>
+    <a href="index.html" class="btn voltar">
+      <i class="fas fa-arrow-left"></i> Voltar ao Menu
+    </a>
+  </div>
 
-    <script type="module">
-      import { URL_BACKEND } from '/ajudante_pwa/js/navegacao.js';
+  <script>
+    let selosDisponiveis = [];
+    let selosSelecionados = [];
 
-      let selosDisponiveis = [];
-      const selecionados = [];
-
-      async function carregarSelos() {
-        try {
-          const resposta = await fetch(URL_BACKEND, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ acao: 'listarSelos' })
-          });
-          const data = await resposta.json();
-          selosDisponiveis = data || [];
-        } catch (err) {
-          console.error('Erro ao carregar selos:', err);
-        }
-      }
-
-      window.mostrarCampoBusca = function () {
-        document.getElementById('inputBuscaSelo').focus();
-      };
-
-      window.filtrarSelos = function () {
-        const input = document.getElementById('inputBuscaSelo').value.toUpperCase();
-        const lista = document.getElementById('listaSelos');
-        lista.innerHTML = '';
-
-        const filtrados = selosDisponiveis.filter(selo => selo.includes(input));
-
-        filtrados.forEach(selo => {
-          const li = document.createElement('li');
-          li.textContent = selo;
-          li.onclick = () => adicionarSelo(selo);
-          lista.appendChild(li);
-        });
-      };
-
-      function adicionarSelo(selo) {
-        if (!selecionados.includes(selo)) {
-          selecionados.push(selo);
-          atualizarSelosSelecionados();
-        }
-        document.getElementById('inputBuscaSelo').value = '';
-        window.filtrarSelos();
-      }
-
-      function atualizarSelosSelecionados() {
-        const div = document.getElementById('selosSelecionados');
-        div.innerHTML = '';
-        selecionados.forEach(selo => {
-          const span = document.createElement('span');
-          span.textContent = selo;
-          div.appendChild(span);
-        });
-      }
-
-      window.salvarCliente = function () {
-        const rota = document.getElementById('rota').value.trim();
-        const cliente = document.getElementById('cliente').value.trim();
-        const endereco = document.getElementById('endereco').value.trim();
-        const bairro = document.getElementById('bairro').value.trim();
-
-        if (!rota || !cliente || !endereco || !bairro) {
-          alert("Por favor, preencha todos os campos.");
-          return;
-        }
-
-        const dados = {
-          acao: 'cadastrarCliente',
-          rota,
-          cliente,
-          endereco,
-          bairro
-        };
-
-        if (navigator.onLine) {
-          enviarParaPlanilha(dados);
-        } else {
-          salvarLocalmente(dados);
-          alert("Sem conexão! Dados salvos localmente e serão enviados quando a internet voltar.");
-        }
-      };
-
-      function enviarParaPlanilha(dados) {
-        fetch(URL_BACKEND, {
+    async function fetchSelos() {
+      try {
+        const response = await fetch(URL_BACKEND, {
           method: 'POST',
-          body: JSON.stringify(dados),
-          headers: { 'Content-Type': 'application/json' }
-        })
-        .then(res => res.json())
-        .then(res => {
-          if (res.sucesso) {
-            alert("✅ Cliente cadastrado com sucesso!");
-            limparFormulario();
-          } else {
-            throw new Error("Erro na resposta do servidor");
-          }
-        })
-        .catch(err => {
-          console.error("Erro ao enviar:", err);
-          salvarLocalmente(dados);
-          alert("⚠️ Erro ao enviar. Dados salvos localmente.");
-        });
-      }
-
-      function salvarLocalmente(dados) {
-        const pendentes = JSON.parse(localStorage.getItem('clientesPendentes') || '[]');
-        pendentes.push(dados);
-        localStorage.setItem('clientesPendentes', JSON.stringify(pendentes));
-      }
-
-      function sincronizarPendentes() {
-        if (!navigator.onLine) return;
-
-        const pendentes = JSON.parse(localStorage.getItem('clientesPendentes') || '[]');
-        if (pendentes.length === 0) return;
-
-        const restante = [];
-
-        pendentes.forEach(dados => {
-          fetch(URL_BACKEND, {
-            method: 'POST',
-            body: JSON.stringify(dados),
-            headers: { 'Content-Type': 'application/json' }
-          })
-          .then(res => res.json())
-          .then(res => {
-            if (!res.sucesso) {
-              restante.push(dados);
-            }
-          })
-          .catch(() => {
-            restante.push(dados);
-          });
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ acao: 'listarSelos' })
         });
 
-        setTimeout(() => {
-          localStorage.setItem('clientesPendentes', JSON.stringify(restante));
-        }, 1000);
+        const resultado = await response.json();
+        if (resultado.sucesso) {
+          selosDisponiveis = resultado.dados;
+        }
+      } catch (err) {
+        console.error('Erro ao buscar selos:', err);
+      }
+    }
+
+    function filtrarSelos() {
+      const termo = document.getElementById("buscaSelo").value.toLowerCase();
+      const lista = document.getElementById("listaSelos");
+      lista.innerHTML = "";
+
+      if (termo.length === 0) {
+        lista.style.display = "none";
+        return;
       }
 
-      function limparFormulario() {
-        document.getElementById('rota').value = '';
-        document.getElementById('cliente').value = '';
-        document.getElementById('endereco').value = '';
-        document.getElementById('bairro').value = '';
-        document.getElementById('inputBuscaSelo').value = '';
-        selecionados.length = 0;
-        atualizarSelosSelecionados();
+      const filtrados = selosDisponiveis.filter(s => s.toLowerCase().includes(termo));
+      filtrados.forEach(selo => {
+        const li = document.createElement("li");
+        li.textContent = selo;
+        li.onclick = () => selecionarSelo(selo);
+        lista.appendChild(li);
+      });
+      lista.style.display = "block";
+    }
+
+    function selecionarSelo(selo) {
+      if (!selosSelecionados.includes(selo)) {
+        selosSelecionados.push(selo);
       }
+      document.getElementById("buscaSelo").value = "";
+      document.getElementById("listaSelos").style.display = "none";
+      alert("Selo adicionado: " + selo);
+    }
 
-      window.addEventListener('online', sincronizarPendentes);
-      setInterval(sincronizarPendentes, 10000);
+    async function salvarCliente() {
+      const cliente = {
+        nome: document.getElementById("nome").value,
+        endereco: document.getElementById("endereco").value,
+        rota: document.getElementById("rota").value,
+        selos: selosSelecionados
+      };
 
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/ajudante_pwa/service-worker.js')
-          .then(() => console.log('✅ SW registrado'))
-          .catch(err => console.error('Erro no SW:', err));
+      try {
+        const response = await fetch(URL_BACKEND, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ acao: "cadastrarCliente", cliente })
+        });
+        const resultado = await response.json();
+        if (resultado.sucesso) {
+          alert("Cliente salvo com sucesso!");
+        } else {
+          alert("Erro ao salvar: " + resultado.mensagem);
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Erro na comunicação com o servidor.");
       }
+    }
 
-      carregarSelos();
-    </script>
-  </body>
+    window.onload = fetchSelos;
+  </script>
+</body>
 </html>
