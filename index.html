@@ -69,9 +69,15 @@
 
   </head>
   <body>
-    <header>
-      <h1>App Ajudante</h1>
-    </header><div class="container">
+    <header style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: #6a1b9a; color: white;">
+  <h1 style="margin: 0; font-size: 1.5rem;">App Ajudante</h1>
+  <div style="display: flex; align-items: center; gap: 1rem;">
+    <span id="nomeUsuario" style="font-weight: bold;">victor</span>
+    <button onclick="logout()" style="background-color: #ffffff22; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer;">
+      <i class="fas fa-sign-out-alt"></i> Sair
+    </button>
+  </div>
+</header><div class="container">
   <a class="menu-button" href="/ajudante-app/gerenciarClientes.html">
     <i class="fas fa-users-cog"></i> Gerenciar Clientes
   </a>
@@ -99,6 +105,11 @@
       .register('/ajudante-app/service-worker.js')
       .then(() => console.log('✅ Service Worker registrado'))
       .catch(error => console.error('❌ Erro ao registrar o SW:', error));
+  }
+
+  function logout() {
+    localStorage.clear();
+    window.location.href = "/ajudante-app/login.html";
   }
 </script>
 
