@@ -5,25 +5,112 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cadastrar Cliente</title>
   <link rel="icon" href="/ajudante-app/favicon.ico" type="image/x-icon" />
-
-  <!-- Font Awesome -->
   <script src="https://kit.fontawesome.com/a2e0bf0f49.js" crossorigin="anonymous"></script>
-
-  <!-- Script principal (com import de URL_BACKEND e irPara) -->
   <script type="module">
-    import { URL_BACKEND, irPara } from '/ajudante-app/js/navegacao.js';
+    import { URL_BACKEND } from '/ajudante-app/js/navegacao.js';
 
-    // Exemplo de uso para garantir que a variável foi importada corretamente
-    console.log("✅ Backend:", URL_BACKEND);
-    window.URL_BACKEND = URL_BACKEND; // Torna acessível fora do módulo se precisar
-    window.irPara = irPara;
+    let selosDisponiveis = [];
+    let selosSelecionados = [];
+
+    async function fetchSelos() {
+      try {
+        const response = await fetch(URL_BACKEND, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ acao: 'listarSelos' })
+        });
+
+        const resultado = await response.json();
+        if (resultado.sucesso) {
+          selosDisponiveis = resultado.dados;
+        }
+      } catch (err) {
+        console.error('Erro ao buscar selos:', err);
+      }
+    }
+
+    function filtrarSelos() {
+      const termo = document.getElementById("buscaSelo").value.toLowerCase();
+      const lista = document.getElementById("listaSelos");
+      lista.innerHTML = "";
+
+      if (termo.length === 0) {
+        lista.style.display = "none";
+        return;
+      }
+
+      const filtrados = selosDisponiveis.filter(s => s.toLowerCase().includes(termo));
+      filtrados.forEach(selo => {
+        const li = document.createElement("li");
+        li.textContent = selo;
+        li.onclick = () => selecionarSelo(selo);
+        lista.appendChild(li);
+      });
+      lista.style.display = "block";
+    }
+
+    function selecionarSelo(selo) {
+      if (!selosSelecionados.includes(selo)) {
+        selosSelecionados.push(selo);
+        renderizarSelosSelecionados();
+      }
+      document.getElementById("buscaSelo").value = "";
+      document.getElementById("listaSelos").style.display = "none";
+    }
+
+    function removerSelo(selo) {
+      selosSelecionados = selosSelecionados.filter(s => s !== selo);
+      renderizarSelosSelecionados();
+    }
+
+    function renderizarSelosSelecionados() {
+      const container = document.getElementById("selosSelecionados");
+      container.innerHTML = "";
+      selosSelecionados.forEach(selo => {
+        const div = document.createElement("div");
+        div.className = "selo-item";
+        div.innerHTML = `${selo} <button onclick="removerSelo('${selo}')">❌</button>`;
+        container.appendChild(div);
+      });
+    }
+
+    async function salvarCliente() {
+      const cliente = {
+        nome: document.getElementById("nome").value,
+        endereco: document.getElementById("endereco").value,
+        rota: document.getElementById("rota").value,
+        selos: selosSelecionados
+      };
+
+      try {
+        const response = await fetch(URL_BACKEND, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ acao: "cadastrarCliente", cliente })
+        });
+        const resultado = await response.json();
+        if (resultado.sucesso) {
+          alert("Cliente salvo com sucesso!");
+        } else {
+          alert("Erro ao salvar: " + resultado.mensagem);
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Erro na comunicação com o servidor.");
+      }
+    }
+
+    window.filtrarSelos = filtrarSelos;
+    window.removerSelo = removerSelo;
+    window.salvarCliente = salvarCliente;
+    window.onload = fetchSelos;
   </script>
   <style>
     body {
       font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
       margin: 0;
       padding: 0;
-      background-color: #f2f2f2;
     }
     header {
       background-color: #6a1b9a;
@@ -95,6 +182,24 @@
     #listaSelos li:hover {
       background-color: #eee;
     }
+    #selosSelecionados {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.5rem;
+    }
+    .selo-item {
+      background-color: #e0e0e0;
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+    }
+    .selo-item button {
+      margin-left: 0.5rem;
+      background: none;
+      border: none;
+      color: red;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -118,92 +223,14 @@
       <label for="buscaSelo">Máquinas (buscar selo)</label>
       <input type="text" id="buscaSelo" placeholder="Buscar selo..." oninput="filtrarSelos()" />
       <ul id="listaSelos"></ul>
+      <div id="selosSelecionados"></div>
     </div>
     <button class="btn salvar" onclick="salvarCliente()">
       <i class="fas fa-save"></i> Salvar
     </button>
-    <a href="gerenciarClientes.html" class="btn voltar">
+    <a href="index.html" class="btn voltar">
       <i class="fas fa-arrow-left"></i> Voltar ao Menu
     </a>
   </div>
-
-  <script>
-    let selosDisponiveis = [];
-    let selosSelecionados = [];
-
-    async function fetchSelos() {
-      try {
-        const response = await fetch(URL_BACKEND, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ acao: 'listarSelos' })
-        });
-
-        const resultado = await response.json();
-        if (resultado.sucesso) {
-          selosDisponiveis = resultado.dados;
-        }
-      } catch (err) {
-        console.error('Erro ao buscar selos:', err);
-      }
-    }
-
-    function filtrarSelos() {
-      const termo = document.getElementById("buscaSelo").value.toLowerCase();
-      const lista = document.getElementById("listaSelos");
-      lista.innerHTML = "";
-
-      if (termo.length === 0) {
-        lista.style.display = "none";
-        return;
-      }
-
-      const filtrados = selosDisponiveis.filter(s => s.toLowerCase().includes(termo));
-      filtrados.forEach(selo => {
-        const li = document.createElement("li");
-        li.textContent = selo;
-        li.onclick = () => selecionarSelo(selo);
-        lista.appendChild(li);
-      });
-      lista.style.display = "block";
-    }
-
-    function selecionarSelo(selo) {
-      if (!selosSelecionados.includes(selo)) {
-        selosSelecionados.push(selo);
-      }
-      document.getElementById("buscaSelo").value = "";
-      document.getElementById("listaSelos").style.display = "none";
-      alert("Selo adicionado: " + selo);
-    }
-
-    async function salvarCliente() {
-      const cliente = {
-        nome: document.getElementById("nome").value,
-        endereco: document.getElementById("endereco").value,
-        rota: document.getElementById("rota").value,
-        selos: selosSelecionados
-      };
-
-      try {
-        const response = await fetch(URL_BACKEND, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ acao: "cadastrarCliente", cliente })
-        });
-        const resultado = await response.json();
-        if (resultado.sucesso) {
-          alert("Cliente salvo com sucesso!");
-        } else {
-          alert("Erro ao salvar: " + resultado.mensagem);
-        }
-      } catch (err) {
-        console.error(err);
-        alert("Erro na comunicação com o servidor.");
-      }
-    }
-
-    window.onload = fetchSelos;
-  </script>
 </body>
 </html>
