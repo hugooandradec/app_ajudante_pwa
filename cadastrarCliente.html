@@ -4,9 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cadastrar Cliente</title>
-  <script type="module">
-  import { URL_BACKEND, irPara } from '/ajudante-app/js/navegacao.js';
+
+  <!-- Font Awesome -->
   <script src="https://kit.fontawesome.com/a2e0bf0f49.js" crossorigin="anonymous"></script>
+
+  <!-- Script principal (com import de URL_BACKEND e irPara) -->
+  <script type="module">
+    import { URL_BACKEND, irPara } from '/ajudante-app/js/navegacao.js';
+
+    // Exemplo de uso para garantir que a variável foi importada corretamente
+    console.log("✅ Backend:", URL_BACKEND);
+    window.URL_BACKEND = URL_BACKEND; // Torna acessível fora do módulo se precisar
+    window.irPara = irPara;
+  </script>
   <style>
     body {
       font-family: Arial, sans-serif;
