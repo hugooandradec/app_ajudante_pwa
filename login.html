@@ -1,54 +1,49 @@
-<!DOCTYPE html><html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Ajudante</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="icon" href="/ajudante-app/img/favicon.ico" type="image/x-icon">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f1f1f1;
       margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
     }
     header {
       background-color: #6a1b9a;
       color: white;
-      text-align: center;
       padding: 1rem;
+      text-align: center;
     }
-    .container {
+    .card {
+      background: white;
       max-width: 400px;
       margin: 2rem auto;
-      background-color: white;
       padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-    .form-group {
-      margin-bottom: 1.2rem;
+    .card h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
     }
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 0.3rem;
-    }
-    input[type="text"],
-    input[type="password"] {
+    input {
       width: 100%;
-      padding: 0.8rem;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
       border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 1rem;
+      border-radius: 4px;
     }
     button {
       width: 100%;
-      padding: 0.8rem;
+      padding: 0.75rem;
       background-color: #6a1b9a;
-      border: none;
       color: white;
+      border: none;
+      border-radius: 4px;
       font-size: 1rem;
-      border-radius: 5px;
       cursor: pointer;
     }
     .mensagem {
@@ -61,71 +56,71 @@
 <body>
   <header>
     <h1><i class="fas fa-lock"></i> Login</h1>
-  </header>  <div class="container">
-    <div class="form-group">
-      <label for="usuario">Usuário:</label>
-      <input type="text" id="usuario" placeholder="Digite seu usuário">
-    </div>
-    <div class="form-group">
-      <label for="senha">Senha:</label>
-      <input type="password" id="senha" placeholder="Digite sua senha">
-    </div>
-    <button onclick="fazerLogin()">
-      <i class="fas fa-sign-in-alt"></i> Entrar
-    </button>
+  </header>
+  <div class="card">
+    <h2>Login</h2>
+    <input type="text" id="usuario" placeholder="Usuário:" value="victor" />
+    <input type="password" id="senha" placeholder="Senha:" />
+    <button onclick="fazerLogin()"><i class="fas fa-sign-in-alt"></i> Entrar</button>
     <div class="mensagem" id="mensagem"></div>
-  </div>  <script type="module">
-    import { URL_BACKEND } from '/ajudante-app/js/navegacao.js';
+  </div>
 
-    window.fazerLogin = async function () {
-      const usuario = document.getElementById("usuario").value.trim();
-      const senha = document.getElementById("senha").value.trim();
+  <script type="module">
+    import { URL_BACKEND } from './js/navegacao.js';
+
+    async function fazerLogin() {
+      const user = document.getElementById("usuario").value.trim();
+      const pass = document.getElementById("senha").value.trim();
       const msg = document.getElementById("mensagem");
-      msg.textContent = "";
 
-      if (!usuario || !senha) {
-        msg.textContent = "Preencha todos os campos.";
+      msg.innerText = "";
+
+      if (!user || !pass) {
+        msg.innerText = "Preencha todos os campos.";
         return;
       }
 
-      const dados = { acao: "login", usuario, senha };
-
-      // Detectar se online ou offline
-      const online = navigator.onLine;
-
-      if (online) {
+      // Verifica se está online
+      if (navigator.onLine) {
+        // Online → tenta autenticar com backend
         try {
-          const res = await fetch(URL_BACKEND, {
+          const resposta = await fetch(URL_BACKEND, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(dados)
+            body: JSON.stringify({
+              acao: "login",
+              usuario: user,
+              senha: pass
+            })
           });
 
-          const json = await res.json();
-
-          if (json.sucesso) {
+          const dados = await resposta.json();
+          if (dados.sucesso) {
+            // salva login para uso offline
             localStorage.setItem("logado", "true");
-            localStorage.setItem("usuario", usuario);
-            localStorage.setItem("senha", senha);
-            window.location.href = "/ajudante-app/index.html";
+            localStorage.setItem("usuario", user);
+            localStorage.setItem("senha", pass);
+            window.location.href = "index.html";
           } else {
-            msg.textContent = json.mensagem || "Usuário ou senha incorretos.";
+            msg.innerText = "Usuário ou senha incorretos.";
           }
         } catch (err) {
-          msg.textContent = "Erro ao conectar com o servidor.";
+          msg.innerText = "Erro ao conectar com o servidor.";
         }
       } else {
-        // OFFLINE: tentar logar com dados armazenados
-        const salvoUsuario = localStorage.getItem("usuario");
-        const salvoSenha = localStorage.getItem("senha");
-
-        if (usuario === salvoUsuario && senha === salvoSenha) {
+        // Offline → verifica se login está salvo localmente
+        const salvoUser = localStorage.getItem("usuario");
+        const salvoPass = localStorage.getItem("senha");
+        if (user === salvoUser && pass === salvoPass) {
           localStorage.setItem("logado", "true");
-          window.location.href = "/ajudante-app/index.html";
+          window.location.href = "index.html";
         } else {
-          msg.textContent = "Sem conexão e sem login válido salvo.";
+          msg.innerText = "Sem internet. Faça login online ao menos uma vez.";
         }
       }
     }
-  </script></body>
+
+    window.fazerLogin = fazerLogin;
+  </script>
+</body>
 </html>
