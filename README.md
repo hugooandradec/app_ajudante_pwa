@@ -8,7 +8,7 @@ Frontend do sistema **Ajudante**, desenvolvido como Progressive Web App (PWA) co
 
 Este frontend está publicado via GitHub Pages na subpasta:
 ```
-https://hugooandradec.github.io/ajudante_pwa/
+https://hugooandradec.github.io/ajudante-app
 ```
 
 ---
@@ -16,7 +16,7 @@ https://hugooandradec.github.io/ajudante_pwa/
 ## 📁 Estrutura
 
 - Páginas HTML com layout responsivo
-- Navegação em subpasta (`/ajudante_pwa/`)
+- Navegação em subpasta (`/ajudante-app/`)
 - Manifesto e Service Worker para instalação offline
 - Integração com backend via `fetch`
 
