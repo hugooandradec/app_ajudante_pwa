@@ -14,6 +14,10 @@ const urlsToCache = [
   '/ajudante-app/icon-512.png',
   '/ajudante-app/manifest.json',
   '/ajudante-app/favicon.ico',
+  '/ajudante-app/gerenciarMaquinas',
+  '/ajudante-app/consultarMaquina',
+  '/ajudante-app/editarMaquina',
+  '/ajudante-app/excluirMaquina',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
 ];
 
