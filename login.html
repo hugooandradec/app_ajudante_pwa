@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html><html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,9 +61,7 @@
 <body>
   <header>
     <h1><i class="fas fa-lock"></i> Login</h1>
-  </header>
-
-  <div class="container">
+  </header>  <div class="container">
     <div class="form-group">
       <label for="usuario">Usuário:</label>
       <input type="text" id="usuario" placeholder="Digite seu usuário">
@@ -77,9 +74,7 @@
       <i class="fas fa-sign-in-alt"></i> Entrar
     </button>
     <div class="mensagem" id="mensagem"></div>
-  </div>
-
-  <script type="module">
+  </div>  <script type="module">
     import { URL_BACKEND } from '/ajudante-app/js/navegacao.js';
 
     window.fazerLogin = async function () {
@@ -93,32 +88,44 @@
         return;
       }
 
-      const dados = {
-        acao: "login",
-        usuario,
-        senha
-      };
+      const dados = { acao: "login", usuario, senha };
 
-      try {
-        const res = await fetch(URL_BACKEND, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(dados)
-        });
+      // Detectar se online ou offline
+      const online = navigator.onLine;
 
-        const json = await res.json();
+      if (online) {
+        try {
+          const res = await fetch(URL_BACKEND, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(dados)
+          });
 
-        if (json.sucesso) {
+          const json = await res.json();
+
+          if (json.sucesso) {
+            localStorage.setItem("logado", "true");
+            localStorage.setItem("usuario", usuario);
+            localStorage.setItem("senha", senha);
+            window.location.href = "/ajudante-app/index.html";
+          } else {
+            msg.textContent = json.mensagem || "Usuário ou senha incorretos.";
+          }
+        } catch (err) {
+          msg.textContent = "Erro ao conectar com o servidor.";
+        }
+      } else {
+        // OFFLINE: tentar logar com dados armazenados
+        const salvoUsuario = localStorage.getItem("usuario");
+        const salvoSenha = localStorage.getItem("senha");
+
+        if (usuario === salvoUsuario && senha === salvoSenha) {
           localStorage.setItem("logado", "true");
           window.location.href = "/ajudante-app/index.html";
         } else {
-          msg.textContent = json.mensagem || "Usuário ou senha incorretos.";
+          msg.textContent = "Sem conexão e sem login válido salvo.";
         }
-      } catch (err) {
-        console.error("Erro ao fazer login:", err);
-        msg.textContent = "Erro ao conectar com o servidor.";
       }
     }
-  </script>
-</body>
+  </script></body>
 </html>
