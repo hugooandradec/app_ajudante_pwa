@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,90 +15,92 @@
         margin: 0;
         font-family: Arial, sans-serif;
         background-color: #f1f1f1;
-      }
+      }header {
+    background-color: #6a1b9a;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+  }
 
-      header {
-        background-color: #6a1b9a;
-        color: white;
-        padding: 1rem;
-        text-align: center;
-      }
+  header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
 
-      header h1 {
-        margin: 0;
-        font-size: 1.5rem;
-      }
+  .container {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
 
-      .container {
-        margin-top: 2rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1.5rem;
-        padding: 0 1rem;
-      }
+  .menu-button {
+    background-color: white;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    color: black;
+    text-decoration: none;
+  }
 
-      .menu-button {
-        background-color: white;
-        border: none;
-        border-radius: 12px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        max-width: 400px;
-        padding: 1rem;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        font-size: 1.1rem;
-        cursor: pointer;
-        transition: transform 0.2s ease;
-        color: black;
-        text-decoration: none;
-      }
+  .menu-button:hover {
+    transform: scale(1.02);
+  }
 
-      .menu-button:hover {
-        transform: scale(1.02);
-      }
+  .menu-button i {
+    margin-right: 1rem;
+    font-size: 1.3rem;
+    color: #6a1b9a;
+    width: 24px;
+    text-align: center;
+  }
+</style>
 
-      .menu-button i {
-        margin-right: 1rem;
-        font-size: 1.3rem;
-        color: #6a1b9a;
-        width: 24px;
-        text-align: center;
-      }
-    </style>
   </head>
   <body>
     <header>
       <h1>App Ajudante</h1>
-    </header>
+    </header><div class="container">
+  <a class="menu-button" href="/ajudante-app/gerenciarClientes.html">
+    <i class="fas fa-users-cog"></i> Gerenciar Clientes
+  </a>
 
-    <div class="container">
-      <a class="menu-button" href="/ajudante-app/gerenciarClientes.html">
-        <i class="fas fa-users-cog"></i> Gerenciar Clientes
-      </a>
+  <a class="menu-button" href="/ajudante-app/gerenciarMaquinas.html">
+    <i class="fas fa-cogs"></i> Gerenciar Máquinas
+  </a>
 
-      <a class="menu-button" href="/ajudante-app/gerenciarMaquinas.html">
-		<i class="fas fa-cogs"></i> Gerenciar Máquinas
-	  </a>
+  <a class="menu-button" href="/ajudante-app/preFecho.html">
+    <i class="fas fa-hourglass-half"></i> Pré Fecho
+  </a>
 
-      <a class="menu-button" href="/ajudante-app/preFecho.html">
-        <i class="fas fa-hourglass-half"></i> Pré Fecho
-      </a>
+  <a class="menu-button" href="/ajudante-app/calculoRetencao.html">
+    <i class="fas fa-percent"></i> Cálculo de Retenção
+  </a>
+</div>
 
-      <a class="menu-button" href="/ajudante-app/calculoRetencao.html">
-        <i class="fas fa-percent"></i> Cálculo de Retenção
-      </a>
-    </div>
+<script>
+  if (localStorage.getItem("logado") !== "true") {
+    window.location.href = "/ajudante-app/login.html";
+  }
 
-    <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker
-          .register('/ajudante-app/service-worker.js')
-          .then(() => console.log('✅ Service Worker registrado'))
-          .catch(error => console.error('❌ Erro ao registrar o SW:', error));
-      }
-    </script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+      .register('/ajudante-app/service-worker.js')
+      .then(() => console.log('✅ Service Worker registrado'))
+      .catch(error => console.error('❌ Erro ao registrar o SW:', error));
+  }
+</script>
+
   </body>
 </html>
