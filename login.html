@@ -4,52 +4,70 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
+      background-color: #f1f1f1;
     }
+
     header {
       background-color: #6a1b9a;
       color: white;
       padding: 1rem;
       text-align: center;
     }
-    .card {
-      background: white;
-      max-width: 400px;
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .container {
       margin: 2rem auto;
+      max-width: 400px;
+      background: white;
       padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
-    .card h2 {
-      text-align: center;
-      margin-bottom: 1.5rem;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
     }
-    input {
+
+    input[type="text"],
+    input[type="password"] {
       width: 100%;
-      padding: 0.75rem;
+      padding: 0.8rem;
       margin-bottom: 1rem;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 6px;
+      font-size: 1rem;
     }
+
     button {
       width: 100%;
-      padding: 0.75rem;
       background-color: #6a1b9a;
       color: white;
       border: none;
-      border-radius: 4px;
+      padding: 0.8rem;
       font-size: 1rem;
+      border-radius: 6px;
       cursor: pointer;
     }
-    .mensagem {
+
+    button i {
+      margin-right: 0.5rem;
+    }
+
+    .erro {
+      color: red;
       text-align: center;
       margin-top: 1rem;
-      color: red;
     }
   </style>
 </head>
@@ -57,70 +75,76 @@
   <header>
     <h1><i class="fas fa-lock"></i> Login</h1>
   </header>
-  <div class="card">
-    <h2>Login</h2>
-    <input type="text" id="usuario" placeholder="Usuário:" value="victor" />
-    <input type="password" id="senha" placeholder="Senha:" />
-    <button onclick="fazerLogin()"><i class="fas fa-sign-in-alt"></i> Entrar</button>
-    <div class="mensagem" id="mensagem"></div>
+
+  <div class="container">
+    <label for="usuario">Usuário:</label>
+    <input type="text" id="usuario" placeholder="Digite o usuário" />
+
+    <label for="senha">Senha:</label>
+    <input type="password" id="senha" placeholder="Digite a senha" />
+
+    <button onclick="logar()">
+      <i class="fas fa-sign-in-alt"></i> Entrar
+    </button>
+
+    <p id="mensagem" class="erro"></p>
   </div>
 
   <script type="module">
     import { URL_BACKEND } from './js/navegacao.js';
 
-    async function fazerLogin() {
-      const user = document.getElementById("usuario").value.trim();
-      const pass = document.getElementById("senha").value.trim();
+    window.logar = async function () {
+      const usuario = document.getElementById("usuario").value.trim().toLowerCase();
+      const senha = document.getElementById("senha").value.trim();
       const msg = document.getElementById("mensagem");
 
       msg.innerText = "";
 
-      if (!user || !pass) {
+      if (!usuario || !senha) {
         msg.innerText = "Preencha todos os campos.";
         return;
       }
 
-      // Verifica se está online
-      if (navigator.onLine) {
-        // Online → tenta autenticar com backend
-        try {
-          const resposta = await fetch(URL_BACKEND, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              acao: "login",
-              usuario: user,
-              senha: pass
-            })
-          });
+      const offline = !navigator.onLine;
 
-          const dados = await resposta.json();
-          if (dados.sucesso) {
-            // salva login para uso offline
-            localStorage.setItem("logado", "true");
-            localStorage.setItem("usuario", user);
-            localStorage.setItem("senha", pass);
-            window.location.href = "index.html";
-          } else {
-            msg.innerText = "Usuário ou senha incorretos.";
-          }
-        } catch (err) {
-          msg.innerText = "Erro ao conectar com o servidor.";
-        }
-      } else {
-        // Offline → verifica se login está salvo localmente
-        const salvoUser = localStorage.getItem("usuario");
-        const salvoPass = localStorage.getItem("senha");
-        if (user === salvoUser && pass === salvoPass) {
+      if (offline) {
+        const salvo = JSON.parse(localStorage.getItem("credenciaisSalvas"));
+        if (salvo && salvo.usuario === usuario && salvo.senha === senha) {
           localStorage.setItem("logado", "true");
-          window.location.href = "index.html";
+          localStorage.setItem("usuarioLogado", usuario);
+          window.location.href = "/ajudante-app/index.html";
         } else {
-          msg.innerText = "Sem internet. Faça login online ao menos uma vez.";
+          msg.innerText = "Sem conexão e login não reconhecido no aparelho.";
         }
+        return;
       }
-    }
 
-    window.fazerLogin = fazerLogin;
+      // Se estiver online, verifica no backend
+      try {
+        const res = await fetch(URL_BACKEND, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            acao: "login",
+            usuario,
+            senha,
+          }),
+        });
+
+        const json = await res.json();
+        if (json.sucesso) {
+          localStorage.setItem("logado", "true");
+          localStorage.setItem("usuarioLogado", usuario);
+          localStorage.setItem("credenciaisSalvas", JSON.stringify({ usuario, senha }));
+          window.location.href = "/ajudante-app/index.html";
+        } else {
+          msg.innerText = json.mensagem || "Login inválido.";
+        }
+      } catch (e) {
+        msg.innerText = "Erro ao conectar com o servidor.";
+        console.error(e);
+      }
+    };
   </script>
 </body>
 </html>
