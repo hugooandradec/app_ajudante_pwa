@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ajudante-cache-v1';
+const CACHE_NAME = `ajudante-cache-v${Date.now()}`;
 const urlsToCache = [
   '/ajudante-app/',
   '/ajudante-app/index.html',
@@ -13,6 +13,7 @@ const urlsToCache = [
   '/ajudante-app/icon-192.png',
   '/ajudante-app/icon-512.png',
   '/ajudante-app/manifest.json',
+  '/ajudante-app/favicon.ico',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
 ];
 
@@ -44,6 +45,6 @@ self.addEventListener('activate', event => {
           }
         })
       )
-    )
+    ).then(() => self.clients.claim())
   );
 });

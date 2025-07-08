@@ -1,7 +1,5 @@
-// js/navegacao.js
+export const URL_BACKEND = "https://ajudante-api.onrender.com";
 
-export const URL_BACKEND = "https://ajudante-api.onrender.com";  // novo backend da Render
-
-function irPara(pagina) {
+export function irPara(pagina) {
   window.location.href = `${pagina}.html`;
 }
