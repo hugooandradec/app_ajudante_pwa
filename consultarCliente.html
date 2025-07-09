@@ -1,92 +1,212 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Consultar Cliente</title>
-	<link rel="icon" href="/ajudante-app/favicon.ico" type="image/x-icon" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <style>
-      body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background-color: #f1f1f1;
-      }
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Consultar Cliente</title>
+  <link rel="icon" href="/ajudante-app/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f1f1f1;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #6a1b9a;
+      color: white;
+      padding: 10px 20px;
+      font-weight: bold;
+      font-size: 16px;
+      border-radius: 0 0 10px 10px;
+    }
+    .btn-sair {
+      background-color: #9e9e9e;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    header {
+      background-color: #6a1b9a;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .container {
+      max-width: 500px;
+      margin: 2rem auto;
+      padding: 2rem;
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.7rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    .btn {
+      display: block;
+      width: 70%;
+      margin: 1rem auto;
+      padding: 0.8rem;
+      font-size: 1rem;
+      text-align: center;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+    }
+    .btn.buscar {
+      background-color: #6a1b9a;
+    }
+    .btn.voltar {
+      background-color: #888;
+    }
+    ul {
+      padding-left: 1.2rem;
+    }
+    li {
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span id="usuario-logado"></span>
+    <button onclick="sair()" class="btn-sair">Sair</button>
+  </div>
 
-      header {
-        background-color: #6a1b9a;
-        color: white;
-        padding: 1rem;
-        text-align: center;
-      }
+  <header>
+    <h1><i class="fas fa-users"></i> Consultar Cliente</h1>
+  </header>
 
-      header h1 {
-        margin: 0;
-        font-size: 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-      }
-
-      .versao {
-        font-size: 0.8rem;
-        color: #e0e0e0;
-      }
-
-      .container {
-        background-color: white;
-        max-width: 500px;
-        margin: 2rem auto;
-        padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
-      }
-
-      p {
-        font-size: 1rem;
-        color: #333;
-        margin-bottom: 2rem;
-      }
-
-      .btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        width: 70%;
-        max-width: 400px;
-        margin: 0 auto;
-        padding: 0.9rem;
-        font-size: 1rem;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        text-decoration: none;
-        color: white;
-      }
-
-      .btn.voltar {
-        background-color: #757575;
-      }
-    </style>
-  </head>
-  <body>
-    <header>
-      <h1><i class="fas fa-search"></i> Consultar Cliente</h1>
-      <span class="versao">Versão 1.0</span>
-    </header>
-
-    <div class="container">
-      <p>🔎 Em breve: você poderá consultar os dados de clientes por nome, rota ou máquina associada.</p>
-
-      <a class="btn voltar" href="/ajudante-app/gerenciarClientes.html">
-        <i class="fas fa-arrow-left"></i> Voltar ao Menu
-      </a>
+  <div class="container">
+    <div class="form-group">
+      <label for="filtro">Buscar por nome ou selo:</label>
+      <input type="text" id="filtro" placeholder="Ex: Maria ou 123-AB" />
     </div>
-  </body>
+
+    <button class="btn buscar" onclick="buscarCliente()">
+      <i class="fas fa-search"></i> Buscar
+    </button>
+
+    <div id="resultado"></div>
+
+    <a class="btn voltar" href="gerenciarClientes.html">
+      <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+  </div>
+
+  <script type="module">
+    import { URL_BACKEND } from '/ajudante-app/js/navegacao.js';
+
+    async function carregarCacheClientes() {
+      try {
+        const resposta = await fetch(URL_BACKEND, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ acao: "listarClientes" })
+        });
+        const json = await resposta.json();
+        if (json.sucesso && Array.isArray(json.dados)) {
+          localStorage.setItem("cacheClientes", JSON.stringify(json.dados));
+        }
+      } catch (e) {
+        console.error("Erro ao sincronizar cache de clientes:", e);
+      }
+    }
+
+    window.buscarCliente = async function () {
+      const filtro = document.getElementById("filtro").value.trim().toLowerCase();
+      const container = document.getElementById("resultado");
+      container.innerHTML = "";
+
+      if (!filtro) {
+        alert("Digite um termo para buscar.");
+        return;
+      }
+
+      let clientes = [];
+
+      if (navigator.onLine) {
+        try {
+          const resposta = await fetch(URL_BACKEND, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ acao: "buscarCliente", filtro })
+          });
+
+          const json = await resposta.json();
+          if (json.sucesso && json.dados.length > 0) {
+            clientes = json.dados;
+            localStorage.setItem("cacheClientes", JSON.stringify(json.dados));
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      } else {
+        const cache = JSON.parse(localStorage.getItem("cacheClientes") || "[]");
+        clientes = cache.filter(c =>
+          c.nome.toLowerCase().includes(filtro) ||
+          c.selos?.some(s => s.toLowerCase().includes(filtro))
+        );
+      }
+
+      if (clientes.length > 0) {
+        const lista = document.createElement("ul");
+        clientes.forEach(c => {
+          const item = document.createElement("li");
+          item.textContent = `${c.nome} - ${c.rota} - ${c.selos.join(', ')}`;
+          lista.appendChild(item);
+        });
+        container.appendChild(lista);
+      } else {
+        container.textContent = "Nenhum cliente encontrado.";
+      }
+    };
+
+    window.addEventListener("load", () => {
+      if (navigator.onLine) carregarCacheClientes();
+    });
+  </script>
+
+  <script>
+    function sair() {
+      localStorage.removeItem('usuarioLogado');
+      window.location.href = 'login.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const usuario = localStorage.getItem('usuarioLogado');
+      if (usuario) {
+        document.getElementById('usuario-logado').textContent = `Usuário: ${usuario}`;
+      } else {
+        window.location.href = 'login.html';
+      }
+    });
+  </script>
+</body>
 </html>

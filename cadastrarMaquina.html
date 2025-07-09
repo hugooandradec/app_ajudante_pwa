@@ -11,7 +11,6 @@
       margin: 0;
       background-color: #f1f1f1;
     }
-
     .header {
       display: flex;
       justify-content: space-between;
@@ -23,7 +22,6 @@
       font-size: 16px;
       border-radius: 0 0 10px 10px;
     }
-
     .btn-sair {
       background-color: #9e9e9e;
       color: white;
@@ -33,29 +31,25 @@
       cursor: pointer;
       font-weight: bold;
     }
-
     header {
       background-color: #6a1b9a;
       color: white;
       padding: 1rem;
       text-align: center;
     }
-
     .container {
       max-width: 400px;
       margin: 2rem auto;
-      background: white;
       padding: 2rem;
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      background-color: transparent;
     }
-
     label {
       display: block;
       margin-bottom: 0.5rem;
       font-weight: bold;
     }
-
     input, select {
       width: 100%;
       padding: 0.8rem;
@@ -63,7 +57,6 @@
       border: 1px solid #ccc;
       border-radius: 6px;
     }
-
     button {
       width: 100%;
       padding: 0.9rem;
@@ -74,17 +67,14 @@
       font-size: 1rem;
       cursor: pointer;
     }
-
     .mensagem {
       text-align: center;
       margin-top: 1rem;
       font-weight: bold;
     }
-
     .mensagem.ok {
       color: green;
     }
-
     .mensagem.erro {
       color: red;
     }
@@ -95,11 +85,9 @@
     <span id="usuario-logado"></span>
     <button onclick="sair()" class="btn-sair">Sair</button>
   </div>
-
   <header>
     <h1><i class="fas fa-cogs"></i> Cadastrar Máquina</h1>
   </header>
-
   <div class="container">
     <label for="nome">Selo da Máquina</label>
     <input type="text" id="nome" placeholder="Ex: 123-AB" />
@@ -119,7 +107,6 @@
 
     <div id="mensagem" class="mensagem"></div>
   </div>
-
   <script type="module">
     import { URL_BACKEND } from "./js/navegacao.js";
 
@@ -203,7 +190,6 @@
       if (navigator.onLine) sincronizarMaquinas();
     });
   </script>
-
   <script>
     function sair() {
       localStorage.removeItem('usuarioLogado');
