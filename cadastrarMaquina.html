@@ -108,7 +108,11 @@
     <div id="mensagem" class="mensagem"></div>
   </div>
   <script type="module">
-    import { URL_BACKEND } from "./js/navegacao.js";
+    import { URL_BACKEND, verificarLogin, exibirUsuarioLogado, sair } from "/ajudante-app/js/navegacao.js";
+
+    verificarLogin();
+    exibirUsuarioLogado();
+    window.sair = sair;
 
     function exibirMensagem(texto, tipo = "ok") {
       const msg = document.getElementById("mensagem");
@@ -188,21 +192,6 @@
 
     window.addEventListener("load", () => {
       if (navigator.onLine) sincronizarMaquinas();
-    });
-  </script>
-  <script>
-    function sair() {
-      localStorage.removeItem('usuarioLogado');
-      window.location.href = 'login.html';
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const usuario = localStorage.getItem('usuarioLogado');
-      if (usuario) {
-        document.getElementById('usuario-logado').textContent = `Usuário: ${usuario}`;
-      } else {
-        window.location.href = 'login.html';
-      }
     });
   </script>
 </body>

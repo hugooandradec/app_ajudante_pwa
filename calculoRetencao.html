@@ -98,6 +98,7 @@
       text-align: center;
       font-weight: bold;
       margin-top: 1rem;
+      white-space: pre-line;
     }
   </style>
 </head>
@@ -137,7 +138,11 @@
   </div>
 
   <script type="module">
-    import { URL_BACKEND } from "/ajudante-app/js/navegacao.js";
+    import { URL_BACKEND, verificarLogin, exibirUsuarioLogado, sair } from "/ajudante-app/js/navegacao.js";
+
+    verificarLogin();
+    exibirUsuarioLogado();
+    window.sair = sair;
 
     window.salvarRetencao = async function () {
       const maquina = document.getElementById("maquina").value.trim();
@@ -157,21 +162,14 @@
       msg.style.color = "green";
       msg.innerText = `🧮 Saldo da máquina ${maquina}: R$ ${saldo.toFixed(2)}`;
 
-      const dados = {
-        maquina,
-        entrada,
-        saida,
-        saldo
-      };
+      const dados = { maquina, entrada, saida, saldo };
 
       if (navigator.onLine) {
         try {
           const resposta = await fetch(URL_BACKEND, {
             method: "POST",
             body: JSON.stringify({ acao: "registrarRetencao", ...dados }),
-            headers: {
-              "Content-Type": "application/json"
-            }
+            headers: { "Content-Type": "application/json" }
           });
 
           const resultado = await resposta.text();
@@ -196,9 +194,7 @@
           const resposta = await fetch(URL_BACKEND, {
             method: "POST",
             body: JSON.stringify({ acao: "registrarRetencao", ...dados }),
-            headers: {
-              "Content-Type": "application/json"
-            }
+            headers: { "Content-Type": "application/json" }
           });
           const resultado = await resposta.text();
           console.log("Sincronizado:", resultado);
@@ -216,22 +212,6 @@
 
     window.addEventListener("load", () => {
       if (navigator.onLine) sincronizarRetencoes();
-    });
-  </script>
-
-  <script>
-    function sair() {
-      localStorage.removeItem('usuarioLogado');
-      window.location.href = 'login.html';
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const usuario = localStorage.getItem('usuarioLogado');
-      if (usuario) {
-        document.getElementById('usuario-logado').textContent = `Usuário: ${usuario}`;
-      } else {
-        window.location.href = 'login.html';
-      }
     });
   </script>
 </body>

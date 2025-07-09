@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Editar Máquina</title>
-  <link rel="icon" href="/ajudante-app/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     body {
@@ -12,125 +11,78 @@
       font-family: Arial, sans-serif;
       background-color: #f1f1f1;
     }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #6a1b9a;
+      color: white;
+      padding: 10px 20px;
+      font-weight: bold;
+      font-size: 16px;
+      border-radius: 0 0 10px 10px;
+    }
+    .btn-sair {
+      background-color: #9e9e9e;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
     header {
       background-color: #6a1b9a;
       color: white;
       padding: 1rem;
       text-align: center;
     }
-    header h1 {
-      margin: 0;
-      font-size: 1.5rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
-    }
     .container {
-      background-color: white;
-      max-width: 500px;
+      max-width: 600px;
       margin: 2rem auto;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: bold;
-    }
-    input[type="text"] {
-      width: 100%;
-      padding: 0.7rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 1rem;
-    }
-    .btn {
-      display: block;
-      width: 70%;
-      margin: 1rem auto;
-      padding: 0.8rem;
-      font-size: 1rem;
+      padding: 1rem;
       text-align: center;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      color: white;
     }
-    .btn.editar {
+    input {
+      width: 90%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
       background-color: #6a1b9a;
-    }
-    .btn.voltar {
-      background-color: #888;
+      color: white;
+      padding: 0.8rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 1rem;
     }
   </style>
 </head>
 <body>
+  <div class="header">
+    <span id="usuario-logado"></span>
+    <button onclick="sair()" class="btn-sair">Sair</button>
+  </div>
   <header>
     <h1><i class="fas fa-edit"></i> Editar Máquina</h1>
   </header>
-
   <div class="container">
-    <div class="form-group">
-      <label for="nome">Selo da Máquina (existente):</label>
-      <input type="text" id="nome" placeholder="Ex: YZS001" />
-    </div>
-
-    <div class="form-group">
-      <label for="novoTipo">Novo Jogo:</label>
-      <input type="text" id="novoTipo" placeholder="Ex: Dragon Plus" />
-    </div>
-
-    <button class="btn editar" onclick="editarMaquina()">
-      <i class="fas fa-edit"></i> Salvar Alterações
+    <p>🛠️ Em breve: formulário para editar dados da máquina</p>
+    <button onclick="window.location.href='index.html'">
+      <i class="fas fa-arrow-left"></i> Voltar ao Menu
     </button>
-
-    <a class="btn voltar" href="gerenciarMaquinas.html">
-      <i class="fas fa-arrow-left"></i> Voltar
-    </a>
   </div>
 
   <script type="module">
-    import { URL_BACKEND } from '/ajudante-app/js/navegacao.js';
+    import { verificarLogin, exibirUsuarioLogado, sair } from "/ajudante-app/js/navegacao.js";
 
-    window.editarMaquina = async function () {
-      const nome = document.getElementById("nome").value.trim();
-      const novoTipo = document.getElementById("novoTipo").value.trim();
-
-      if (!nome || !novoTipo) {
-        alert("Preencha os campos corretamente.");
-        return;
-      }
-
-      const dados = {
-        acao: "editarMaquina",
-        nome,
-        novoTipo
-      };
-
-      try {
-        const resposta = await fetch(URL_BACKEND, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(dados)
-        });
-
-        const json = await resposta.json();
-
-        if (json.sucesso) {
-          alert("✅ Máquina atualizada com sucesso!");
-        } else {
-          alert(json.mensagem || "❌ Erro ao atualizar.");
-        }
-      } catch (erro) {
-        console.error("Erro:", erro);
-        alert("❌ Erro de comunicação com o servidor.");
-      }
-    };
+    verificarLogin();
+    exibirUsuarioLogado();
+    window.sair = sair;
   </script>
 </body>
 </html>

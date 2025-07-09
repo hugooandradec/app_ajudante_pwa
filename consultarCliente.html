@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Consultar Cliente</title>
-  <link rel="icon" href="/ajudante-app/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     body {
@@ -41,55 +40,27 @@
     header h1 {
       margin: 0;
       font-size: 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
     }
     .container {
-      max-width: 500px;
+      max-width: 600px;
       margin: 2rem auto;
-      padding: 2rem;
+      padding: 1rem;
       text-align: center;
     }
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: bold;
-    }
-    input[type="text"] {
-      width: 100%;
-      padding: 0.7rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 1rem;
-    }
-    .btn {
-      display: block;
-      width: 70%;
-      margin: 1rem auto;
+    input {
+      width: 90%;
       padding: 0.8rem;
-      font-size: 1rem;
-      text-align: center;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      color: white;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
     }
-    .btn.buscar {
-      background-color: #6a1b9a;
-    }
-    .btn.voltar {
-      background-color: #888;
-    }
-    ul {
-      padding-left: 1.2rem;
-    }
-    li {
-      margin-bottom: 0.5rem;
+    .cliente {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: left;
     }
   </style>
 </head>
@@ -98,115 +69,69 @@
     <span id="usuario-logado"></span>
     <button onclick="sair()" class="btn-sair">Sair</button>
   </div>
-
   <header>
-    <h1><i class="fas fa-users"></i> Consultar Cliente</h1>
+    <h1><i class="fas fa-search"></i> Consultar Cliente</h1>
   </header>
-
   <div class="container">
-    <div class="form-group">
-      <label for="filtro">Buscar por nome ou selo:</label>
-      <input type="text" id="filtro" placeholder="Ex: Maria ou 123-AB" />
-    </div>
-
-    <button class="btn buscar" onclick="buscarCliente()">
-      <i class="fas fa-search"></i> Buscar
-    </button>
-
+    <input type="text" id="busca" placeholder="Digite nome ou selo..." oninput="filtrarClientes()" />
     <div id="resultado"></div>
-
-    <a class="btn voltar" href="gerenciarClientes.html">
-      <i class="fas fa-arrow-left"></i> Voltar
-    </a>
   </div>
 
   <script type="module">
-    import { URL_BACKEND } from '/ajudante-app/js/navegacao.js';
+    import { URL_BACKEND, verificarLogin, exibirUsuarioLogado, sair } from "/ajudante-app/js/navegacao.js";
 
-    async function carregarCacheClientes() {
-      try {
-        const resposta = await fetch(URL_BACKEND, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ acao: "listarClientes" })
-        });
-        const json = await resposta.json();
-        if (json.sucesso && Array.isArray(json.dados)) {
-          localStorage.setItem("cacheClientes", JSON.stringify(json.dados));
-        }
-      } catch (e) {
-        console.error("Erro ao sincronizar cache de clientes:", e);
-      }
-    }
+    verificarLogin();
+    exibirUsuarioLogado();
+    window.sair = sair;
 
-    window.buscarCliente = async function () {
-      const filtro = document.getElementById("filtro").value.trim().toLowerCase();
-      const container = document.getElementById("resultado");
-      container.innerHTML = "";
+    let todosClientes = [];
 
-      if (!filtro) {
-        alert("Digite um termo para buscar.");
-        return;
-      }
-
-      let clientes = [];
-
+    async function carregarClientes() {
       if (navigator.onLine) {
         try {
-          const resposta = await fetch(URL_BACKEND, {
+          const res = await fetch(URL_BACKEND, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ acao: "buscarCliente", filtro })
+            body: JSON.stringify({ acao: "listarClientes" })
           });
-
-          const json = await resposta.json();
-          if (json.sucesso && json.dados.length > 0) {
-            clientes = json.dados;
-            localStorage.setItem("cacheClientes", JSON.stringify(json.dados));
+          const json = await res.json();
+          if (json.sucesso) {
+            todosClientes = json.dados;
+            localStorage.setItem("cacheClientes", JSON.stringify(todosClientes));
           }
         } catch (err) {
-          console.error(err);
+          console.error("Erro ao buscar online:", err);
+          todosClientes = JSON.parse(localStorage.getItem("cacheClientes") || "[]");
         }
       } else {
-        const cache = JSON.parse(localStorage.getItem("cacheClientes") || "[]");
-        clientes = cache.filter(c =>
-          c.nome.toLowerCase().includes(filtro) ||
-          c.selos?.some(s => s.toLowerCase().includes(filtro))
-        );
+        todosClientes = JSON.parse(localStorage.getItem("cacheClientes") || "[]");
       }
-
-      if (clientes.length > 0) {
-        const lista = document.createElement("ul");
-        clientes.forEach(c => {
-          const item = document.createElement("li");
-          item.textContent = `${c.nome} - ${c.rota} - ${c.selos.join(', ')}`;
-          lista.appendChild(item);
-        });
-        container.appendChild(lista);
-      } else {
-        container.textContent = "Nenhum cliente encontrado.";
-      }
-    };
-
-    window.addEventListener("load", () => {
-      if (navigator.onLine) carregarCacheClientes();
-    });
-  </script>
-
-  <script>
-    function sair() {
-      localStorage.removeItem('usuarioLogado');
-      window.location.href = 'login.html';
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const usuario = localStorage.getItem('usuarioLogado');
-      if (usuario) {
-        document.getElementById('usuario-logado').textContent = `Usuário: ${usuario}`;
-      } else {
-        window.location.href = 'login.html';
-      }
-    });
+    window.filtrarClientes = function () {
+      const termo = document.getElementById("busca").value.toLowerCase();
+      const resultado = document.getElementById("resultado");
+      resultado.innerHTML = "";
+
+      const filtrados = todosClientes.filter(c =>
+        c.nome.toLowerCase().includes(termo) ||
+        c.selos?.some(s => s.toLowerCase().includes(termo))
+      );
+
+      filtrados.forEach(cliente => {
+        const div = document.createElement("div");
+        div.className = "cliente";
+        div.innerHTML = `
+          <strong>Nome:</strong> ${cliente.nome}<br>
+          <strong>Endereço:</strong> ${cliente.endereco}<br>
+          <strong>Rota:</strong> ${cliente.rota}<br>
+          <strong>Máquinas:</strong> ${cliente.selos?.join(", ") || "-"}
+        `;
+        resultado.appendChild(div);
+      });
+    };
+
+    window.addEventListener("load", carregarClientes);
   </script>
 </body>
 </html>

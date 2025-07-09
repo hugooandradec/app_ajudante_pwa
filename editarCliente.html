@@ -1,132 +1,88 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Editar Cliente</title>
-    <link rel="icon" href="/ajudante-app/favicon.ico" type="image/x-icon" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <style>
-      body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background-color: #f1f1f1;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editar Cliente</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f1f1f1;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #6a1b9a;
+      color: white;
+      padding: 10px 20px;
+      font-weight: bold;
+      font-size: 16px;
+      border-radius: 0 0 10px 10px;
+    }
+    .btn-sair {
+      background-color: #9e9e9e;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    header {
+      background-color: #6a1b9a;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1rem;
+      text-align: center;
+    }
+    input {
+      width: 90%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #6a1b9a;
+      color: white;
+      padding: 0.8rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span id="usuario-logado"></span>
+    <button onclick="sair()" class="btn-sair">Sair</button>
+  </div>
+  <header>
+    <h1><i class="fas fa-pen"></i> Editar Cliente</h1>
+  </header>
+  <div class="container">
+    <p>🛠️ Em breve: formulário para editar cliente existente</p>
+    <button onclick="window.location.href='index.html'">
+      <i class="fas fa-arrow-left"></i> Voltar ao Menu
+    </button>
+  </div>
 
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #6a1b9a;
-        color: white;
-        padding: 10px 20px;
-        font-weight: bold;
-        font-size: 16px;
-        border-radius: 0 0 10px 10px;
-      }
+  <script type="module">
+    import { verificarLogin, exibirUsuarioLogado, sair } from "/ajudante-app/js/navegacao.js";
 
-      .btn-sair {
-        background-color: #9e9e9e;
-        color: white;
-        border: none;
-        padding: 6px 12px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: bold;
-      }
-
-      header {
-        background-color: #6a1b9a;
-        color: white;
-        padding: 1rem;
-        text-align: center;
-      }
-
-      header h1 {
-        margin: 0;
-        font-size: 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-      }
-
-      .versao {
-        font-size: 0.8rem;
-        color: #e0e0e0;
-      }
-
-      .container {
-        max-width: 500px;
-        margin: 2rem auto;
-        padding: 2rem;
-        text-align: center;
-      }
-
-      p {
-        font-size: 1rem;
-        color: #333;
-        margin-bottom: 2rem;
-      }
-
-      .btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        width: 70%;
-        max-width: 400px;
-        margin: 0 auto;
-        padding: 0.9rem;
-        font-size: 1rem;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        text-decoration: none;
-        color: white;
-      }
-
-      .btn.voltar {
-        background-color: #757575;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="header">
-      <span id="usuario-logado"></span>
-      <button onclick="sair()" class="btn-sair">Sair</button>
-    </div>
-
-    <header>
-      <h1><i class="fas fa-pen"></i> Editar Cliente</h1>
-      <span class="versao">Versão 1.0</span>
-    </header>
-
-    <div class="container">
-      <p>⚙️ Em breve: aqui você poderá buscar, editar e atualizar os dados dos clientes já cadastrados.</p>
-
-      <a class="btn voltar" href="/ajudante-app/gerenciarClientes.html">
-        <i class="fas fa-arrow-left"></i> Voltar ao Menu
-      </a>
-    </div>
-
-    <script>
-      function sair() {
-        localStorage.removeItem('usuarioLogado');
-        window.location.href = 'login.html';
-      }
-
-      document.addEventListener('DOMContentLoaded', () => {
-        const usuario = localStorage.getItem('usuarioLogado');
-        if (usuario) {
-          document.getElementById('usuario-logado').textContent = `Usuário: ${usuario}`;
-        } else {
-          window.location.href = 'login.html';
-        }
-      });
-    </script>
-  </body>
+    verificarLogin();
+    exibirUsuarioLogado();
+    window.sair = sair;
+  </script>
+</body>
 </html>
