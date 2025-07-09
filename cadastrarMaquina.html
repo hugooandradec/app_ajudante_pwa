@@ -4,141 +4,183 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cadastrar Máquina</title>
-  <link rel="icon" href="/ajudante-app/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
+      margin: 0;
       background-color: #f1f1f1;
     }
+
     header {
       background-color: #6a1b9a;
       color: white;
       padding: 1rem;
       text-align: center;
     }
-    header h1 {
-      margin: 0;
-      font-size: 1.5rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
-    }
+
     .container {
+      max-width: 400px;
       margin: 2rem auto;
-      max-width: 500px;
-      padding: 1rem;
-      background-color: white;
+      background: white;
+      padding: 2rem;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-    }
+
     label {
+      display: block;
+      margin-bottom: 0.5rem;
       font-weight: bold;
     }
-    input {
-      padding: 0.7rem;
-      border-radius: 6px;
+
+    input, select {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1.2rem;
       border: 1px solid #ccc;
-      font-size: 1rem;
+      border-radius: 6px;
     }
-    .btn {
+
+    button {
+      width: 100%;
       padding: 0.9rem;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
-      width: 70%;
-      max-width: 400px;
-      margin: 0 auto 1rem;
-    }
-    .btn.salvar {
       background-color: #6a1b9a;
       color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
     }
-    .btn.voltar {
-      background-color: #757575;
-      color: white;
+
+    .mensagem {
+      text-align: center;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    .mensagem.ok {
+      color: green;
+    }
+
+    .mensagem.erro {
+      color: red;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1><i class="fas fa-plus-circle"></i> Cadastrar Máquina</h1>
+    <h1><i class="fas fa-cogs"></i> Cadastrar Máquina</h1>
   </header>
 
   <div class="container">
-    <div class="form-group">
-      <label for="nome">Selo:</label>
-      <input type="text" id="nome" placeholder="Ex: YZS001" />
-    </div>
+    <label for="nome">Selo da Máquina</label>
+    <input type="text" id="nome" placeholder="Ex: 123-AB" />
 
-    <div class="form-group">
-      <label for="tipo">Jogo:</label>
-      <input type="text" id="tipo" placeholder="Ex: Dragon" />
-    </div>
+    <label for="tipo">Tipo</label>
+    <select id="tipo">
+      <option value="">Selecione</option>
+      <option value="Refrigerante">Refrigerante</option>
+      <option value="Salgado">Salgado</option>
+      <option value="Doce">Doce</option>
+      <option value="Café">Café</option>
+    </select>
 
-    <button class="btn salvar" onclick="salvarMaquina()">
+    <button onclick="salvarMaquina()">
       <i class="fas fa-save"></i> Salvar Máquina
     </button>
 
-    <a href="gerenciarMaquinas.html" class="btn voltar">
-      <i class="fas fa-arrow-left"></i> Voltar
-    </a>
+    <div id="mensagem" class="mensagem"></div>
   </div>
 
   <script type="module">
-    import { URL_BACKEND } from '/ajudante-app/js/navegacao.js';
+    import { URL_BACKEND } from "./js/navegacao.js";
 
-    async function salvarMaquina() {
+    function exibirMensagem(texto, tipo = "ok") {
+      const msg = document.getElementById("mensagem");
+      msg.textContent = texto;
+      msg.className = "mensagem " + tipo;
+    }
+
+    // Enviar máquinas salvas localmente (se houver)
+    async function sincronizarMaquinas() {
+      const pendentes = JSON.parse(localStorage.getItem("maquinasPendentes") || "[]");
+      if (!pendentes.length || !navigator.onLine) return;
+
+      for (let maquina of pendentes) {
+        try {
+          const res = await fetch(URL_BACKEND, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ acao: "cadastrarMaquina", ...maquina })
+          });
+
+          const json = await res.json();
+          if (json.sucesso) {
+            exibirMensagem(`✅ Máquina sincronizada: ${maquina.nome}`, "ok");
+          } else {
+            exibirMensagem(`❌ Erro ao sincronizar ${maquina.nome}`, "erro");
+          }
+        } catch (err) {
+          console.error("Erro na sincronização:", err);
+        }
+      }
+
+      // Limpa as máquinas sincronizadas
+      localStorage.removeItem("maquinasPendentes");
+    }
+
+    window.salvarMaquina = async function () {
       const nome = document.getElementById("nome").value.trim().toUpperCase();
-      const tipo = document.getElementById("tipo").value.trim();
+      const tipo = document.getElementById("tipo").value;
 
       if (!nome || !tipo) {
-        alert("Preencha todos os campos.");
+        exibirMensagem("Preencha todos os campos.", "erro");
         return;
       }
 
-      const dados = {
-        acao: "cadastrarMaquina",
-        nome,
-        tipo
-      };
+      const dados = { nome, tipo };
 
-      try {
-        const resposta = await fetch(URL_BACKEND, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(dados)
-        });
+      if (navigator.onLine) {
+        // ONLINE → envia direto
+        try {
+          const res = await fetch(URL_BACKEND, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ acao: "cadastrarMaquina", ...dados })
+          });
 
-        const json = await resposta.json();
+          const json = await res.json();
 
-        if (json.sucesso) {
-          alert("✅ Máquina cadastrada com sucesso!");
-          document.getElementById("nome").value = "";
-          document.getElementById("tipo").value = "";
-        } else {
-          alert(json.mensagem || "❌ Erro ao salvar.");
+          if (json.sucesso) {
+            exibirMensagem("✅ Máquina cadastrada com sucesso!", "ok");
+            document.getElementById("nome").value = "";
+            document.getElementById("tipo").value = "";
+          } else {
+            exibirMensagem(json.mensagem || "Erro ao cadastrar.", "erro");
+          }
+        } catch (e) {
+          exibirMensagem("Erro ao conectar com o servidor.", "erro");
         }
-      } catch (erro) {
-        console.error("Erro:", erro);
-        alert("❌ Erro de comunicação com o servidor.");
+      } else {
+        // OFFLINE → salva local
+        let maquinasPendentes = JSON.parse(localStorage.getItem("maquinasPendentes") || "[]");
+        maquinasPendentes.push(dados);
+        localStorage.setItem("maquinasPendentes", JSON.stringify(maquinasPendentes));
+        exibirMensagem("📦 Máquina salva localmente. Será enviada quando voltar a internet.", "ok");
       }
-    }
+    };
 
-    window.salvarMaquina = salvarMaquina;
+    // Sincroniza automaticamente ao reconectar
+    window.addEventListener("online", () => {
+      exibirMensagem("🌐 Conectado! Sincronizando dados...");
+      sincronizarMaquinas();
+    });
+
+    // Ao abrir a página, tenta sincronizar se online
+    window.addEventListener("load", () => {
+      if (navigator.onLine) sincronizarMaquinas();
+    });
   </script>
 </body>
 </html>
