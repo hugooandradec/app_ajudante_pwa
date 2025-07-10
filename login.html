@@ -6,14 +6,11 @@
   <title>Login</title>
   <link rel="icon" href="/ajudante-app/favicon.ico" type="image/x-icon" />
 
-  <!-- CSS externo unificado -->
   <link rel="stylesheet" href="estilo.css" onerror="console.warn('⚠️ estilo.css não carregado')">
-
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-  <!-- JS navegação global -->
   <script src="js/navegacao.js"></script>
+  <script src="js/servicos.js"></script>
 </head>
 <body>
   <div class="container card">
@@ -28,32 +25,22 @@
     async function logar() {
       const usuario = document.getElementById("usuario").value.trim();
       const senha = document.getElementById("senha").value.trim();
-      const msg = document.getElementById("mensagem");
 
       if (!usuario || !senha) {
-        msg.textContent = "Preencha todos os campos.";
+        exibirMensagem("Preencha todos os campos.");
         return;
       }
 
       if (navigator.onLine) {
-        try {
-          const resposta = await fetch(URL_BACKEND, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ acao: "login", usuario, senha })
-          });
+        const resposta = await enviarDados("login", { usuario, senha });
 
-          const json = await resposta.json();
-          if (json.sucesso) {
-            localStorage.setItem("usuarioLogado", usuario);
-            localStorage.setItem("senha", senha);
-            localStorage.setItem("logado", "true");
-            window.location.href = "index.html";
-          } else {
-            msg.textContent = "Usuário ou senha incorretos.";
-          }
-        } catch (e) {
-          msg.textContent = "Erro ao conectar com o servidor.";
+        if (resposta.sucesso) {
+          localStorage.setItem("usuarioLogado", usuario);
+          localStorage.setItem("senha", senha);
+          localStorage.setItem("logado", "true");
+          window.location.href = "index.html";
+        } else {
+          exibirMensagem("Usuário ou senha incorretos.");
         }
       } else {
         const usuarioSalvo = localStorage.getItem("usuarioLogado");
@@ -61,7 +48,7 @@
         if (usuario === usuarioSalvo && senha === senhaSalva) {
           window.location.href = "index.html";
         } else {
-          msg.textContent = "Login offline inválido.";
+          exibirMensagem("Login offline inválido.");
         }
       }
     }

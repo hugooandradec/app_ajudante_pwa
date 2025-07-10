@@ -5,14 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Menu Principal</title>
 
-  <!-- Estilo centralizado -->
   <link rel="stylesheet" href="estilo.css" onerror="console.warn('⚠️ estilo.css não carregado')">
-
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-  <!-- JS de navegação (sem export/import por enquanto) -->
-  <script src="navegacao.js"></script>
+  <script src="js/navegacao.js"></script>
 </head>
 <body>
 
@@ -35,7 +31,9 @@
   </div>
 
   <script>
+    protegerPagina();
     renderizarCabecalho("Menu Principal");
+    renderizarStatusConexao();
   </script>
 </body>
 </html>

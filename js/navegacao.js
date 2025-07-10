@@ -36,3 +36,40 @@ function renderizarCabecalho(titulo = '') {
 function estaOnline() {
   return navigator.onLine;
 }
+
+function renderizarStatusConexao() {
+  const statusDiv = document.createElement("div");
+  statusDiv.id = "status-conexao";
+  statusDiv.style.position = "fixed";
+  statusDiv.style.top = "0";
+  statusDiv.style.left = "0";
+  statusDiv.style.right = "0";
+  statusDiv.style.padding = "5px";
+  statusDiv.style.textAlign = "center";
+  statusDiv.style.zIndex = "9999";
+  statusDiv.style.fontSize = "0.9rem";
+  statusDiv.style.fontWeight = "bold";
+  statusDiv.style.color = "white";
+
+  document.body.appendChild(statusDiv);
+
+  function atualizarStatus() {
+    if (navigator.onLine) {
+      statusDiv.textContent = "🟢 Conectado";
+      statusDiv.style.backgroundColor = "#28a745";
+    } else {
+      statusDiv.textContent = "🔴 Sem conexão - dados serão sincronizados depois";
+      statusDiv.style.backgroundColor = "#dc3545";
+    }
+  }
+
+  window.addEventListener("online", atualizarStatus);
+  window.addEventListener("offline", atualizarStatus);
+  atualizarStatus(); // inicial
+}
+
+function protegerPagina() {
+  if (!localStorage.getItem("usuarioLogado")) {
+    location.href = "login.html";
+  }
+}

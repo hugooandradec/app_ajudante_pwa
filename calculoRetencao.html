@@ -5,214 +5,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cálculo de Retenção</title>
   <link rel="icon" href="/ajudante-app/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="estilo.css" onerror="console.warn('⚠️ estilo.css não carregado')" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-      margin: 0;
-      padding: 0;
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #6a1b9a;
-      color: white;
-      padding: 10px 20px;
-      font-weight: bold;
-      font-size: 16px;
-      border-radius: 0 0 10px 10px;
-    }
-
-    .btn-sair {
-      background-color: #9e9e9e;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    header {
-      background-color: #6a1b9a;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.5rem;
-    }
-
-    .container {
-      max-width: 500px;
-      margin: 2rem auto;
-      padding: 2rem;
-      text-align: center;
-    }
-
-    .form-group {
-      margin-bottom: 1.5rem;
-      width: 90%;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: bold;
-    }
-
-    input[type="text"],
-    input[type="number"] {
-      width: 100%;
-      padding: 0.7rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 1rem;
-    }
-
-    .btn {
-      display: block;
-      width: 70%;
-      margin: 1rem auto;
-      padding: 0.8rem;
-      font-size: 1rem;
-      text-align: center;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      color: white;
-    }
-
-    .btn.salvar {
-      background-color: #7e57c2;
-    }
-
-    .btn.voltar {
-      background-color: #888;
-    }
-
-    #mensagem {
-      text-align: center;
-      font-weight: bold;
-      margin-top: 1rem;
-      white-space: pre-line;
-    }
-  </style>
+  <script src="js/navegacao.js"></script>
+  <script src="js/servicos.js"></script>
+  <script src="js/sincronizador.js"></script>
 </head>
 <body>
-  <div class="header">
-    <span id="usuario-logado"></span>
-    <button onclick="sair()" class="btn-sair">Sair</button>
-  </div>
-
-  <header>Cálculo de Retenção</header>
-
   <div class="container">
     <div class="form-group">
       <label for="maquina">Máquina</label>
-      <input type="text" id="maquina" placeholder="Selo" />
+      <input type="text" id="maquina" placeholder="Selo da Máquina" />
     </div>
 
     <div class="form-group">
       <label for="entrada">Entrada</label>
-      <input type="number" id="entrada" placeholder="Entrada" />
+      <input type="number" id="entrada" placeholder="R$ 0,00" />
     </div>
 
     <div class="form-group">
       <label for="saida">Saída</label>
-      <input type="number" id="saida" placeholder="Saída" />
+      <input type="number" id="saida" placeholder="R$ 0,00" />
     </div>
 
     <button class="btn salvar" onclick="salvarRetencao()">
       <i class="fas fa-save"></i> Salvar Retenção
     </button>
 
-    <a class="btn voltar" href="/ajudante-app/index.html">
+    <a class="btn voltar" href="index.html">
       <i class="fas fa-arrow-left"></i> Voltar ao Menu
     </a>
 
-    <div id="mensagem"></div>
+    <div id="mensagem" class="mensagem"></div>
   </div>
 
-  <script type="module">
-    import { URL_BACKEND, verificarLogin, exibirUsuarioLogado, sair } from "/ajudante-app/js/navegacao.js";
+  <script>
+    protegerPagina();
+    renderizarCabecalho("Cálculo de Retenção");
+    renderizarStatusConexao();
 
-    verificarLogin();
-    exibirUsuarioLogado();
-    window.sair = sair;
-
-    window.salvarRetencao = async function () {
+    async function salvarRetencao() {
       const maquina = document.getElementById("maquina").value.trim();
       const entrada = parseFloat(document.getElementById("entrada").value);
       const saida = parseFloat(document.getElementById("saida").value);
-      const msg = document.getElementById("mensagem");
-
-      msg.innerText = "";
 
       if (!maquina || isNaN(entrada) || isNaN(saida)) {
-        msg.style.color = "red";
-        msg.innerText = "❌ Preencha todos os campos corretamente!";
+        exibirMensagem("Preencha todos os campos corretamente.", "erro");
         return;
       }
 
       const saldo = entrada - saida;
-      msg.style.color = "green";
-      msg.innerText = `🧮 Saldo da máquina ${maquina}: R$ ${saldo.toFixed(2)}`;
-
       const dados = { maquina, entrada, saida, saldo };
 
-      if (navigator.onLine) {
-        try {
-          const resposta = await fetch(URL_BACKEND, {
-            method: "POST",
-            body: JSON.stringify({ acao: "registrarRetencao", ...dados }),
-            headers: { "Content-Type": "application/json" }
-          });
+      const resposta = await salvarComSincronizacao("registrarRetencao", dados);
 
-          const resultado = await resposta.text();
-          console.log("Resposta do backend:", resultado);
-        } catch (err) {
-          console.error("Erro ao enviar dados:", err);
-        }
-      } else {
-        let retencoesPendentes = JSON.parse(localStorage.getItem("retencoesPendentes") || "[]");
-        retencoesPendentes.push(dados);
-        localStorage.setItem("retencoesPendentes", JSON.stringify(retencoesPendentes));
-        msg.innerText += "\n📦 Retenção salva localmente. Será enviada quando voltar a internet.";
+      let mensagem = `🧮 Saldo da máquina ${maquina}: R$ ${saldo.toFixed(2)}`;
+      mensagem += `\n${resposta.mensagem}`;
+      exibirMensagem(mensagem, resposta.sucesso ? "sucesso" : "erro");
+
+      if (resposta.sucesso) {
+        limparCampos(["maquina", "entrada", "saida"]);
       }
-    };
-
-    async function sincronizarRetencoes() {
-      const pendentes = JSON.parse(localStorage.getItem("retencoesPendentes") || "[]");
-      if (!pendentes.length || !navigator.onLine) return;
-
-      for (let dados of pendentes) {
-        try {
-          const resposta = await fetch(URL_BACKEND, {
-            method: "POST",
-            body: JSON.stringify({ acao: "registrarRetencao", ...dados }),
-            headers: { "Content-Type": "application/json" }
-          });
-          const resultado = await resposta.text();
-          console.log("Sincronizado:", resultado);
-        } catch (err) {
-          console.error("Erro ao sincronizar retenção:", err);
-        }
-      }
-
-      localStorage.removeItem("retencoesPendentes");
     }
-
-    window.addEventListener("online", () => {
-      sincronizarRetencoes();
-    });
-
-    window.addEventListener("load", () => {
-      if (navigator.onLine) sincronizarRetencoes();
-    });
   </script>
 </body>
 </html>
