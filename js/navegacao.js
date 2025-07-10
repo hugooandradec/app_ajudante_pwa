@@ -1,75 +1,39 @@
-const URL_BACKEND = "https://ajudante-api.onrender.com";
+function renderizarCabecalho(tituloPagina = "") {
+  const usuario = localStorage.getItem("usuario") || "";
+  const cabecalho = document.createElement("div");
+  cabecalho.className = "header";
 
-// ⬆️ URL do backend centralizado
-
-function usuarioLogado() {
-  return localStorage.getItem("usuarioLogado");
-}
-
-function realizarLogout() {
-  localStorage.removeItem("usuarioLogado");
-  window.location.href = "login.html";
-}
-
-// ⬇️ Cabeçalho com faixa roxa + nome do sistema + usuário + botão sair
-function renderizarCabecalho(titulo = '') {
-  const usuario = usuarioLogado() || "Usuário";
-
-  const cabecalhoHTML = `
-    <div class="cabecalho-superior">
-      <h2 class="titulo-sistema"><i class="fas fa-tools"></i> Ajudante App</h2>
-    </div>
-    <div class="cabecalho">
-      <div class="usuario-info">
-        <span><i class="fas fa-user"></i> ${usuario}</span>
-        <button class="btn-sair" onclick="realizarLogout()">
-          <i class="fas fa-sign-out-alt"></i> Sair
-        </button>
-      </div>
-      ${titulo ? `<h1 class="titulo">${titulo}</h1>` : ''}
-    </div>
+  cabecalho.innerHTML = `
+    <span class="logo">App Ajudante</span>
+    <span class="usuario-logado">${usuario}</span>
+    <button class="btn-sair" onclick="sair()"><i class="fas fa-sign-out-alt"></i> Sair</button>
   `;
 
-  document.body.insertAdjacentHTML("afterbegin", cabecalhoHTML);
-}
+  document.body.prepend(cabecalho);
 
-function estaOnline() {
-  return navigator.onLine;
+  if (tituloPagina) {
+    const titulo = document.createElement("h2");
+    titulo.textContent = tituloPagina;
+    titulo.style.marginTop = "0";
+    titulo.style.color = "#4a148c";
+    document.body.insertBefore(titulo, document.body.children[1]);
+  }
 }
 
 function renderizarStatusConexao() {
-  const statusDiv = document.createElement("div");
-  statusDiv.id = "status-conexao";
-  statusDiv.style.position = "fixed";
-  statusDiv.style.top = "0";
-  statusDiv.style.left = "0";
-  statusDiv.style.right = "0";
-  statusDiv.style.padding = "5px";
-  statusDiv.style.textAlign = "center";
-  statusDiv.style.zIndex = "9999";
-  statusDiv.style.fontSize = "0.9rem";
-  statusDiv.style.fontWeight = "bold";
-  statusDiv.style.color = "white";
-
-  document.body.appendChild(statusDiv);
-
-  function atualizarStatus() {
-    if (navigator.onLine) {
-      statusDiv.textContent = "🟢 Conectado";
-      statusDiv.style.backgroundColor = "#28a745";
-    } else {
-      statusDiv.textContent = "🔴 Sem conexão - dados serão sincronizados depois";
-      statusDiv.style.backgroundColor = "#dc3545";
-    }
-  }
-
-  window.addEventListener("online", atualizarStatus);
-  window.addEventListener("offline", atualizarStatus);
-  atualizarStatus(); // inicial
+  const online = navigator.onLine;
+  const status = document.createElement("div");
+  status.className = online ? "status-online" : "status-offline";
+  status.innerText = online ? "🟢 Conectado" : "🔴 Offline";
+  document.body.insertBefore(status, document.body.children[1]);
 }
 
 function protegerPagina() {
-  if (!localStorage.getItem("usuarioLogado")) {
-    location.href = "login.html";
-  }
+  const usuario = localStorage.getItem("usuario");
+  if (!usuario) window.location.href = "login.html";
+}
+
+function sair() {
+  localStorage.clear();
+  window.location.href = "login.html";
 }
