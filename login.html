@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login</title>
 
-  <!-- Estilo centralizado -->
-  <link rel="stylesheet" href="estilo.css" onerror="console.warn('⚠️ estilo.css não carregado')">
+  <!-- Estilo visual centralizado -->
+  <link rel="stylesheet" href="estilo.css" onerror="console.warn('⚠️ estilo.css não carregado')" />
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -20,7 +20,6 @@
 <body>
 
   <header id="cabecalho"></header>
-  <div class="status-bar" id="statusConexao" style="display: none;"></div>
 
   <div class="container">
     <div class="card">
@@ -44,9 +43,14 @@
     </div>
   </div>
 
+  <!-- Indicador de conexão -->
+  <div id="status-conexao" class="status-conexao"></div>
+
   <script>
-    renderizarCabecalhoLogin(); // Cabeçalho sem nome + botão sair
-    monitorarStatusConexao();
+    window.addEventListener("DOMContentLoaded", () => {
+      renderizarCabecalhoLogin(); // sem botão de sair
+      monitorarStatusConexao();
+    });
 
     async function logar() {
       const usuario = document.getElementById("usuario").value.trim();
@@ -75,6 +79,5 @@
       }
     }
   </script>
-  <div id="status-conexao" class="status-conexao"></div>
 </body>
 </html>
