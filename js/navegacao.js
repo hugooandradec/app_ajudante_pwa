@@ -1,6 +1,6 @@
 const URL_BACKEND = "https://ajudante-api.onrender.com";
 
-// ⬆️ Exportar a URL central do backend para todas as páginas
+// ⬆️ URL do backend centralizado
 
 function usuarioLogado() {
   return localStorage.getItem("usuarioLogado");
@@ -11,11 +11,14 @@ function realizarLogout() {
   window.location.href = "login.html";
 }
 
-// ⬇️ Cabeçalho com usuário logado e botão sair
+// ⬇️ Cabeçalho com faixa roxa + nome do sistema + usuário + botão sair
 function renderizarCabecalho(titulo = '') {
   const usuario = usuarioLogado() || "Usuário";
 
   const cabecalhoHTML = `
+    <div class="cabecalho-superior">
+      <h2 class="titulo-sistema"><i class="fas fa-tools"></i> Ajudante App</h2>
+    </div>
     <div class="cabecalho">
       <div class="usuario-info">
         <span><i class="fas fa-user"></i> ${usuario}</span>
@@ -30,7 +33,6 @@ function renderizarCabecalho(titulo = '') {
   document.body.insertAdjacentHTML("afterbegin", cabecalhoHTML);
 }
 
-// ⬇️ Detecta se está online
 function estaOnline() {
   return navigator.onLine;
 }

@@ -84,6 +84,17 @@ body {
   color: black;
 }
 
+.btn.login {
+  background-color: #6a1b9a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  padding: 0.8rem;
+  width: 100%;
+  cursor: pointer;
+}
+
 .form-group {
   margin-bottom: 15px;
   text-align: left;
