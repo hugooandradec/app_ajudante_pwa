@@ -15,6 +15,18 @@ body {
   max-width: 400px;
 }
 
+.cabecalho-superior {
+  background-color: #5c2d91;
+  padding: 10px;
+  color: white;
+  text-align: center;
+}
+
+.titulo-sistema {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
 .cabecalho {
   background-color: #5c2d91;
   color: white;
@@ -41,6 +53,12 @@ body {
   padding: 5px 12px;
   margin-right: 10px;
   cursor: pointer;
+}
+
+.titulo {
+  margin-top: 15px;
+  font-size: 1.1rem;
+  color: #ffffff;
 }
 
 .btn {
@@ -75,6 +93,7 @@ body {
 }
 
 input[type="text"],
+input[type="password"],
 select {
   width: 100%;
   padding: 8px;
