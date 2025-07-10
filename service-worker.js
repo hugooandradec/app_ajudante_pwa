@@ -20,6 +20,15 @@ const urlsToCache = [
   '/ajudante-app/favicon.ico',
   '/ajudante-app/icon-192.png',
   '/ajudante-app/icon-512.png',
+
+  // CSS e JS internos
+  '/ajudante-app/estilo.css',
+  '/ajudante-app/js/navegacao.js',
+  '/ajudante-app/js/componentes.js',
+  '/ajudante-app/js/servicos.js',
+  '/ajudante-app/js/sincronizador.js',
+
+  // Font Awesome via CDN
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
 ];
 

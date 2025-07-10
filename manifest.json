@@ -3,6 +3,7 @@
   "short_name": "AAPP",
   "start_url": "/ajudante-app/index.html?homescreen=1",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#6a1b9a",
   "icons": [

@@ -5,8 +5,10 @@ function renderizarCabecalho(tituloPagina = "") {
 
   cabecalho.innerHTML = `
     <span class="logo">App Ajudante</span>
-    <span class="usuario-logado">${usuario}</span>
-    <button class="btn-sair" onclick="sair()"><i class="fas fa-sign-out-alt"></i> Sair</button>
+    <span class="usuario-logado"><i class="fas fa-user"></i> ${usuario}</span>
+    <button class="btn-sair" onclick="sair()">
+      <i class="fas fa-sign-out-alt"></i> Sair
+    </button>
   `;
 
   document.body.prepend(cabecalho);
@@ -20,12 +22,34 @@ function renderizarCabecalho(tituloPagina = "") {
   }
 }
 
+function renderizarCabecalhoLogin() {
+  const cabecalho = document.getElementById("cabecalho");
+  cabecalho.innerHTML = `
+    <div class="header">
+      <span class="logo"><i class="fas fa-lock"></i> Login</span>
+    </div>
+  `;
+}
+
 function renderizarStatusConexao() {
   const online = navigator.onLine;
   const status = document.createElement("div");
   status.className = online ? "status-online" : "status-offline";
   status.innerText = online ? "🟢 Conectado" : "🔴 Offline";
-  document.body.insertBefore(status, document.body.children[1]);
+  document.body.appendChild(status);
+}
+
+function monitorarStatusConexao() {
+  function atualizarStatus() {
+    const status = document.getElementById("status-conexao");
+    const online = navigator.onLine;
+    status.innerText = online ? "🟢 Conectado" : "🔴 Offline";
+    status.style.color = online ? "green" : "red";
+  }
+
+  window.addEventListener("online", atualizarStatus);
+  window.addEventListener("offline", atualizarStatus);
+  atualizarStatus(); // Executa na primeira vez
 }
 
 function protegerPagina() {
@@ -36,13 +60,4 @@ function protegerPagina() {
 function sair() {
   localStorage.clear();
   window.location.href = "login.html";
-}
-
-function renderizarCabecalhoLogin() {
-  const cabecalho = document.getElementById("cabecalho");
-  cabecalho.innerHTML = `
-    <div class="header">
-      <span class="logo"><i class="fas fa-lock"></i> Login</span>
-    </div>
-  `;
 }
