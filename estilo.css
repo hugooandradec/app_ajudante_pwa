@@ -1,0 +1,85 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f8f8;
+  text-align: center;
+}
+
+.container {
+  background-color: white;
+  padding: 20px;
+  margin: 30px auto;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+}
+
+.cabecalho {
+  background-color: #5c2d91;
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+.usuario-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.usuario-info span {
+  margin-left: 10px;
+  font-size: 0.9rem;
+}
+
+.btn-sair {
+  background-color: #ccc;
+  color: black;
+  border: none;
+  border-radius: 20px;
+  padding: 5px 12px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.btn {
+  display: block;
+  width: 70%;
+  max-width: 400px;
+  margin: 10px auto;
+  padding: 10px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn.salvar {
+  background-color: #5c2d91;
+  color: white;
+}
+
+.btn.voltar {
+  background-color: #ccc;
+  color: black;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+input[type="text"],
+select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+  box-sizing: border-box;
+}

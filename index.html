@@ -1,101 +1,41 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Menu Principal</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="manifest" href="manifest.json" />
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f1f1f1;
-    }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #6a1b9a;
-      color: white;
-      padding: 10px 20px;
-      font-weight: bold;
-      font-size: 16px;
-      border-radius: 0 0 10px 10px;
-    }
-    .btn-sair {
-      background-color: #9e9e9e;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    header {
-      background-color: #6a1b9a;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-    }
-    .container {
-      margin: 2rem auto;
-      padding: 0 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.5rem;
-    }
-    .menu-button {
-      background-color: white;
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 400px;
-      padding: 1rem;
-      font-size: 1.1rem;
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      color: black;
-    }
-    .menu-button i {
-      margin-right: 1rem;
-      color: #6a1b9a;
-      font-size: 1.3rem;
-    }
-  </style>
+
+  <!-- Estilo centralizado -->
+  <link rel="stylesheet" href="estilo.css" onerror="console.warn('⚠️ estilo.css não carregado')">
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script>
+
+  <!-- JS de navegação -->
+  <script src="navegacao.js"></script>
 </head>
 <body>
-  <div class="header">
-    <span id="usuario-logado"></span>
-    <button onclick="sair()" class="btn-sair">Sair</button>
-  </div>
-
-  <header>
-    <h1>Menu Principal</h1>
-  </header>
 
   <div class="container">
-    <a class="menu-button" href="gerenciarClientes.html"><i class="fas fa-users"></i> Gerenciar Clientes</a>
-    <a class="menu-button" href="gerenciarMaquinas.html"><i class="fas fa-cogs"></i> Gerenciar Máquinas</a>
-    <a class="menu-button" href="preFecho.html"><i class="fas fa-hourglass-half"></i> Pré Fecho</a>
-    <a class="menu-button" href="calculoRetencao.html"><i class="fas fa-calculator"></i> Cálculo de Retenção</a>
+    <button class="btn" onclick="location.href='gerenciarClientes.html'">
+      <i class="fas fa-users"></i> Gerenciar Clientes
+    </button>
+
+    <button class="btn" onclick="location.href='gerenciarMaquinas.html'">
+      <i class="fas fa-cogs"></i> Gerenciar Máquinas
+    </button>
+
+    <button class="btn" onclick="location.href='preFecho.html'">
+      <i class="fas fa-file-alt"></i> Pré-Fecho
+    </button>
+
+    <button class="btn" onclick="location.href='calculoRetencao.html'">
+      <i class="fas fa-percentage"></i> Cálculo de Retenção
+    </button>
   </div>
 
-  <script type="module">
-    import { verificarLogin, exibirUsuarioLogado, sair } from "/ajudante-app/js/navegacao.js";
-    verificarLogin();
-    exibirUsuarioLogado();
-    window.sair = sair;
-
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/ajudante-app/service-worker.js")
-        .then(() => console.log("✅ Service Worker registrado"))
-        .catch(error => console.error("❌ Erro ao registrar o SW:", error));
-    }
+  <script>
+    renderizarCabecalho("Menu Principal");
   </script>
 </body>
 </html>

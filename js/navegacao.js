@@ -1,32 +1,36 @@
-// 🌐 URL do backend atual hospedado no Render
-export const URL_BACKEND = "https://ajudante-api.onrender.com";
+const URL_BACKEND = "https://ajudante-api.onrender.com";
 
-// 🔁 Navegação programada para uma página específica (ex: irPara('index'))
-export function irPara(pagina) {
-  window.location.href = `${pagina}.html`;
+// ⬆️ Exportar a URL central do backend para todas as páginas
+
+function usuarioLogado() {
+  return localStorage.getItem("usuarioLogado");
 }
 
-// 🔐 Verifica se o usuário está logado
-// Se não estiver, redireciona para a tela de login
-export function verificarLogin() {
-  const usuario = localStorage.getItem('usuarioLogado');
-  if (!usuario) {
-    window.location.href = 'login.html';
-  }
+function realizarLogout() {
+  localStorage.removeItem("usuarioLogado");
+  window.location.href = "login.html";
 }
 
-// 👤 Exibe o nome do usuário logado no elemento com id="usuario-logado"
-// (Usado no cabeçalho das páginas protegidas)
-export function exibirUsuarioLogado() {
-  const usuario = localStorage.getItem('usuarioLogado');
-  if (usuario && document.getElementById('usuario-logado')) {
-    document.getElementById('usuario-logado').textContent = `Usuário: ${usuario}`;
-  }
+// ⬇️ Cabeçalho com usuário logado e botão sair
+function renderizarCabecalho(titulo = '') {
+  const usuario = usuarioLogado() || "Usuário";
+
+  const cabecalhoHTML = `
+    <div class="cabecalho">
+      <div class="usuario-info">
+        <span><i class="fas fa-user"></i> ${usuario}</span>
+        <button class="btn-sair" onclick="realizarLogout()">
+          <i class="fas fa-sign-out-alt"></i> Sair
+        </button>
+      </div>
+      ${titulo ? `<h1 class="titulo">${titulo}</h1>` : ''}
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML("afterbegin", cabecalhoHTML);
 }
 
-// 🚪 Realiza logout:
-// Remove o usuário logado do localStorage e redireciona para login
-export function sair() {
-  localStorage.removeItem('usuarioLogado');
-  window.location.href = 'login.html';
+// ⬇️ Detecta se está online
+function estaOnline() {
+  return navigator.onLine;
 }
