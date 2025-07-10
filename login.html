@@ -65,18 +65,23 @@
       }
 
       try {
-        const dados = { acao: "login", usuario, senha };
-        const resposta = await enviarDados(dados);
+  const dados = { acao: "login", usuario, senha };
+  console.log("📤 Enviando:", dados); // Loga os dados enviados
 
-        if (resposta?.ok) {
-          localStorage.setItem("usuario", usuario);
-          window.location.href = "index.html";
-        } else {
-          msg.textContent = resposta?.mensagem || "Usuário ou senha inválidos.";
-        }
-      } catch (erro) {
-        msg.textContent = "Erro ao conectar com o servidor.";
-      }
+  const resposta = await enviarDados(dados);
+  console.log("📥 Resposta do servidor:", resposta); // Loga a resposta recebida
+
+  if (resposta?.ok) {
+    localStorage.setItem("usuario", usuario);
+    window.location.href = "index.html";
+  } else {
+    msg.textContent = resposta?.mensagem || "Usuário ou senha inválidos.";
+  }
+} catch (erro) {
+  console.error("❌ Erro na requisição:", erro);
+  msg.textContent = "Erro ao conectar com o servidor.";
+}
+
     }
   </script>
 </body>
