@@ -1,3 +1,5 @@
+const URL_BACKEND = "https://ajudante-api.onrender.com/";
+
 function renderizarCabecalho(tituloPagina = "") {
   const usuario = localStorage.getItem("usuario") || "";
   const cabecalho = document.createElement("div");
