@@ -92,3 +92,13 @@ header .usuario {
   padding: 4px 10px;
   font-size: 14px;
 }
+
+.status-conexao {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  color: #333;
+  opacity: 0.85;
+}

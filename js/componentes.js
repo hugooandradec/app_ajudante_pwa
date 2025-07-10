@@ -45,3 +45,19 @@ function criarBotao(texto, classe = "salvar", icone = "", onClick = "") {
   if (onClick) botao.setAttribute("onclick", onClick);
   return botao;
 }
+
+function atualizarStatusConexao() {
+  const statusDiv = document.getElementById("status-conexao");
+  if (!statusDiv) return;
+
+  const online = navigator.onLine;
+  statusDiv.innerHTML = online
+    ? "🟢 Conectado"
+    : "🔴 Offline";
+}
+
+// Executa ao carregar
+window.addEventListener("load", atualizarStatusConexao);
+// Atualiza quando a conexão muda
+window.addEventListener("online", atualizarStatusConexao);
+window.addEventListener("offline", atualizarStatusConexao);
