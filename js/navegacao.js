@@ -37,3 +37,12 @@ function sair() {
   localStorage.clear();
   window.location.href = "login.html";
 }
+
+function renderizarCabecalhoLogin() {
+  const cabecalho = document.getElementById("cabecalho");
+  cabecalho.innerHTML = `
+    <div class="header">
+      <span class="logo"><i class="fas fa-lock"></i> Login</span>
+    </div>
+  `;
+}
