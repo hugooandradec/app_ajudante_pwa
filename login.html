@@ -24,7 +24,7 @@
 
   <div class="container">
     <div class="card">
-      <h2><i class="fas fa-lock"></i> Login</h2>
+      <h2 class="titulo-formulario"><i class="fas fa-lock"></i> Login</h2>
 
       <div class="form-group">
         <label for="usuario">Usuário:</label>
@@ -45,7 +45,7 @@
   </div>
 
   <script>
-    renderizarCabecalho("Login", false); // Cabeçalho sem nome + botão sair
+    renderizarCabecalhoLogin(); // Cabeçalho sem nome + botão sair
     monitorarStatusConexao();
 
     async function logar() {

@@ -7,14 +7,14 @@ body {
 }
 
 header {
-  background-color: #651e9c;
+  background-color: #651e94;
   color: white;
-  padding: 15px;
-  font-size: 20px;
+  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 
 header .titulo {
   font-weight: bold;
