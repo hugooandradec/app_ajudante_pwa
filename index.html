@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Menu Principal</title>
+  <link rel="icon" href="data:,">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script type="module" src="js/navegacao.js"></script>
@@ -118,14 +119,7 @@
   </style>
 </head>
 <body>
-  <div class="header">
-    <div></div>
-    <div class="logo">Menu Principal</div>
-    <div class="usuario-logado">
-      <i class="fas fa-user"></i> <span id="usuarioNome"></span>
-      <i class="fas fa-sign-out-alt" onclick="logout()" title="Sair"></i>
-    </div>
-  </div>
+  <div class="header" id="cabecalho"></div>
 
   <main>
     <div class="card">
@@ -147,11 +141,8 @@
   <footer></footer>
 
   <script type="module">
-    import { monitorarStatusConexao } from './js/navegacao.js';
-
-    const user = localStorage.getItem("usuario") || "";
-    document.getElementById("usuarioNome").innerText = user;
-
+    import { inicializarPagina, monitorarStatusConexao } from './js/navegacao.js';
+    inicializarPagina("Menu Principal");
     monitorarStatusConexao();
   </script>
 </body>
