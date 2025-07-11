@@ -138,7 +138,7 @@
   </main>
 
   <footer>
-    <div id="statusConexao" class="status-online"></div>
+    <div id="statusConexao"></div>
   </footer>
 
   <script>
@@ -172,39 +172,13 @@
         msg.textContent = "Erro ao conectar com o servidor.";
       }
     }
-  </script>
 
-  <!-- ✅ Registro automático do novo service worker -->
-  <script>
+    // ✅ Registro tradicional do service worker (sem auto reload)
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js').then(reg => {
-          console.log('✅ Service Worker registrado:', reg.scope);
-
-          if (reg.waiting) {
-            reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-          }
-
-          reg.addEventListener('updatefound', () => {
-            const newWorker = reg.installing;
-            newWorker?.addEventListener('statechange', () => {
-              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                console.log('📦 Novo Service Worker instalado. Recarregando...');
-                window.location.reload();
-              }
-            });
-          });
-        }).catch(err => {
-          console.warn('⚠️ Falha ao registrar Service Worker:', err);
-        });
-      });
+      navigator.serviceWorker.register('service-worker.js')
+        .then(reg => console.log('✅ Service Worker registrado:', reg.scope))
+        .catch(err => console.warn('⚠️ Falha ao registrar Service Worker:', err));
     }
-
-    navigator.serviceWorker?.addEventListener('message', event => {
-      if (event.data?.type === 'SKIP_WAITING') {
-        navigator.serviceWorker.skipWaiting();
-      }
-    });
   </script>
 </body>
 </html>

@@ -59,10 +59,3 @@ self.addEventListener('fetch', event => {
     )
   );
 });
-
-// ✅ Ativação imediata quando solicitado pelo HTML
-self.addEventListener('message', event => {
-  if (event.data?.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-});
