@@ -6,7 +6,6 @@
   <title>Menu Principal</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
   <script type="module" src="js/navegacao.js"></script>
   <script type="module" src="js/componentes.js"></script>
 
@@ -24,12 +23,32 @@
     .header {
       background-color: #5e1ca4;
       color: white;
-      padding: 10px;
-      font-size: 20px;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .logo {
+    .header > div {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .header .usuario-logado {
+      justify-content: flex-end;
+      gap: 10px;
+      font-size: 14px;
+    }
+
+    .header .logo {
       font-weight: bold;
+      font-size: 18px;
+    }
+
+    .usuario-logado i {
+      cursor: pointer;
     }
 
     main {
@@ -99,7 +118,11 @@
   </style>
 </head>
 <body>
-  <div class="header" id="cabecalho"></div>
+  <div class="header">
+    <div></div>
+    <div class="logo">Menu Principal</div>
+    <div class="usuario-logado" id="usuarioLogado"></div>
+  </div>
 
   <main>
     <div class="card">
@@ -118,9 +141,7 @@
     </div>
   </main>
 
-  <footer>
-    <div id="statusConexao"></div>
-  </footer>
+  <footer></footer>
 
   <script type="module">
     import { inicializarPagina, monitorarStatusConexao } from './js/navegacao.js';
