@@ -1,74 +1,88 @@
-const URL_BACKEND = "https://ajudante-api.onrender.com/";
+export const URL_BACKEND = "https://ajudante-api.onrender.com/";
 
-function renderizarCabecalho(tituloPagina = "") {
-  const usuario = localStorage.getItem("usuario") || "";
-  const cabecalho = document.createElement("div");
-  cabecalho.className = "header";
-
-  cabecalho.innerHTML = `
-    <span class="logo">App Ajudante</span>
-    <span class="usuario-logado"><i class="fas fa-user"></i> ${usuario}</span>
-    <button class="btn-sair" onclick="sair()">
-      <i class="fas fa-sign-out-alt"></i> Sair
-    </button>
-  `;
-
-  document.body.prepend(cabecalho);
-
-  if (tituloPagina) {
-    const titulo = document.createElement("h2");
-    titulo.textContent = tituloPagina;
-    titulo.style.marginTop = "0";
-    titulo.style.color = "#4a148c";
-    document.body.insertBefore(titulo, document.body.children[1]);
+export function verificarLogin() {
+  const user = localStorage.getItem("usuario");
+  if (!user) {
+    window.location.href = "login.html";
   }
 }
 
-function renderizarCabecalhoLogin() {
-  const cabecalho = document.getElementById("cabecalho");
-  cabecalho.innerHTML = `
-    <div class="header">
-      <span class="logo"><i class="fas fa-lock"></i> Login</span>
-    </div>
-  `;
-}
-
-function renderizarStatusConexao() {
-  const online = navigator.onLine;
-  const status = document.createElement("div");
-  status.id = "statusConexao"; // ✅ Corrigido ID para coincidir com o CSS
-  status.className = online ? "status-online" : "status-offline";
-  status.innerText = online ? "🟢 Conectado" : "🔴 Offline";
-  document.body.appendChild(status);
-}
-
-function monitorarStatusConexao() {
-  function atualizarStatus() {
-    const status = document.getElementById("statusConexao"); // ✅ Corrigido ID aqui também
-    if (!status) return;
-    const online = navigator.onLine;
-    status.innerText = online ? "🟢 Conectado" : "🔴 Offline";
-    status.style.color = online ? "green" : "red";
+export function protegerPagina() {
+  const nomePagina = window.location.pathname;
+  if (!localStorage.getItem("usuario") && !nomePagina.includes("login")) {
+    window.location.href = "login.html";
   }
-
-  window.addEventListener("online", atualizarStatus);
-  window.addEventListener("offline", atualizarStatus);
-  atualizarStatus(); // Executa na primeira vez
 }
 
-function protegerPagina() {
-  const usuario = localStorage.getItem("usuario");
-  if (!usuario) window.location.href = "login.html";
+export function sair() {
+  localStorage.removeItem("usuario");
+  window.location.href = "login.html";
 }
 
-function inicializarPagina(titulo) {
-  protegerPagina();
-  renderizarCabecalho(titulo);
+export function inicializarPagina(titulo) {
+  if (titulo?.toLowerCase() === "login") {
+    renderizarCabecalhoSimples(titulo);
+  } else {
+    protegerPagina();
+    renderizarCabecalho(titulo);
+  }
   renderizarStatusConexao();
   monitorarStatusConexao();
 }
 
-function sair() {
-  localStorage.clear();
-  window.location.href = "login.html";
+export function renderizarCabecalho(tituloPagina = "") {
+  const cabecalho = document.createElement("div");
+  cabecalho.className = "header";
+
+  const user = localStorage.getItem("usuario") || "";
+  cabecalho.innerHTML = `
+    <span class="logo">${tituloPagina}</span>
+    <span class="usuario-logado">
+      <i class="fas fa-user"></i> ${user}
+      <button onclick="sair()" title="Sair"><i class="fas fa-sign-out-alt"></i></button>
+    </span>
+  `;
+
+  document.body.prepend(cabecalho);
+}
+
+export function renderizarCabecalhoSimples(tituloPagina = "") {
+  const cabecalho = document.createElement("div");
+  cabecalho.className = "header";
+
+  cabecalho.innerHTML = `
+    <span class="logo"><i class="fas fa-lock"></i> ${tituloPagina}</span>
+  `;
+
+  document.body.prepend(cabecalho);
+}
+
+export function exibirUsuarioLogado() {
+  const usuario = localStorage.getItem("usuario");
+  if (usuario) {
+    const span = document.getElementById("usuarioLogado");
+    if (span) span.innerText = usuario;
+  }
+}
+
+export function renderizarStatusConexao() {
+  const status = document.createElement("div");
+  status.id = "statusConexao";
+  status.className = "status-online";
+  status.innerText = "Conectado";
+
+  const footer = document.querySelector("footer") || document.body;
+  footer.appendChild(status);
+}
+
+export function monitorarStatusConexao() {
+  const status = document.getElementById("statusConexao");
+  function atualizar() {
+    const online = navigator.onLine;
+    status.className = online ? "status-online" : "status-offline";
+    status.innerText = online ? "Conectado" : "Offline";
+  }
+  window.addEventListener("online", atualizar);
+  window.addEventListener("offline", atualizar);
+  atualizar();
 }
