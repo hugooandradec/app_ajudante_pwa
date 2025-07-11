@@ -5,12 +5,117 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastrar Cliente</title>
 
-  <link rel="stylesheet" href="estilo.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="js/navegacao.js"></script>
   <script src="js/servicos.js"></script>
   <script src="js/sincronizador.js"></script>
   <script src="js/componentes.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .btn-roxo, .btn-voltar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      padding: 14px;
+      border-radius: 8px;
+      margin: 10px auto;
+      width: 90%;
+      max-width: 400px;
+      font-size: 1.1em;
+      text-decoration: none;
+    }
+
+    .btn-roxo {
+      background-color: white;
+      color: black;
+      border: 2px solid #5e1ca4;
+    }
+
+    .btn-roxo i {
+      color: #5e1ca4;
+      margin-right: 8px;
+    }
+
+    .btn-voltar {
+      background-color: #e0e0e0;
+      color: black;
+      border: 2px solid #5e1ca4;
+    }
+
+    .btn-voltar i {
+      color: #5e1ca4;
+      margin-right: 8px;
+    }
+
+    .selo-item {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin: 6px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #listaSelos {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      list-style: none;
+      padding: 10px;
+      margin-top: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    #listaSelos li {
+      padding: 6px 4px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    #listaSelos li:hover {
+      background-color: #f1e7ff;
+    }
+
+    .mensagem {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <script>

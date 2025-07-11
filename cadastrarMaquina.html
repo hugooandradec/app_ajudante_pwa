@@ -5,11 +5,84 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cadastrar Máquina</title>
 
-  <link rel="stylesheet" href="estilo.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script src="js/navegacao.js"></script>
   <script src="js/servicos.js"></script>
   <script src="js/sincronizador.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .btn-roxo, .btn-voltar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      padding: 14px;
+      border-radius: 8px;
+      margin: 10px auto;
+      width: 90%;
+      max-width: 400px;
+      font-size: 1.1em;
+      text-decoration: none;
+    }
+
+    .btn-roxo {
+      background-color: white;
+      color: black;
+      border: 2px solid #5e1ca4;
+    }
+
+    .btn-roxo i {
+      color: #5e1ca4;
+      margin-right: 8px;
+    }
+
+    .btn-voltar {
+      background-color: #e0e0e0;
+      color: black;
+      border: 2px solid #5e1ca4;
+    }
+
+    .btn-voltar i {
+      color: #5e1ca4;
+      margin-right: 8px;
+    }
+
+    .mensagem {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <script>
@@ -23,10 +96,9 @@
     </div>
 
     <div class="form-group">
-  <label for="tipo">Tipo</label>
-  <input type="text" id="tipo" placeholder="Dragon" />
-</div>
-
+      <label for="tipo">Tipo</label>
+      <input type="text" id="tipo" placeholder="Dragon" />
+    </div>
 
     <button class="btn-roxo" onclick="salvarMaquina()">
       <i class="fas fa-save"></i> Salvar Máquina
