@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login</title>
 
-  <!-- Estilo centralizado -->
-  <link rel="stylesheet" href="estilo.css" onerror="console.warn('⚠️ estilo.css não carregado')" />
+  <!-- Estilo unificado -->
+  <link rel="stylesheet" href="estilo.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <!-- Scripts compartilhados -->
@@ -19,7 +19,7 @@
 
   <header id="cabecalho"></header>
 
-  <div class="container">
+  <main class="menu">
     <div class="card">
       <h2 class="titulo-formulario"><i class="fas fa-lock"></i> Login</h2>
 
@@ -33,16 +33,16 @@
         <input type="password" id="senha" placeholder="Digite sua senha" />
       </div>
 
-      <button class="btn" onclick="logar()">
+      <button class="btn-roxo" onclick="logar()">
         <i class="fas fa-sign-in-alt"></i> Entrar
       </button>
 
       <p id="mensagem" style="color: red; text-align: center; margin-top: 10px;"></p>
     </div>
-  </div>
 
-  <!-- Indicador de conexão -->
-  <div id="status-conexao" class="status-conexao"></div>
+    <!-- Status de conexão -->
+    <div id="statusConexao" class="status-online"></div>
+  </main>
 
   <script>
     window.addEventListener("DOMContentLoaded", () => {

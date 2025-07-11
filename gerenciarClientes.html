@@ -5,26 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gerenciar Clientes</title>
 
-  <link rel="stylesheet" href="estilo.css" onerror="console.warn('⚠️ estilo.css não carregado')">
+  <link rel="stylesheet" href="estilo.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <script src="js/navegacao.js"></script>
   <script src="js/servicos.js"></script>
 </head>
 <body>
-
-  <div class="container">
-    <a class="btn" href="cadastrarCliente.html"><i class="fas fa-plus-circle"></i> Cadastrar Cliente</a>
-    <a class="btn" href="consultarCliente.html"><i class="fas fa-search"></i> Consultar Cliente</a>
-    <a class="btn" href="editarCliente.html"><i class="fas fa-pen"></i> Editar Cliente</a>
-    <a class="btn" href="excluirCliente.html"><i class="fas fa-trash"></i> Excluir Cliente</a>
-    <a class="btn voltar" href="index.html"><i class="fas fa-arrow-left"></i> Voltar ao Menu</a>
-  </div>
-
   <script>
-    protegerPagina();
-    renderizarCabecalho("Gerenciar Clientes");
-    renderizarStatusConexao();
+    inicializarPagina("Gerenciar Clientes");
   </script>
+
+  <main class="menu">
+    <a class="btn-roxo" href="cadastrarCliente.html"><i class="fas fa-plus-circle"></i> Cadastrar Cliente</a>
+    <a class="btn-roxo" href="consultarCliente.html"><i class="fas fa-search"></i> Consultar Cliente</a>
+    <a class="btn-roxo" href="editarCliente.html"><i class="fas fa-pen"></i> Editar Cliente</a>
+    <a class="btn-roxo" href="excluirCliente.html"><i class="fas fa-trash"></i> Excluir Cliente</a>
+    <a class="btn-voltar" href="index.html"><i class="fas fa-arrow-left"></i> Voltar ao Menu</a>
+  </main>
 </body>
 </html>

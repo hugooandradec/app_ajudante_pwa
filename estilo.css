@@ -1,104 +1,133 @@
+/* === CONFIGURAÇÃO GERAL === */
 body {
   margin: 0;
-  padding: 0;
-  background-color: #f8f8f8;
   font-family: Arial, sans-serif;
+  background-color: #f8f8f8;
   text-align: center;
 }
 
-header {
-  background-color: #651e94;
+/* === CABEÇALHO ROXO === */
+.top-bar {
+  background-color: #5e1ca4;
   color: white;
   padding: 10px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-
-header .titulo {
-  font-weight: bold;
-  margin-left: 15px;
-}
-
-header .usuario {
-  margin-right: 15px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.container {
-  margin-top: 40px;
+  position: sticky;
+  top: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.card {
-  background-color: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px #ccc;
-  max-width: 400px;
-  width: 90%;
-  text-align: left;
-}
-
-.card h2 {
-  text-align: center;
-  margin-top: 0;
-  color: #651e9c;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  font-weight: bold;
+/* === INFORMAÇÕES DO USUÁRIO === */
+.user-info {
+  align-self: flex-start;
+  font-size: 0.9em;
   margin-bottom: 5px;
 }
 
-.form-group input {
-  width: 100%;
-  padding: 10px;
+/* === BOTÃO DE SAIR === */
+.btn-sair {
+  margin-left: 10px;
+  background-color: #fff;
+  color: #5e1ca4;
+  border: 1px solid #fff;
   border-radius: 5px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
-
-.btn {
-  padding: 12px;
-  background-color: #651e9c;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
+  padding: 4px 8px;
+  font-size: 0.85em;
   cursor: pointer;
-  width: 100%;
-  margin-top: 10px;
-  transition: background-color 0.3s ease;
 }
 
-.btn:hover {
-  background-color: #4e1580;
+.btn-sair:hover {
+  background-color: #e6e6e6;
 }
 
-.status-bar {
+/* === ÁREA PRINCIPAL === */
+.menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+/* === BOTÕES PRINCIPAIS === */
+.btn-roxo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: #000;
+  border: 2px solid #5e1ca4;
+  border-radius: 8px;
+  padding: 14px;
+  width: 90%;
+  max-width: 400px;
+  margin: 10px;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.btn-roxo i {
+  color: #5e1ca4;
+  margin-right: 8px;
+}
+
+.btn-roxo:hover {
+  background-color: #f2e9ff;
+}
+
+/* === BOTÃO VOLTAR === */
+.btn-voltar {
+  background-color: #e0e0e0;
+  color: black;
+  border: 2px solid #5e1ca4;
+  border-radius: 8px;
+  padding: 14px;
+  width: 90%;
+  max-width: 400px;
+  margin: 10px;
+  font-size: 1.1em;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-voltar i {
+  color: #5e1ca4;
+  margin-right: 8px;
+}
+
+/* === STATUS DE CONEXÃO === */
+.status-online,
+.status-offline {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 0.95em;
+  font-weight: bold;
+}
+
+#statusConexao {
+  font-size: 0.95em;
+}
+
+#statusConexao::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  border-radius: 50%;
   background-color: green;
-  color: white;
-  padding: 4px 10px;
-  font-size: 14px;
 }
 
-.status-conexao {
-  position: fixed;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 14px;
-  color: #333;
-  opacity: 0.85;
+/* Quando offline */
+.offline #statusConexao::before {
+  background-color: red;
+}
+
+/* === RODAPÉ (caso necessário) === */
+footer {
+  margin-top: 30px;
+  padding: 10px;
 }

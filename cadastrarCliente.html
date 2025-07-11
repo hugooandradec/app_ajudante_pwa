@@ -4,15 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastrar Cliente</title>
-  <link rel="icon" href="/ajudante-app/favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="estilo.css" onerror="console.warn('⚠️ estilo.css não carregado')">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+  <link rel="stylesheet" href="estilo.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="js/navegacao.js"></script>
   <script src="js/servicos.js"></script>
   <script src="js/sincronizador.js"></script>
+  <script src="js/componentes.js"></script>
 </head>
 <body>
+  <script>
+    inicializarPagina("Cadastrar Cliente");
+  </script>
+
   <div class="container" id="formulario">
     <div class="form-group">
       <label for="buscaSelo">+ Adicionar Máquina (por selo)</label>
@@ -22,22 +26,17 @@
 
     <div id="selosSelecionados"></div>
 
-    <button class="btn salvar" onclick="salvarCliente()">
+    <button class="btn-roxo" onclick="salvarCliente()">
       <i class="fas fa-save"></i> Salvar Cliente
     </button>
-    <a class="btn voltar" href="index.html">
+    <a class="btn-voltar" href="index.html">
       <i class="fas fa-arrow-left"></i> Voltar ao Menu
     </a>
 
     <div id="mensagem" class="mensagem"></div>
   </div>
 
-  <script src="js/componentes.js"></script>
   <script>
-    protegerPagina();
-    renderizarCabecalho("Cadastrar Cliente");
-    renderizarStatusConexao();
-
     const selosSelecionados = [];
     let selosDisponiveis = [];
 

@@ -36,6 +36,7 @@ function renderizarCabecalhoLogin() {
 function renderizarStatusConexao() {
   const online = navigator.onLine;
   const status = document.createElement("div");
+  status.id = "statusConexao"; // ✅ Corrigido ID para coincidir com o CSS
   status.className = online ? "status-online" : "status-offline";
   status.innerText = online ? "🟢 Conectado" : "🔴 Offline";
   document.body.appendChild(status);
@@ -43,7 +44,8 @@ function renderizarStatusConexao() {
 
 function monitorarStatusConexao() {
   function atualizarStatus() {
-    const status = document.getElementById("status-conexao");
+    const status = document.getElementById("statusConexao"); // ✅ Corrigido ID aqui também
+    if (!status) return;
     const online = navigator.onLine;
     status.innerText = online ? "🟢 Conectado" : "🔴 Offline";
     status.style.color = online ? "green" : "red";
@@ -57,6 +59,13 @@ function monitorarStatusConexao() {
 function protegerPagina() {
   const usuario = localStorage.getItem("usuario");
   if (!usuario) window.location.href = "login.html";
+}
+
+function inicializarPagina(titulo) {
+  protegerPagina();
+  renderizarCabecalho(titulo);
+  renderizarStatusConexao();
+  monitorarStatusConexao();
 }
 
 function sair() {

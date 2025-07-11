@@ -5,26 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gerenciar Máquinas</title>
 
-  <link rel="stylesheet" href="estilo.css" onerror="console.warn('⚠️ estilo.css não carregado')">
+  <link rel="stylesheet" href="estilo.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <script src="js/navegacao.js"></script>
   <script src="js/servicos.js"></script>
 </head>
 <body>
-
-  <div class="container">
-    <a class="btn" href="cadastrarMaquina.html"><i class="fas fa-plus-circle"></i> Cadastrar Máquina</a>
-    <a class="btn" href="consultarMaquina.html"><i class="fas fa-search"></i> Consultar Máquina</a>
-    <a class="btn" href="editarMaquina.html"><i class="fas fa-pen"></i> Editar Máquina</a>
-    <a class="btn" href="excluirMaquina.html"><i class="fas fa-trash"></i> Excluir Máquina</a>
-    <a class="btn voltar" href="index.html"><i class="fas fa-arrow-left"></i> Voltar ao Menu</a>
-  </div>
-
   <script>
-    protegerPagina();
-    renderizarCabecalho("Gerenciar Máquinas");
-    renderizarStatusConexao();
+    inicializarPagina("Gerenciar Máquinas");
   </script>
+
+  <main class="menu">
+    <a class="btn-roxo" href="cadastrarMaquina.html"><i class="fas fa-plus-circle"></i> Cadastrar Máquina</a>
+    <a class="btn-roxo" href="consultarMaquina.html"><i class="fas fa-search"></i> Consultar Máquina</a>
+    <a class="btn-roxo" href="editarMaquina.html"><i class="fas fa-pen"></i> Editar Máquina</a>
+    <a class="btn-roxo" href="excluirMaquina.html"><i class="fas fa-trash"></i> Excluir Máquina</a>
+    <a class="btn-voltar" href="index.html"><i class="fas fa-arrow-left"></i> Voltar ao Menu</a>
+  </main>
 </body>
 </html>

@@ -4,34 +4,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cadastrar Máquina</title>
-  <link rel="stylesheet" href="estilo.css" onerror="console.warn('⚠️ estilo.css não carregado')">
+
+  <link rel="stylesheet" href="estilo.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script src="js/navegacao.js"></script>
   <script src="js/servicos.js"></script>
   <script src="js/sincronizador.js"></script>
 </head>
 <body>
+  <script>
+    inicializarPagina("Cadastrar Máquina");
+  </script>
+
   <div class="container" id="formulario">
     <div class="form-group">
       <label for="nome">Selo da Máquina</label>
-      <input type="text" id="nome" placeholder="Ex: 123-AB" />
+      <input type="text" id="nome" placeholder="Ex: YZS001" />
     </div>
 
     <div class="form-group">
-      <label for="tipo">Tipo</label>
-      <select id="tipo">
-        <option value="">Selecione</option>
-        <option value="Refrigerante">Refrigerante</option>
-        <option value="Salgado">Salgado</option>
-        <option value="Doce">Doce</option>
-        <option value="Café">Café</option>
-      </select>
-    </div>
+  <label for="tipo">Tipo</label>
+  <input type="text" id="tipo" placeholder="Dragon" />
+</div>
 
-    <button class="btn salvar" onclick="salvarMaquina()">
+
+    <button class="btn-roxo" onclick="salvarMaquina()">
       <i class="fas fa-save"></i> Salvar Máquina
     </button>
-    <a class="btn voltar" href="index.html">
+    <a class="btn-voltar" href="index.html">
       <i class="fas fa-arrow-left"></i> Voltar ao Menu
     </a>
 
@@ -39,10 +39,6 @@
   </div>
 
   <script>
-    protegerPagina();
-    renderizarCabecalho("Cadastrar Máquina");
-    renderizarStatusConexao();
-
     async function salvarMaquina() {
       const nome = document.getElementById("nome").value.trim().toUpperCase();
       const tipo = document.getElementById("tipo").value;

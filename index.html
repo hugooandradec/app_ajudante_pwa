@@ -2,42 +2,43 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Menu Principal</title>
 
-  <link rel="stylesheet" href="estilo.css" onerror="console.warn('⚠️ estilo.css não carregado')">
+  <link rel="stylesheet" href="estilo.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
+  
   <script src="js/navegacao.js"></script>
-  <script src="js/componentes.js"></script>
-  <script src="js/servicos.js"></script>
-  <script src="js/sincronizador.js"></script>
 </head>
 <body>
-
-  <div class="container">
-    <button class="btn" onclick="location.href='gerenciarClientes.html'">
-      <i class="fas fa-users"></i> Gerenciar Clientes
-    </button>
-
-    <button class="btn" onclick="location.href='gerenciarMaquinas.html'">
-      <i class="fas fa-cogs"></i> Gerenciar Máquinas
-    </button>
-
-    <button class="btn" onclick="location.href='preFecho.html'">
-      <i class="fas fa-file-alt"></i> Pré-Fecho
-    </button>
-
-    <button class="btn" onclick="location.href='calculoRetencao.html'">
-      <i class="fas fa-percentage"></i> Cálculo de Retenção
-    </button>
-  </div>
-
   <script>
-    protegerPagina();
-    renderizarCabecalho("Menu Principal");
-    renderizarStatusConexao();
+    inicializarPagina("Menu Principal");
   </script>
-  <div id="status-conexao" class="status-conexao"></div>
+
+  <main class="menu">
+    <a href="gerenciarClientes.html" class="btn-roxo">
+      <i class="fas fa-users"></i> Gerenciar Clientes
+    </a>
+    <a href="gerenciarMaquinas.html" class="btn-roxo">
+      <i class="fas fa-tools"></i> Gerenciar Máquinas
+    </a>
+    <a href="preFecho.html" class="btn-roxo">
+      <i class="fas fa-file-alt"></i> Pré-Fecho
+    </a>
+    <a href="calculoRetencao.html" class="btn-roxo">
+      <i class="fas fa-sliders-h"></i> Cálculo de Retenção
+    </a>
+  </main>
+
+  <!-- ✅ Registro do Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('✅ Service Worker registrado:', reg.scope))
+          .catch(err => console.warn('⚠️ Falha ao registrar Service Worker:', err));
+      });
+    }
+  </script>
 </body>
 </html>
