@@ -1,88 +1,52 @@
-export const URL_BACKEND = "https://ajudante-api.onrender.com/";
-
-export function verificarLogin() {
-  const user = localStorage.getItem("usuario");
-  if (!user) {
-    window.location.href = "login.html";
+// Atualiza o status visual
+function atualizar(status) {
+  const div = document.getElementById("statusConexao");
+  if (div) {
+    div.className = status ? "status-online" : "status-offline";
+    div.textContent = status ? "Conectado" : "Desconectado";
   }
 }
 
-export function protegerPagina() {
-  const nomePagina = window.location.pathname;
-  if (!localStorage.getItem("usuario") && !nomePagina.includes("login")) {
-    window.location.href = "login.html";
-  }
-}
-
-export function sair() {
-  localStorage.removeItem("usuario");
-  window.location.href = "login.html";
-}
-
-export function inicializarPagina(titulo) {
-  if (titulo?.toLowerCase() === "login") {
-    renderizarCabecalhoSimples(titulo);
-  } else {
-    protegerPagina();
-    renderizarCabecalho(titulo);
-  }
-  renderizarStatusConexao();
-  monitorarStatusConexao();
-}
-
-export function renderizarCabecalho(tituloPagina = "") {
-  const cabecalho = document.createElement("div");
-  cabecalho.className = "header";
-
-  const user = localStorage.getItem("usuario") || "";
-  cabecalho.innerHTML = `
-    <span class="logo">${tituloPagina}</span>
-    <span class="usuario-logado">
-      <i class="fas fa-user"></i> ${user}
-      <button onclick="sair()" title="Sair"><i class="fas fa-sign-out-alt"></i></button>
-    </span>
-  `;
-
-  document.body.prepend(cabecalho);
-}
-
-export function renderizarCabecalhoSimples(tituloPagina = "") {
-  const cabecalho = document.createElement("div");
-  cabecalho.className = "header";
-
-  cabecalho.innerHTML = `
-    <span class="logo"><i class="fas fa-lock"></i> ${tituloPagina}</span>
-  `;
-
-  document.body.prepend(cabecalho);
-}
-
-export function exibirUsuarioLogado() {
-  const usuario = localStorage.getItem("usuario");
-  if (usuario) {
-    const span = document.getElementById("usuarioLogado");
-    if (span) span.innerText = usuario;
-  }
-}
-
-export function renderizarStatusConexao() {
-  const status = document.createElement("div");
-  status.id = "statusConexao";
-  status.className = "status-online";
-  status.innerText = "Conectado";
-
-  const footer = document.querySelector("footer") || document.body;
-  footer.appendChild(status);
-}
-
+// Cria o elemento do status, se ainda não existir
 export function monitorarStatusConexao() {
-  const status = document.getElementById("statusConexao");
-  function atualizar() {
-    const online = navigator.onLine;
-    status.className = online ? "status-online" : "status-offline";
-    status.innerText = online ? "Conectado" : "Offline";
+  let status = document.getElementById("statusConexao");
+  if (!status) {
+    status = document.createElement("div");
+    status.id = "statusConexao";
+    document.querySelector("footer")?.appendChild(status);
   }
-  window.addEventListener("online", atualizar);
-  window.addEventListener("offline", atualizar);
-  atualizar();
+
+  function checar() {
+    atualizar(navigator.onLine);
+  }
+
+  window.addEventListener("online", checar);
+  window.addEventListener("offline", checar);
+  checar();
 }
+
+// Cabeçalho padrão
+export function renderizarCabecalho(titulo) {
+  const cabecalho = document.getElementById("cabecalho");
+  if (cabecalho) {
+    cabecalho.innerHTML = `
+      <div></div>
+      <div class="logo">${titulo}</div>
+      <div class="usuario-logado">
+        <i class="fas fa-user"></i> ${localStorage.getItem("usuario") || ""}
+        <i class="fas fa-sign-out-alt" onclick="logout()" title="Sair"></i>
+      </div>
+    `;
+  }
+}
+
+// Inicializa a página
+export function inicializarPagina(titulo) {
+  renderizarCabecalho(titulo);
+}
+
+// Define a função logout globalmente
+window.logout = function () {
+  localStorage.clear();
+  window.location.href = "login.html";
+};
