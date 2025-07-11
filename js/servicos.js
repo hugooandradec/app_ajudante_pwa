@@ -1,5 +1,5 @@
 // Envia uma ação e dados ao backend, retorna resposta JSON
-async function enviarDados(acao, dados = {}) {
+export async function enviarDados(acao, dados = {}) {
   try {
     const resposta = await fetch(URL_BACKEND, {
       method: "POST",
@@ -16,7 +16,7 @@ async function enviarDados(acao, dados = {}) {
 }
 
 // Exibe mensagem em um elemento com id="mensagem"
-function exibirMensagem(texto, tipo = 'erro') {
+export function exibirMensagem(texto, tipo = 'erro') {
   const msg = document.getElementById("mensagem");
   if (!msg) return;
 
@@ -29,7 +29,7 @@ function exibirMensagem(texto, tipo = 'erro') {
   }, 4000);
 }
 
-function validarCamposObrigatorios(ids = []) {
+export function validarCamposObrigatorios(ids = []) {
   for (const id of ids) {
     const valor = document.getElementById(id)?.value.trim();
     if (!valor) {
@@ -40,10 +40,9 @@ function validarCamposObrigatorios(ids = []) {
   return true;
 }
 
-function limparCampos(ids = []) {
+export function limparCampos(ids = []) {
   ids.forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
 }
-
