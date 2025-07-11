@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login</title>
 
-  <!-- Estilo visual centralizado -->
+  <!-- Estilo centralizado -->
   <link rel="stylesheet" href="estilo.css" onerror="console.warn('⚠️ estilo.css não carregado')" />
-
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <!-- Scripts compartilhados -->
@@ -48,7 +46,7 @@
 
   <script>
     window.addEventListener("DOMContentLoaded", () => {
-      renderizarCabecalhoLogin(); // sem botão de sair
+      renderizarCabecalhoLogin();
       monitorarStatusConexao();
     });
 
@@ -65,23 +63,18 @@
       }
 
       try {
-  const dados = { acao: "login", usuario, senha };
-  console.log("📤 Enviando:", dados); // Loga os dados enviados
+        const resposta = await enviarDados("login", { usuario, senha });
 
-  const resposta = await enviarDados(dados);
-  console.log("📥 Resposta do servidor:", resposta); // Loga a resposta recebida
-
-  if (resposta?.ok) {
-    localStorage.setItem("usuario", usuario);
-    window.location.href = "index.html";
-  } else {
-    msg.textContent = resposta?.mensagem || "Usuário ou senha inválidos.";
-  }
-} catch (erro) {
-  console.error("❌ Erro na requisição:", erro);
-  msg.textContent = "Erro ao conectar com o servidor.";
-}
-
+        if (resposta?.sucesso) {
+          localStorage.setItem("usuario", usuario);
+          window.location.href = "index.html";
+        } else {
+          msg.textContent = resposta?.mensagem || "Usuário ou senha inválidos.";
+        }
+      } catch (erro) {
+        console.error("Erro na requisição:", erro);
+        msg.textContent = "Erro ao conectar com o servidor.";
+      }
     }
   </script>
 </body>
