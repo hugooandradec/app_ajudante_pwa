@@ -21,8 +21,7 @@ const urlsToCache = [
   '/ajudante-app/icon-192.png',
   '/ajudante-app/icon-512.png',
 
-  // CSS e JS internos
-  '/ajudante-app/estilo.css',
+  // JS internos
   '/ajudante-app/js/navegacao.js',
   '/ajudante-app/js/componentes.js',
   '/ajudante-app/js/servicos.js',
