@@ -16,12 +16,22 @@
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #f8f8f8;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
       text-align: center;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
     }
 
     .card {
       max-width: 400px;
-      margin: 50px auto;
       background-color: white;
       border-radius: 12px;
       padding: 2rem;
@@ -71,8 +81,12 @@
       margin-right: 8px;
     }
 
+    footer {
+      text-align: center;
+      padding: 12px 0;
+    }
+
     #statusConexao {
-      margin-top: 20px;
       font-size: 0.9em;
     }
 
@@ -90,10 +104,16 @@
     .status-offline::before {
       background-color: red;
     }
+
+    #mensagem {
+      margin-top: 10px;
+      font-weight: bold;
+      color: red;
+    }
   </style>
 </head>
 <body>
-  <header id="cabecalho"></header>
+  <script>inicializarPagina("Login")</script>
 
   <main>
     <div class="card">
@@ -113,15 +133,16 @@
         <i class="fas fa-sign-in-alt"></i> Entrar
       </button>
 
-      <p id="mensagem" style="color: red; text-align: center; margin-top: 10px;"></p>
+      <div id="mensagem"></div>
     </div>
-
-    <div id="statusConexao" class="status-online"></div>
   </main>
+
+  <footer>
+    <div id="statusConexao" class="status-online"></div>
+  </footer>
 
   <script>
     window.addEventListener("DOMContentLoaded", () => {
-      renderizarCabecalhoLogin();
       monitorarStatusConexao();
     });
 
@@ -151,6 +172,39 @@
         msg.textContent = "Erro ao conectar com o servidor.";
       }
     }
+  </script>
+
+  <!-- ✅ Registro automático do novo service worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js').then(reg => {
+          console.log('✅ Service Worker registrado:', reg.scope);
+
+          if (reg.waiting) {
+            reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+          }
+
+          reg.addEventListener('updatefound', () => {
+            const newWorker = reg.installing;
+            newWorker?.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                console.log('📦 Novo Service Worker instalado. Recarregando...');
+                window.location.reload();
+              }
+            });
+          });
+        }).catch(err => {
+          console.warn('⚠️ Falha ao registrar Service Worker:', err);
+        });
+      });
+    }
+
+    navigator.serviceWorker?.addEventListener('message', event => {
+      if (event.data?.type === 'SKIP_WAITING') {
+        navigator.serviceWorker.skipWaiting();
+      }
+    });
   </script>
 </body>
 </html>

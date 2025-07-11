@@ -27,7 +27,7 @@ const urlsToCache = [
   '/ajudante-app/js/servicos.js',
   '/ajudante-app/js/sincronizador.js',
 
-  // Font Awesome via CDN
+  // Font Awesome CDN
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
 ];
 
@@ -58,4 +58,11 @@ self.addEventListener('fetch', event => {
       response || fetch(event.request)
     )
   );
+});
+
+// ✅ Ativação imediata quando solicitado pelo HTML
+self.addEventListener('message', event => {
+  if (event.data?.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
