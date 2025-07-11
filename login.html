@@ -6,10 +6,11 @@
   <title>Login</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <script src="js/navegacao.js"></script>
-  <script src="js/componentes.js"></script>
-  <script src="js/servicos.js"></script>
-  <script src="js/sincronizador.js"></script>
+
+  <script type="module" src="js/navegacao.js"></script>
+  <script type="module" src="js/componentes.js"></script>
+  <script type="module" src="js/servicos.js"></script>
+  <script type="module" src="js/sincronizador.js"></script>
 
   <style>
     body {
@@ -22,12 +23,24 @@
       text-align: center;
     }
 
+    .header {
+      background-color: #5e1ca4;
+      color: white;
+      padding: 10px;
+      font-size: 20px;
+    }
+
+    .logo {
+      font-weight: bold;
+    }
+
     main {
       flex: 1;
       display: flex;
-      justify-content: center;
+      justify-content: start;
       align-items: center;
       flex-direction: column;
+      padding-top: 60px;
     }
 
     .card {
@@ -113,7 +126,10 @@
   </style>
 </head>
 <body>
-  <script>inicializarPagina("Login")</script>
+  <script type="module">
+    import { inicializarPagina } from './js/navegacao.js';
+    inicializarPagina("Login");
+  </script>
 
   <main>
     <div class="card">
@@ -141,12 +157,15 @@
     <div id="statusConexao"></div>
   </footer>
 
-  <script>
+  <script type="module">
+    import { monitorarStatusConexao } from './js/navegacao.js';
+    import { enviarDados } from './js/servicos.js';
+
     window.addEventListener("DOMContentLoaded", () => {
       monitorarStatusConexao();
     });
 
-    async function logar() {
+    window.logar = async function () {
       const usuario = document.getElementById("usuario").value.trim();
       const senha = document.getElementById("senha").value.trim();
       const msg = document.getElementById("mensagem");
@@ -169,15 +188,8 @@
         }
       } catch (erro) {
         console.error("Erro na requisição:", erro);
-        msg.textContent = "Erro ao conectar com o servidor.";
+        msg.textContent = "Erro de conexão com o servidor.";
       }
-    }
-
-    // ✅ Registro tradicional do service worker (sem auto reload)
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(reg => console.log('✅ Service Worker registrado:', reg.scope))
-        .catch(err => console.warn('⚠️ Falha ao registrar Service Worker:', err));
     }
   </script>
 </body>
