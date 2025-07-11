@@ -1,3 +1,5 @@
+import { URL_BACKEND } from './navegacao.js';
+
 // Envia uma ação e dados ao backend, retorna resposta JSON
 export async function enviarDados(acao, dados = {}) {
   try {
