@@ -1,25 +1,29 @@
 name: Atualiza data no service-worker
 
 on:
-  push:
-    paths:
-      - 'service-worker.js'
+  push:  # Executa em qualquer push
 
 jobs:
-  atualizar-data:
+  atualizar-sw:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout do repositório
         uses: actions/checkout@v3
 
-      - name: Substituir data de atualização no service-worker.js
+      - name: Atualizar data no service-worker.js
         run: |
-          data=$(date '+%Y-%m-%d %H:%M')
-          sed -i "s|// Última atualização: .*|// Última atualização: $data|" service-worker.js
+          ARQUIVO="service-worker.js"
+          DATA=$(date '+%Y-%m-%d %H:%M')
+          if grep -q "// Última atualização:" "$ARQUIVO"; then
+            sed -i "s|// Última atualização: .*|// Última atualização: $DATA|" "$ARQUIVO"
+          else
+            echo "// Última atualização: $DATA" >> "$ARQUIVO"
+          fi
 
-      - name: Commit e push da atualização
+      - name: Commit e push da nova data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -am "Atualiza data no service worker [$data]"
+          git add service-worker.js
+          git commit -m "Atualiza automaticamente o service-worker.js [$DATA]" || echo "Nada para commitar"
           git push
