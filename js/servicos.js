@@ -1,4 +1,5 @@
-import { URL_BACKEND } from './navegacao.js';
+// URL do backend
+export const URL_BACKEND = "https://ajudante-api.onrender.com";
 
 // Envia uma ação e dados ao backend, retorna resposta JSON
 export async function enviarDados(acao, dados = {}) {
