@@ -6,32 +6,6 @@
   <title>Gerenciar Clientes</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script defer src="navegacao.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      renderizarCabecalho("Gerenciar Clientes", "../menu.html");
-
-      const botoes = [
-        { texto: "Cadastrar Cliente", icone: "fa-user-plus", link: "cadastrarCliente.html" },
-        { texto: "Editar Cliente", icone: "fa-pen-to-square", link: "editarCliente.html" },
-        { texto: "Consultar Cliente", icone: "fa-search", link: "consultarCliente.html" },
-        { texto: "Excluir Cliente", icone: "fa-user-minus", link: "excluirCliente.html" }
-      ];
-
-      const container = document.getElementById("botoes");
-      botoes.forEach((btn, index) => {
-        const corFundo = index % 2 === 0 ? "#f3e8ff" : "#ede9fe";
-        const button = document.createElement("a");
-        button.href = btn.link;
-        button.className = "botao";
-        button.style.backgroundColor = corFundo;
-        button.innerHTML = `
-          <i class="fas ${btn.icone}"></i>
-          <span>${btn.texto}</span>
-        `;
-        container.appendChild(button);
-      });
-    });
-  </script>
   <style>
     body {
       margin: 0;
@@ -109,7 +83,7 @@
 <body>
   <header>
     <div id="titulo-pagina">
-      <i class="fas fa-arrow-left" onclick="window.location.href='../menu.html'"></i>
+      <i class="fas fa-arrow-left" onclick="window.location.href='menu.html'"></i>
       <span>Gerenciar Clientes</span>
     </div>
     <div id="user-info">
@@ -120,5 +94,34 @@
   </header>
 
   <div id="botoes"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      renderizarCabecalho("Gerenciar Clientes", "menu.html");
+
+      const botoes = [
+        { texto: "Cadastrar Cliente", icone: "fa-user-plus", link: "cadastrarCliente.html" },
+        { texto: "Editar Cliente", icone: "fa-pen-to-square", link: "editarCliente.html" },
+        { texto: "Consultar Cliente", icone: "fa-search", link: "consultarCliente.html" },
+        { texto: "Excluir Cliente", icone: "fa-user-minus", link: "excluirCliente.html" }
+      ];
+
+      const container = document.getElementById("botoes");
+      if (container) {
+        botoes.forEach((btn, index) => {
+          const corFundo = index % 2 === 0 ? "#f3e8ff" : "#ede9fe";
+          const button = document.createElement("a");
+          button.href = btn.link;
+          button.className = "botao";
+          button.style.backgroundColor = corFundo;
+          button.innerHTML = `
+            <i class="fas ${btn.icone}"></i>
+            <span>${btn.texto}</span>
+          `;
+          container.appendChild(button);
+        });
+      }
+    });
+  </script>
 </body>
 </html>
