@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cadastrar Máquina</title>
+  <link rel="icon" href="data:,">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script src="js/navegacao.js"></script>
@@ -15,13 +16,59 @@
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #f8f8f8;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
       text-align: center;
     }
 
+    .header {
+      background-color: #5e1ca4;
+      color: white;
+      padding: 10px;
+      font-size: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header > div {
+      flex: 1;
+    }
+
+    .logo {
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .usuario-logado {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+      padding-right: 10px;
+    }
+
+    .usuario-logado i {
+      cursor: pointer;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      flex-direction: column;
+      padding-top: 60px;
+    }
+
     .container {
+      width: 90%;
       max-width: 500px;
-      margin: 40px auto;
-      padding: 1.5rem;
+      background-color: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
     .form-group {
@@ -40,13 +87,14 @@
       padding: 10px;
       border-radius: 8px;
       border: 1px solid #ccc;
+      box-sizing: border-box;
     }
 
     .btn-roxo, .btn-voltar {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: bold;
+      font-weight: normal;
       padding: 14px;
       border-radius: 8px;
       margin: 10px auto;
@@ -82,35 +130,72 @@
       margin-top: 20px;
       font-weight: bold;
     }
+
+    footer {
+      text-align: center;
+      padding: 12px 0;
+    }
+
+    .status-online::before,
+    .status-offline::before {
+      content: '';
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 6px;
+      border-radius: 50%;
+      background-color: green;
+    }
+
+    .status-offline::before {
+      background-color: red;
+    }
+
+    #statusConexao {
+      font-size: 0.9em;
+    }
   </style>
 </head>
 <body>
-  <script>
-    inicializarPagina("Cadastrar Máquina");
-  </script>
-
-  <div class="container" id="formulario">
-    <div class="form-group">
-      <label for="nome">Selo da Máquina</label>
-      <input type="text" id="nome" placeholder="Ex: YZS001" />
+  <div class="header">
+    <div></div>
+    <div class="logo">Cadastrar Máquina</div>
+    <div class="usuario-logado">
+      <i class="fas fa-user"></i> <span id="usuarioNome"></span>
+      <i class="fas fa-sign-out-alt" onclick="logout()" title="Sair"></i>
     </div>
-
-    <div class="form-group">
-      <label for="tipo">Tipo</label>
-      <input type="text" id="tipo" placeholder="Dragon" />
-    </div>
-
-    <button class="btn-roxo" onclick="salvarMaquina()">
-      <i class="fas fa-save"></i> Salvar Máquina
-    </button>
-    <a class="btn-voltar" href="index.html">
-      <i class="fas fa-arrow-left"></i> Voltar ao Menu
-    </a>
-
-    <div id="mensagem" class="mensagem"></div>
   </div>
 
+  <main>
+    <div class="container" id="formulario">
+      <div class="form-group">
+        <label for="nome">Selo da Máquina</label>
+        <input type="text" id="nome" placeholder="Ex: YZS001" />
+      </div>
+
+      <div class="form-group">
+        <label for="tipo">Tipo</label>
+        <input type="text" id="tipo" placeholder="Dragon" />
+      </div>
+
+      <button class="btn-roxo" onclick="salvarMaquina()">
+        <i class="fas fa-save"></i> Salvar Máquina
+      </button>
+
+      <a class="btn-voltar" href="index.html">
+        <i class="fas fa-arrow-left"></i> Voltar ao Menu
+      </a>
+
+      <div id="mensagem" class="mensagem"></div>
+    </div>
+  </main>
+
+  <footer></footer>
+
   <script>
+    document.getElementById("usuarioNome").innerText = localStorage.getItem("usuario") || "";
+    monitorarStatusConexao();
+
     async function salvarMaquina() {
       const nome = document.getElementById("nome").value.trim().toUpperCase();
       const tipo = document.getElementById("tipo").value;

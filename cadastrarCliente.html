@@ -1,28 +1,74 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cadastrar Cliente</title>
+  <link rel="icon" href="data:,">
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script src="js/navegacao.js"></script>
   <script src="js/servicos.js"></script>
   <script src="js/sincronizador.js"></script>
-  <script src="js/componentes.js"></script>
 
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #f8f8f8;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
       text-align: center;
     }
 
+    .header {
+      background-color: #5e1ca4;
+      color: white;
+      padding: 10px;
+      font-size: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header > div {
+      flex: 1;
+    }
+
+    .logo {
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .usuario-logado {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+      padding-right: 10px;
+    }
+
+    .usuario-logado i {
+      cursor: pointer;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      flex-direction: column;
+      padding-top: 60px;
+    }
+
     .container {
+      width: 90%;
       max-width: 500px;
-      margin: 40px auto;
-      padding: 1.5rem;
+      background-color: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
     .form-group {
@@ -41,13 +87,14 @@
       padding: 10px;
       border-radius: 8px;
       border: 1px solid #ccc;
+      box-sizing: border-box;
     }
 
     .btn-roxo, .btn-voltar {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: bold;
+      font-weight: normal;
       padding: 14px;
       border-radius: 8px;
       margin: 10px auto;
@@ -79,137 +126,80 @@
       margin-right: 8px;
     }
 
-    .selo-item {
-      background-color: #fff;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      padding: 8px 12px;
-      margin: 6px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    #listaSelos {
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      list-style: none;
-      padding: 10px;
-      margin-top: 8px;
-      max-height: 200px;
-      overflow-y: auto;
-    }
-
-    #listaSelos li {
-      padding: 6px 4px;
-      cursor: pointer;
-      text-align: left;
-    }
-
-    #listaSelos li:hover {
-      background-color: #f1e7ff;
-    }
-
     .mensagem {
-      margin-top: 15px;
+      margin-top: 20px;
       font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      padding: 12px 0;
+    }
+
+    .status-online::before,
+    .status-offline::before {
+      content: '';
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 6px;
+      border-radius: 50%;
+      background-color: green;
+    }
+
+    .status-offline::before {
+      background-color: red;
+    }
+
+    #statusConexao {
+      font-size: 0.9em;
     }
   </style>
 </head>
 <body>
-  <script>
-    inicializarPagina("Cadastrar Cliente");
-  </script>
-
-  <div class="container" id="formulario">
-    <div class="form-group">
-      <label for="buscaSelo">+ Adicionar Máquina (por selo)</label>
-      <input type="text" id="buscaSelo" oninput="filtrarSelos()" placeholder="Buscar selo...">
-      <ul id="listaSelos" style="display:none;"></ul>
+  <div class="header">
+    <div></div>
+    <div class="logo">Cadastrar Cliente</div>
+    <div class="usuario-logado">
+      <i class="fas fa-user"></i> <span id="usuarioNome"></span>
+      <i class="fas fa-sign-out-alt" onclick="logout()" title="Sair"></i>
     </div>
-
-    <div id="selosSelecionados"></div>
-
-    <button class="btn-roxo" onclick="salvarCliente()">
-      <i class="fas fa-save"></i> Salvar Cliente
-    </button>
-    <a class="btn-voltar" href="index.html">
-      <i class="fas fa-arrow-left"></i> Voltar ao Menu
-    </a>
-
-    <div id="mensagem" class="mensagem"></div>
   </div>
 
+  <main>
+    <div class="container">
+      <div class="form-group">
+        <label for="nome">Nome do Cliente</label>
+        <input type="text" id="nome" />
+      </div>
+
+      <div class="form-group">
+        <label for="endereco">Endereço</label>
+        <input type="text" id="endereco" />
+      </div>
+
+      <div class="form-group">
+        <label for="rota">Rota</label>
+        <input type="text" id="rota" />
+      </div>
+
+      <button class="btn-roxo" onclick="salvarCliente()">
+        <i class="fas fa-save"></i> Salvar Cliente
+      </button>
+
+      <a class="btn-voltar" href="index.html">
+        <i class="fas fa-arrow-left"></i> Voltar ao Menu
+      </a>
+
+      <div id="mensagem" class="mensagem"></div>
+    </div>
+  </main>
+
+  <footer></footer>
+
   <script>
-    const selosSelecionados = [];
-    let selosDisponiveis = [];
-
-    const form = document.getElementById("formulario");
-    form.prepend(criarCampoTexto("rota", "Rota", "Ex: A, B, C"));
-    form.prepend(criarCampoTexto("endereco", "Endereço", "Rua do cliente"));
-    form.prepend(criarCampoTexto("nome", "Nome do Cliente", "Ex: João Silva"));
-
-    async function fetchSelos() {
-      try {
-        const resultado = await enviarDados("listarSelos", {});
-        if (resultado.sucesso) {
-          selosDisponiveis = resultado.dados;
-          localStorage.setItem("cacheSelos", JSON.stringify(selosDisponiveis));
-        }
-      } catch {
-        selosDisponiveis = JSON.parse(localStorage.getItem("cacheSelos") || "[]");
-      }
-    }
-
-    function filtrarSelos() {
-      const termo = document.getElementById("buscaSelo").value.toLowerCase();
-      const lista = document.getElementById("listaSelos");
-      lista.innerHTML = "";
-
-      if (!termo.length) {
-        lista.style.display = "none";
-        return;
-      }
-
-      const filtrados = selosDisponiveis.filter(s => s.toLowerCase().includes(termo));
-      filtrados.forEach(selo => {
-        const li = document.createElement("li");
-        li.textContent = selo;
-        li.onclick = () => selecionarSelo(selo);
-        lista.appendChild(li);
-      });
-
-      lista.style.display = "block";
-    }
-
-    function selecionarSelo(selo) {
-      if (!selosSelecionados.includes(selo)) {
-        selosSelecionados.push(selo);
-        renderizarSelosSelecionados();
-      }
-      document.getElementById("buscaSelo").value = "";
-      document.getElementById("listaSelos").style.display = "none";
-    }
-
-    function removerSelo(selo) {
-      const index = selosSelecionados.indexOf(selo);
-      if (index >= 0) {
-        selosSelecionados.splice(index, 1);
-        renderizarSelosSelecionados();
-      }
-    }
-
-    function renderizarSelosSelecionados() {
-      const container = document.getElementById("selosSelecionados");
-      container.innerHTML = "";
-      selosSelecionados.forEach(selo => {
-        const div = document.createElement("div");
-        div.className = "selo-item";
-        div.innerHTML = `${selo} <button onclick="removerSelo('${selo}')">❌</button>`;
-        container.appendChild(div);
-      });
-    }
+    document.getElementById("usuarioNome").innerText = localStorage.getItem("usuario") || "";
+    monitorarStatusConexao();
 
     async function salvarCliente() {
       const nome = document.getElementById("nome").value.trim();
@@ -218,26 +208,15 @@
 
       if (!validarCamposObrigatorios(["nome", "endereco", "rota"])) return;
 
-      const cliente = { nome, endereco, rota, selos: selosSelecionados };
-
-      const resposta = await salvarComSincronizacao("cadastrarCliente", { cliente });
+      const dados = { nome, endereco, rota };
+      const resposta = await salvarComSincronizacao("cadastrarCliente", dados);
 
       exibirMensagem(resposta.mensagem, resposta.sucesso ? "sucesso" : "erro");
 
       if (resposta.sucesso) {
         limparCampos(["nome", "endereco", "rota"]);
-        selosSelecionados.length = 0;
-        renderizarSelosSelecionados();
       }
     }
-
-    window.filtrarSelos = filtrarSelos;
-    window.removerSelo = removerSelo;
-    window.salvarCliente = salvarCliente;
-
-    window.onload = () => {
-      fetchSelos();
-    };
   </script>
 </body>
 </html>
