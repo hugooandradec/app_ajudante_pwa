@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login - App Ajudante</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="favicon.ico" />
+  <meta name="theme-color" content="#6a1b9a" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     body {
@@ -115,7 +118,7 @@
 
       if (usuario && senhaDigitada === usuario.senha) {
         localStorage.setItem("usuarioLogado", usuario.nomeExibicao);
-        window.location.href = "index.html";
+        window.location.href = "menu.html";
       } else {
         mensagem.textContent = "Usuário ou senha inválidos.";
       }
@@ -127,7 +130,17 @@
       if (icone) icone.style.color = online ? "green" : "red";
     }
 
-    window.addEventListener("load", atualizarStatusConexao);
+    // Atualiza o status da conexão e registra o service worker
+    window.addEventListener("load", () => {
+      atualizarStatusConexao();
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/ajudante-app/service-worker.js')
+          .then(() => console.log('Service Worker registrado no login'))
+          .catch(err => console.error('Erro ao registrar SW:', err));
+      }
+    });
+
     window.addEventListener("online", atualizarStatusConexao);
     window.addEventListener("offline", atualizarStatusConexao);
   </script>
