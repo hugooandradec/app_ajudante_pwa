@@ -4,35 +4,80 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gerenciar Clientes</title>
+  <link rel="icon" href="data:,">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <script src="js/navegacao.js"></script>
-  <script src="js/servicos.js"></script>
+  <script type="module" src="js/navegacao.js"></script>
 
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #f8f8f8;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
       text-align: center;
     }
 
-    .menu {
+    .header {
+      background-color: #5e1ca4;
+      color: white;
+      padding: 10px;
+      font-size: 20px;
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      margin-top: 40px;
+    }
+
+    .header > div {
+      flex: 1;
+    }
+
+    .logo {
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .usuario-logado {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+      padding-right: 10px;
+    }
+
+    .usuario-logado i {
+      cursor: pointer;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding-top: 60px;
+    }
+
+    .card {
+      width: 90%;
+      max-width: 460px;
+      background-color: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
     .btn-roxo, .btn-voltar {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: bold;
+      font-weight: normal;
       padding: 14px;
       border-radius: 8px;
       margin: 10px auto;
-      width: 90%;
+      width: 100%;
       max-width: 400px;
       font-size: 1.1em;
       text-decoration: none;
@@ -59,19 +104,58 @@
       color: #5e1ca4;
       margin-right: 8px;
     }
+
+    footer {
+      text-align: center;
+      padding: 12px 0;
+    }
+
+    .status-online::before,
+    .status-offline::before {
+      content: '';
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 6px;
+      border-radius: 50%;
+      background-color: green;
+    }
+
+    .status-offline::before {
+      background-color: red;
+    }
+
+    #statusConexao {
+      font-size: 0.9em;
+    }
   </style>
 </head>
 <body>
-  <script>
-    inicializarPagina("Gerenciar Clientes");
-  </script>
+  <div class="header">
+    <div></div>
+    <div class="logo">Gerenciar Clientes</div>
+    <div class="usuario-logado">
+      <i class="fas fa-user"></i> <span id="usuarioNome"></span>
+      <i class="fas fa-sign-out-alt" onclick="logout()" title="Sair"></i>
+    </div>
+  </div>
 
-  <main class="menu">
-    <a class="btn-roxo" href="cadastrarCliente.html"><i class="fas fa-plus-circle"></i> Cadastrar Cliente</a>
-    <a class="btn-roxo" href="consultarCliente.html"><i class="fas fa-search"></i> Consultar Cliente</a>
-    <a class="btn-roxo" href="editarCliente.html"><i class="fas fa-pen"></i> Editar Cliente</a>
-    <a class="btn-roxo" href="excluirCliente.html"><i class="fas fa-trash"></i> Excluir Cliente</a>
-    <a class="btn-voltar" href="index.html"><i class="fas fa-arrow-left"></i> Voltar ao Menu</a>
+  <main>
+    <div class="card">
+      <a class="btn-roxo" href="cadastrarCliente.html"><i class="fas fa-plus-circle"></i> Cadastrar Cliente</a>
+      <a class="btn-roxo" href="consultarCliente.html"><i class="fas fa-search"></i> Consultar Cliente</a>
+      <a class="btn-roxo" href="editarCliente.html"><i class="fas fa-pen"></i> Editar Cliente</a>
+      <a class="btn-roxo" href="excluirCliente.html"><i class="fas fa-trash"></i> Excluir Cliente</a>
+      <a class="btn-voltar" href="index.html"><i class="fas fa-arrow-left"></i> Voltar ao Menu</a>
+    </div>
   </main>
+
+  <footer></footer>
+
+  <script type="module">
+    import { monitorarStatusConexao } from './js/navegacao.js';
+    document.getElementById("usuarioNome").innerText = localStorage.getItem("usuario") || "";
+    monitorarStatusConexao();
+  </script>
 </body>
 </html>
