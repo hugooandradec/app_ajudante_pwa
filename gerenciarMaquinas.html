@@ -2,63 +2,119 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Gerenciar Máquinas</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <script src="js/navegacao.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="navegacao.js" defer></script>
 </head>
 <body>
-  <header style="background-color: #6a1b9a; color: white; display: flex; align-items: center; justify-content: space-between; padding: 10px 16px;">
-    <div style="display: flex; align-items: center;">
-      <a href="menu.html" style="color: white; text-decoration: none; font-size: 1.2em; margin-right: 10px;"><i class="fas fa-arrow-left"></i></a>
-      <h1 style="font-size: 1.2em; margin: 0;">Gerenciar Máquinas</h1>
-    </div>
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <span id="status-indicador" style="width: 10px; height: 10px; border-radius: 50%; background-color: gray;"></span>
-      <span id="usuarioLogado">Usuário</span>
+  <header class="header">
+    <a href="menu.html" class="voltar">
+      <i class="fas fa-arrow-left"></i>
+    </a>
+    <h1>Gerenciar Máquinas</h1>
+    <div class="status-usuario">
+      <span id="nomeUsuario">Usuário</span>
+      <span id="iconeStatus" class="status-indicador"></span>
+      <button onclick="logout()" class="btn-sair"><i class="fas fa-sign-out-alt"></i></button>
     </div>
   </header>
 
-  <main style="padding: 20px;">
-    <div style="display: flex; flex-direction: column; gap: 12px;">
-      <a href="cadastrarMaquina.html" class="menu-btn"><i class="fas fa-plus"></i> Cadastrar Máquina</a>
-      <a href="editarMaquina.html" class="menu-btn"><i class="fas fa-edit"></i> Editar Máquina</a>
-      <a href="consultarMaquina.html" class="menu-btn"><i class="fas fa-search"></i> Consultar Máquina</a>
-      <a href="excluirMaquina.html" class="menu-btn"><i class="fas fa-trash-alt"></i> Excluir Máquina</a>
+  <main>
+    <div class="menu-opcoes">
+      <a href="cadastrarMaquina.html" class="opcao-menu">
+        <i class="fas fa-plus"></i>
+        <span>Cadastrar Máquina</span>
+      </a>
+      <a href="editarMaquina.html" class="opcao-menu">
+        <i class="fas fa-pen-to-square"></i>
+        <span>Editar Máquina</span>
+      </a>
+      <a href="consultarMaquina.html" class="opcao-menu">
+        <i class="fas fa-search"></i>
+        <span>Consultar Máquina</span>
+      </a>
+      <a href="excluirMaquina.html" class="opcao-menu">
+        <i class="fas fa-trash"></i>
+        <span>Excluir Máquina</span>
+      </a>
     </div>
   </main>
 
   <style>
     body {
       margin: 0;
-      font-family: sans-serif;
-      background-color: #f3f3f3;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
     }
 
-    .menu-btn {
+    .header {
       display: flex;
       align-items: center;
-      padding: 16px;
-      background-color: white;
-      color: #6a1b9a;
-      font-weight: bold;
+      justify-content: space-between;
+      background: #7b1fa2;
+      color: white;
+      padding: 10px 16px;
+      position: relative;
+    }
+
+    .header h1 {
+      font-size: 18px;
+      margin: 0;
+      margin-left: 8px;
+    }
+
+    .voltar {
+      color: white;
       text-decoration: none;
-      font-size: 1.1em;
-      width: 100%;
-      max-width: 500px;
-      margin: 0 auto;
-      border-radius: 0;
-      border-bottom: 1px solid #e0e0e0;
-      gap: 12px;
+      font-size: 20px;
     }
 
-    .menu-btn i {
-      color: #6a1b9a;
-      font-size: 1.2em;
+    .status-usuario {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .menu-btn:hover {
-      background-color: #f0e6f6;
+    #nomeUsuario {
+      font-size: 14px;
+    }
+
+    .status-indicador {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      background-color: gray;
+    }
+
+    .btn-sair {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 16px;
+    }
+
+    .menu-opcoes {
+      display: flex;
+      flex-direction: column;
+      margin-top: 16px;
+    }
+
+    .opcao-menu {
+      background-color: #ead5f5;
+      color: #4a148c;
+      text-decoration: none;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .opcao-menu i {
+      margin-right: 12px;
+      font-size: 18px;
     }
   </style>
 </body>
