@@ -1,7 +1,7 @@
 {
   "name": "Ajudante APP",
   "short_name": "AAPP",
-  "start_url": "/ajudante-app/index.html?homescreen=1",
+  "start_url": "/ajudante-app/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#ffffff",
