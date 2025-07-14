@@ -50,31 +50,21 @@
     }
 
     .menu-container {
-      max-width: 500px;
-      margin: 30px auto;
-      padding: 0 16px;
+      margin: 30px 0;
     }
 
     .menu-btn {
       display: flex;
       align-items: center;
+      justify-content: flex-start;
       color: #333;
-      border-radius: 8px;
-      padding: 14px 18px;
+      border-radius: 0;
+      padding: 16px 18px;
       font-size: 16px;
-      margin-bottom: 12px;
       width: 100%;
       cursor: pointer;
       text-decoration: none;
       font-weight: bold;
-    }
-
-    .menu-btn i {
-      color: #6a1b9a;
-      margin-right: 14px;
-      font-size: 20px;
-      width: 24px;
-      text-align: center;
     }
 
     .menu-btn:nth-child(even) {
@@ -87,6 +77,14 @@
 
     .menu-btn:hover {
       background-color: #decdf4;
+    }
+
+    .menu-btn i {
+      color: #6a1b9a;
+      margin-right: 14px;
+      font-size: 20px;
+      width: 24px;
+      text-align: center;
     }
   </style>
 </head>
@@ -118,16 +116,16 @@
   </div>
 
   <script>
-    // Exibe status da conexão
+    // Atualiza status da conexão
     function atualizarStatusConexao() {
       const online = navigator.onLine;
       const icone = document.getElementById("icone-status");
       icone.style.color = online ? "green" : "red";
     }
 
-    // Mostra nome do usuário logado
+    // Exibe nome do usuário
     function exibirUsuario() {
-      const usuario = localStorage.getItem("usuarioLogado") || "Usuário";
+      const usuario = localStorage.getItem("usuarioLogado") || "Desconhecido";
       document.getElementById("usuario-logado").innerText = usuario;
     }
 
