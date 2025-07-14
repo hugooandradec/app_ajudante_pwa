@@ -4,6 +4,7 @@ const urlsToCache = [
   '/ajudante-app/',
   '/ajudante-app/index.html',
   '/ajudante-app/login.html',
+  '/ajudante-app/menu.html',
   '/ajudante-app/gerenciarClientes.html',
   '/ajudante-app/gerenciarMaquinas.html',
   '/ajudante-app/cadastrarCliente.html',
@@ -27,7 +28,7 @@ const urlsToCache = [
   '/ajudante-app/js/servicos.js',
   '/ajudante-app/js/sincronizador.js',
 
-  // Font Awesome CDN
+  // Font Awesome
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
 ];
 
