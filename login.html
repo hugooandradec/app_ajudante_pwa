@@ -15,8 +15,10 @@
     header {
       background-color: #6a1b9a;
       color: white;
-      padding: 16px;
-      text-align: center;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       font-size: 18px;
       font-weight: bold;
     }
@@ -73,7 +75,10 @@
   </style>
 </head>
 <body>
-  <header>Login - App Ajudante</header>
+  <header>
+    <div>Login - App Ajudante</div>
+    <div><i class="fas fa-circle" id="icone-status" style="color: gray;"></i></div>
+  </header>
 
   <div class="container">
     <div class="form-group">
@@ -89,14 +94,11 @@
   </div>
 
   <script>
-    // Lista de usuários cadastrados com nome padrão + senha
     const usuariosCadastrados = {
       "victor": {
         senha: "1785",
         nomeExibicao: "victor"
       }
-      // Exemplo para adicionar mais:
-      // "cah": { senha: "1234", nomeExibicao: "cah" }
     };
 
     function realizarLogin() {
@@ -112,13 +114,22 @@
       const usuario = usuariosCadastrados[usuarioDigitado];
 
       if (usuario && senhaDigitada === usuario.senha) {
-        // Salva exatamente o nome como foi cadastrado (nomeExibicao)
         localStorage.setItem("usuarioLogado", usuario.nomeExibicao);
         window.location.href = "index.html";
       } else {
         mensagem.textContent = "Usuário ou senha inválidos.";
       }
     }
+
+    function atualizarStatusConexao() {
+      const online = navigator.onLine;
+      const icone = document.getElementById("icone-status");
+      if (icone) icone.style.color = online ? "green" : "red";
+    }
+
+    window.addEventListener("load", atualizarStatusConexao);
+    window.addEventListener("online", atualizarStatusConexao);
+    window.addEventListener("offline", atualizarStatusConexao);
   </script>
 </body>
 </html>
