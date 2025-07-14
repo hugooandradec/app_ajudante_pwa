@@ -2,68 +2,123 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gerenciar Clientes - App Ajudante</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <script defer src="js/navegacao.js"></script>
-  <script defer>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gerenciar Clientes</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script defer src="navegacao.js"></script>
+  <script>
     document.addEventListener("DOMContentLoaded", () => {
-      renderizarCabecalho("Gerenciar Clientes", true);
-      verificarStatusConexao();
+      renderizarCabecalho("Gerenciar Clientes", "../menu.html");
+
+      const botoes = [
+        { texto: "Cadastrar Cliente", icone: "fa-user-plus", link: "cadastrarCliente.html" },
+        { texto: "Editar Cliente", icone: "fa-pen-to-square", link: "editarCliente.html" },
+        { texto: "Consultar Cliente", icone: "fa-search", link: "consultarCliente.html" },
+        { texto: "Excluir Cliente", icone: "fa-user-minus", link: "excluirCliente.html" }
+      ];
+
+      const container = document.getElementById("botoes");
+      botoes.forEach((btn, index) => {
+        const corFundo = index % 2 === 0 ? "#f3e8ff" : "#ede9fe";
+        const button = document.createElement("a");
+        button.href = btn.link;
+        button.className = "botao";
+        button.style.backgroundColor = corFundo;
+        button.innerHTML = `
+          <i class="fas ${btn.icone}"></i>
+          <span>${btn.texto}</span>
+        `;
+        container.appendChild(button);
+      });
     });
   </script>
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
     }
 
-    .menu {
-      margin-top: 20px;
+    header {
+      background-color: #7c3aed;
+      color: white;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 18px;
     }
 
-    .botao-menu {
+    #titulo-pagina {
       display: flex;
       align-items: center;
-      padding: 15px;
-      border-bottom: 1px solid #ddd;
+      font-weight: bold;
+    }
+
+    #titulo-pagina i {
+      margin-right: 8px;
       font-size: 18px;
-      background-color: #ffffff;
-      color: #5e2ca5;
+      cursor: pointer;
+    }
+
+    #user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+    }
+
+    .status-indicador {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    #botoes {
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      gap: 12px;
+    }
+
+    .botao {
+      display: flex;
+      align-items: center;
+      padding: 14px;
+      border-radius: 8px;
       text-decoration: none;
+      color: #6b21a8;
+      font-weight: bold;
+      font-size: 16px;
+      transition: background 0.2s;
     }
 
-    .botao-menu:nth-child(even) {
-      background-color: #f3e5f5;
-    }
-
-    .botao-menu i {
+    .botao i {
       margin-right: 12px;
-      font-size: 20px;
+      font-size: 18px;
+      color: #7c3aed;
+      min-width: 20px;
+      text-align: center;
     }
 
-    .botao-menu:hover {
-      background-color: #e1bee7;
+    .botao:hover {
+      background-color: #ddd6fe;
     }
   </style>
 </head>
 <body>
-  <div id="cabecalho"></div>
+  <header>
+    <div id="titulo-pagina">
+      <i class="fas fa-arrow-left" onclick="window.location.href='../menu.html'"></i>
+      <span>Gerenciar Clientes</span>
+    </div>
+    <div id="user-info">
+      <span id="nome-usuario">Usuário</span>
+      <span class="status-indicador" id="status-indicador"></span>
+      <i class="fas fa-right-from-bracket" onclick="logout()" style="cursor:pointer;"></i>
+    </div>
+  </header>
 
-  <div class="menu">
-    <a href="cadastrarCliente.html" class="botao-menu">
-      <i class="fas fa-user-plus"></i> Cadastrar Cliente
-    </a>
-    <a href="editarCliente.html" class="botao-menu">
-      <i class="fas fa-pen-to-square"></i> Editar Cliente
-    </a>
-    <a href="consultarCliente.html" class="botao-menu">
-      <i class="fas fa-search"></i> Consultar Cliente
-    </a>
-    <a href="excluirCliente.html" class="botao-menu">
-      <i class="fas fa-user-minus"></i> Excluir Cliente
-    </a>
-  </div>
+  <div id="botoes"></div>
 </body>
 </html>
