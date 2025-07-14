@@ -4,159 +4,62 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gerenciar Máquinas</title>
-  <link rel="icon" href="data:,">
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <script type="module" src="js/navegacao.js"></script>
-
-  <style>
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f8f8f8;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    text-align: center;
-  }
-
-  .header {
-    background-color: #5e1ca4;
-    color: white;
-    padding: 10px;
-    font-size: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .header > div {
-    flex: 1;
-  }
-
-  .logo {
-    font-weight: bold;
-    text-align: center;
-  }
-
-  .usuario-logado {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 10px;
-    padding-right: 10px;
-  }
-
-  .usuario-logado i {
-    cursor: pointer;
-  }
-
-  main {
-    flex: 1;
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    flex-direction: column;
-    padding-top: 60px;
-  }
-
-  .card {
-    width: 90%;
-    max-width: 460px;
-    background-color: white;
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  }
-
-  .btn-roxo, .btn-voltar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: normal;
-    padding: 14px;
-    border-radius: 8px;
-    margin: 10px auto;
-    width: 100%;
-    max-width: 400px;
-    font-size: 1.1em;
-    text-decoration: none;
-  }
-
-  .btn-roxo {
-    background-color: white;
-    color: black;
-    border: 2px solid #5e1ca4;
-  }
-
-  .btn-roxo i {
-    color: #5e1ca4;
-    margin-right: 8px;
-  }
-
-  .btn-voltar {
-    background-color: #e0e0e0;
-    color: black;
-    border: 2px solid #5e1ca4;
-  }
-
-  .btn-voltar i {
-    color: #5e1ca4;
-    margin-right: 8px;
-  }
-
-  footer {
-    text-align: center;
-    padding: 12px 0;
-  }
-
-  .status-online::before,
-  .status-offline::before {
-    content: '';
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    margin-right: 6px;
-    border-radius: 50%;
-    background-color: green;
-  }
-
-  .status-offline::before {
-    background-color: red;
-  }
-
-  #statusConexao {
-    font-size: 0.9em;
-  }
-</style>
-
+  <script src="js/navegacao.js" defer></script>
 </head>
 <body>
-  <div class="header">
-    <div></div>
-    <div class="logo">Gerenciar Máquinas</div>
-    <div class="usuario-logado">
-      <i class="fas fa-user"></i> <span id="usuarioNome"></span>
-      <i class="fas fa-sign-out-alt" onclick="logout()" title="Sair"></i>
+  <header style="background-color: #6a1b9a; color: white; display: flex; align-items: center; justify-content: space-between; padding: 10px 16px;">
+    <div style="display: flex; align-items: center;">
+      <a href="menu.html" style="color: white; text-decoration: none; font-size: 1.2em; margin-right: 10px;"><i class="fas fa-arrow-left"></i></a>
+      <h1 style="font-size: 1.2em; margin: 0;">Gerenciar Máquinas</h1>
     </div>
-  </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span id="status-indicador" style="width: 10px; height: 10px; border-radius: 50%; background-color: gray;"></span>
+      <span id="usuarioLogado">Usuário</span>
+    </div>
+  </header>
 
-  <main>
-    <div class="card">
-      <a class="btn-roxo" href="cadastrarMaquina.html"><i class="fas fa-plus-circle"></i> Cadastrar Máquina</a>
-      <a class="btn-roxo" href="consultarMaquina.html"><i class="fas fa-search"></i> Consultar Máquina</a>
-      <a class="btn-roxo" href="editarMaquina.html"><i class="fas fa-pen"></i> Editar Máquina</a>
-      <a class="btn-roxo" href="excluirMaquina.html"><i class="fas fa-trash"></i> Excluir Máquina</a>
-      <a class="btn-voltar" href="index.html"><i class="fas fa-arrow-left"></i> Voltar ao Menu</a>
+  <main style="padding: 20px;">
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <a href="cadastrarMaquina.html" class="menu-btn"><i class="fas fa-plus"></i> Cadastrar Máquina</a>
+      <a href="editarMaquina.html" class="menu-btn"><i class="fas fa-edit"></i> Editar Máquina</a>
+      <a href="consultarMaquina.html" class="menu-btn"><i class="fas fa-search"></i> Consultar Máquina</a>
+      <a href="excluirMaquina.html" class="menu-btn"><i class="fas fa-trash-alt"></i> Excluir Máquina</a>
     </div>
   </main>
 
-  <footer></footer>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #f3f3f3;
+    }
 
-  <script type="module">
-    import { monitorarStatusConexao } from './js/navegacao.js';
-    document.getElementById("usuarioNome").innerText = localStorage.getItem("usuario") || "";
-    monitorarStatusConexao();
-  </script>
+    .menu-btn {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background-color: white;
+      color: #6a1b9a;
+      font-weight: bold;
+      text-decoration: none;
+      font-size: 1.1em;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+      border-radius: 0;
+      border-bottom: 1px solid #e0e0e0;
+      gap: 12px;
+    }
+
+    .menu-btn i {
+      color: #6a1b9a;
+      font-size: 1.2em;
+    }
+
+    .menu-btn:hover {
+      background-color: #f0e6f6;
+    }
+  </style>
 </body>
 </html>
