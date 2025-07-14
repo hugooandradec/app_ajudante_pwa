@@ -1,6 +1,6 @@
 const CACHE_NAME = 'ajudante-cache-v' + Date.now();
 
-// Última atualização: 2025-07-14 19:04
+// Última atualização: 2025-07-14 19:08
 
 const urlsToCache = [
   '/ajudante-app/',
