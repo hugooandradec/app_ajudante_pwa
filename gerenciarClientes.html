@@ -9,74 +9,131 @@
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: Arial, sans-serif;
       background-color: #f9f9f9;
     }
 
-    #botoes {
+    header {
+      background-color: #7c3aed;
+      color: white;
+      padding: 12px 16px;
       display: flex;
-      flex-direction: column;
-      padding: 16px;
-      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .botao {
+    .titulo-app {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .header-right {
       display: flex;
       align-items: center;
-      padding: 14px;
-      border-radius: 8px;
-      text-decoration: none;
-      color: #6b21a8;
-      font-weight: bold;
-      font-size: 16px;
-      transition: background 0.2s;
+      gap: 10px;
     }
 
-    .botao i {
-      margin-right: 12px;
+    .status-icon {
+      font-size: 14px;
+    }
+
+    .usuario {
+      font-size: 14px;
+    }
+
+    .logout-btn {
+      background: none;
+      border: none;
+      color: white;
       font-size: 18px;
-      color: #7c3aed;
-      min-width: 20px;
-      text-align: center;
+      cursor: pointer;
     }
 
-    .botao:hover {
-      background-color: #ddd6fe;
+    .menu-container {
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+    }
+
+    .menu-btn {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      color: #5e2ca5;
+      background-color: white;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 16px;
+      font-size: 16px;
+      width: 100%;
+    }
+
+    .menu-btn:nth-child(even) {
+      background-color: #f3e8ff;
+    }
+
+    .menu-btn i {
+      margin-right: 12px;
+      color: #7c3aed;
+      font-size: 18px;
+    }
+
+    .menu-btn:hover {
+      background-color: #e9d5ff;
     }
   </style>
 </head>
 <body>
-  <div id="cabecalho"></div>
+  <header>
+    <div class="titulo-app">Gerenciar Clientes</div>
+    <div class="header-right">
+      <i class="fas fa-circle status-icon" id="icone-status" style="color: gray;"></i>
+      <span class="usuario" id="usuario-logado">Usuário</span>
+      <button class="logout-btn" onclick="logout()" title="Sair">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
 
-  <div id="botoes"></div>
+  <div class="menu-container">
+    <a href="cadastrarCliente.html" class="menu-btn">
+      <i class="fas fa-user-plus"></i> Cadastrar Cliente
+    </a>
+    <a href="editarCliente.html" class="menu-btn">
+      <i class="fas fa-pen-to-square"></i> Editar Cliente
+    </a>
+    <a href="consultarCliente.html" class="menu-btn">
+      <i class="fas fa-search"></i> Consultar Cliente
+    </a>
+    <a href="excluirCliente.html" class="menu-btn">
+      <i class="fas fa-user-minus"></i> Excluir Cliente
+    </a>
+  </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      renderizarCabecalho("Gerenciar Clientes", "menu.html");
+    function atualizarStatusConexao() {
+      const online = navigator.onLine;
+      const icone = document.getElementById("icone-status");
+      icone.style.color = online ? "green" : "red";
+    }
 
-      const botoes = [
-        { texto: "Cadastrar Cliente", icone: "fa-user-plus", link: "cadastrarCliente.html" },
-        { texto: "Editar Cliente", icone: "fa-pen-to-square", link: "editarCliente.html" },
-        { texto: "Consultar Cliente", icone: "fa-search", link: "consultarCliente.html" },
-        { texto: "Excluir Cliente", icone: "fa-user-minus", link: "excluirCliente.html" }
-      ];
+    function exibirUsuario() {
+      const usuario = localStorage.getItem("usuarioLogado") || "Usuário";
+      document.getElementById("usuario-logado").innerText = usuario;
+    }
 
-      const container = document.getElementById("botoes");
-      if (container) {
-        botoes.forEach((btn, index) => {
-          const corFundo = index % 2 === 0 ? "#f3e8ff" : "#ede9fe";
-          const button = document.createElement("a");
-          button.href = btn.link;
-          button.className = "botao";
-          button.style.backgroundColor = corFundo;
-          button.innerHTML = `
-            <i class="fas ${btn.icone}"></i>
-            <span>${btn.texto}</span>
-          `;
-          container.appendChild(button);
-        });
-      }
+    function logout() {
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "login.html";
+    }
+
+    window.addEventListener("load", () => {
+      atualizarStatusConexao();
+      exibirUsuario();
     });
+
+    window.addEventListener("online", atualizarStatusConexao);
+    window.addEventListener("offline", atualizarStatusConexao);
   </script>
 </body>
 </html>
