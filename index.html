@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>App Ajudante</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="favicon.ico" />
+  <meta name="theme-color" content="#6a1b9a" />
   <script>
     const usuario = localStorage.getItem("usuarioLogado");
-    if (usuario) {
-      window.location.href = "menu.html";
-    } else {
-      window.location.href = "login.html";
-    }
+    const destino = usuario ? "menu.html" : "login.html";
+    window.location.replace(destino); // evita histórico duplo
   </script>
 </head>
 <body>
