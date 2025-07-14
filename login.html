@@ -3,192 +3,120 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login</title>
-
+  <title>Login - App Ajudante</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-  <script type="module" src="js/navegacao.js"></script>
-  <script type="module" src="js/componentes.js"></script>
-  <script type="module" src="js/servicos.js"></script>
-  <script type="module" src="js/sincronizador.js"></script>
-
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #f8f8f8;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      text-align: center;
+      background: #f5f5f5;
     }
 
-    .header {
-      background-color: #5e1ca4;
+    header {
+      background-color: #6a1b9a;
       color: white;
-      padding: 10px;
-      font-size: 20px;
-    }
-
-    .logo {
+      padding: 16px;
+      text-align: center;
+      font-size: 18px;
       font-weight: bold;
     }
 
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: start;
-      align-items: center;
-      flex-direction: column;
-      padding-top: 60px;
-    }
-
-    .card {
-	  width: 90%;
-      max-width: 460px;
-      background-color: white;
-      border-radius: 12px;
-      padding: 2rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    .titulo-formulario {
-      color: #5e1ca4;
-      margin-bottom: 20px;
+    .container {
+      max-width: 400px;
+      margin: 60px auto;
+      background: white;
+      padding: 24px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     .form-group {
-      margin-bottom: 1rem;
-      text-align: left;
+      margin-bottom: 18px;
     }
 
-    .form-group label {
+    label {
       display: block;
+      margin-bottom: 6px;
       font-weight: bold;
-      margin-bottom: 5px;
     }
 
-    .form-group input {
+    input {
       width: 100%;
-      padding: 10px 12px;
-      border-radius: 8px;
+      padding: 10px;
       border: 1px solid #ccc;
-	  box-sizing: border-box;
+      border-radius: 6px;
+      font-size: 16px;
     }
 
-    .btn-roxo {
-      background-color: white;
-      color: black;
-      border: 2px solid #5e1ca4;
-      border-radius: 8px;
-      padding: 10px 20px;
+    button {
+      width: 100%;
+      background-color: #6a1b9a;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
       font-weight: bold;
-      width: 70%;
-      max-width: 300px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      cursor: pointer;
     }
 
-    .btn-roxo i {
-      color: #5e1ca4;
-      margin-right: 8px;
+    button:hover {
+      background-color: #4a1270;
     }
 
-    footer {
-      text-align: center;
-      padding: 12px 0;
-    }
-
-    #statusConexao {
-      font-size: 0.9em;
-    }
-
-    .status-online::before,
-    .status-offline::before {
-      content: '';
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      margin-right: 6px;
-      border-radius: 50%;
-      background-color: green;
-    }
-
-    .status-offline::before {
-      background-color: red;
-    }
-
-    #mensagem {
-      margin-top: 10px;
-      font-weight: bold;
+    .mensagem-erro {
       color: red;
+      margin-top: 12px;
+      text-align: center;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
-  <script type="module">
-    import { inicializarPagina } from './js/navegacao.js';
-    inicializarPagina("Login");
-  </script>
+  <header>Login - App Ajudante</header>
 
-  <main>
-    <div class="card">
-      <h2 class="titulo-formulario"><i class="fas fa-lock"></i> Login</h2>
-
-      <div class="form-group">
-        <label for="usuario">Usuário:</label>
-        <input type="text" id="usuario" placeholder="Digite seu usuário" />
-      </div>
-
-      <div class="form-group">
-        <label for="senha">Senha:</label>
-        <input type="password" id="senha" placeholder="Digite sua senha" />
-      </div>
-
-      <button class="btn-roxo" onclick="logar()">
-        <i class="fas fa-sign-in-alt"></i> Entrar
-      </button>
-
-      <div id="mensagem"></div>
+  <div class="container">
+    <div class="form-group">
+      <label for="usuario">Usuário</label>
+      <input type="text" id="usuario" placeholder="Digite seu nome de usuário" autocomplete="username" />
     </div>
-  </main>
+    <div class="form-group">
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" placeholder="Digite sua senha" autocomplete="current-password" />
+    </div>
+    <button onclick="realizarLogin()">Entrar</button>
+    <div class="mensagem-erro" id="mensagemErro"></div>
+  </div>
 
-  <footer></footer>
+  <script>
+    // Lista de usuários cadastrados com nome padrão + senha
+    const usuariosCadastrados = {
+      "victor": {
+        senha: "1785",
+        nomeExibicao: "victor"
+      }
+      // Exemplo para adicionar mais:
+      // "cah": { senha: "1234", nomeExibicao: "cah" }
+    };
 
-  <script type="module">
-    import { monitorarStatusConexao } from './js/navegacao.js';
-    import { enviarDados } from './js/servicos.js';
+    function realizarLogin() {
+      const usuarioDigitado = document.getElementById("usuario").value.trim().toLowerCase();
+      const senhaDigitada = document.getElementById("senha").value;
+      const mensagem = document.getElementById("mensagemErro");
 
-    window.addEventListener("DOMContentLoaded", () => {
-      monitorarStatusConexao();
-    });
-
-    window.logar = async function () {
-      const usuario = document.getElementById("usuario").value.trim();
-      const senha = document.getElementById("senha").value.trim();
-      const msg = document.getElementById("mensagem");
-
-      msg.textContent = "";
-
-      if (!usuario || !senha) {
-        msg.textContent = "Preencha todos os campos.";
+      if (!usuarioDigitado || !senhaDigitada) {
+        mensagem.textContent = "Preencha todos os campos.";
         return;
       }
 
-      try {
-        const resposta = await enviarDados("login", { usuario, senha });
+      const usuario = usuariosCadastrados[usuarioDigitado];
 
-        if (resposta?.sucesso) {
-          localStorage.setItem("usuario", usuario);
-          window.location.href = "index.html";
-        } else {
-          msg.textContent = resposta?.mensagem || "Usuário ou senha inválidos.";
-        }
-      } catch (erro) {
-        console.error("Erro na requisição:", erro);
-        msg.textContent = "Erro de conexão com o servidor.";
+      if (usuario && senhaDigitada === usuario.senha) {
+        // Salva exatamente o nome como foi cadastrado (nomeExibicao)
+        localStorage.setItem("usuarioLogado", usuario.nomeExibicao);
+        window.location.href = "index.html";
+      } else {
+        mensagem.textContent = "Usuário ou senha inválidos.";
       }
     }
   </script>
