@@ -2,120 +2,68 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gerenciar Clientes</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="navegacao.js" defer></script>
-</head>
-<body>
-  <header class="header">
-    <a href="menu.html" class="voltar">
-      <i class="fas fa-arrow-left"></i>
-    </a>
-    <h1>Gerenciar Clientes</h1>
-    <div class="status-usuario">
-      <span id="nomeUsuario">Usuário</span>
-      <span id="iconeStatus" class="status-indicador"></span>
-      <button onclick="logout()" class="btn-sair"><i class="fas fa-sign-out-alt"></i></button>
-    </div>
-  </header>
-
-  <main>
-    <div class="menu-opcoes">
-      <a href="cadastrarCliente.html" class="opcao-menu">
-        <i class="fas fa-user-plus"></i>
-        <span>Cadastrar Cliente</span>
-      </a>
-      <a href="editarCliente.html" class="opcao-menu">
-        <i class="fas fa-pen-to-square"></i>
-        <span>Editar Cliente</span>
-      </a>
-      <a href="consultarCliente.html" class="opcao-menu">
-        <i class="fas fa-search"></i>
-        <span>Consultar Cliente</span>
-      </a>
-      <a href="excluirCliente.html" class="opcao-menu">
-        <i class="fas fa-user-minus"></i>
-        <span>Excluir Cliente</span>
-      </a>
-    </div>
-  </main>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gerenciar Clientes - App Ajudante</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script defer src="js/navegacao.js"></script>
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => {
+      renderizarCabecalho("Gerenciar Clientes", true);
+      verificarStatusConexao();
+    });
+  </script>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      background-color: #f5f5f5;
     }
 
-    .header {
+    .menu {
+      margin-top: 20px;
+    }
+
+    .botao-menu {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      background: #7b1fa2;
-      color: white;
-      padding: 10px 16px;
-      position: relative;
-    }
-
-    .header h1 {
+      padding: 15px;
+      border-bottom: 1px solid #ddd;
       font-size: 18px;
-      margin: 0;
-      margin-left: 8px;
+      background-color: #ffffff;
+      color: #5e2ca5;
+      text-decoration: none;
     }
 
-    .voltar {
-      color: white;
-      text-decoration: none;
+    .botao-menu:nth-child(even) {
+      background-color: #f3e5f5;
+    }
+
+    .botao-menu i {
+      margin-right: 12px;
       font-size: 20px;
     }
 
-    .status-usuario {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    #nomeUsuario {
-      font-size: 14px;
-    }
-
-    .status-indicador {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      display: inline-block;
-      background-color: gray;
-    }
-
-    .btn-sair {
-      background: transparent;
-      border: none;
-      color: white;
-      font-size: 16px;
-    }
-
-    .menu-opcoes {
-      display: flex;
-      flex-direction: column;
-      margin-top: 16px;
-    }
-
-    .opcao-menu {
-      background-color: #ead5f5;
-      color: #4a148c;
-      text-decoration: none;
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      font-size: 16px;
-      border-bottom: 1px solid #ddd;
-    }
-
-    .opcao-menu i {
-      margin-right: 12px;
-      font-size: 18px;
+    .botao-menu:hover {
+      background-color: #e1bee7;
     }
   </style>
+</head>
+<body>
+  <div id="cabecalho"></div>
+
+  <div class="menu">
+    <a href="cadastrarCliente.html" class="botao-menu">
+      <i class="fas fa-user-plus"></i> Cadastrar Cliente
+    </a>
+    <a href="editarCliente.html" class="botao-menu">
+      <i class="fas fa-pen-to-square"></i> Editar Cliente
+    </a>
+    <a href="consultarCliente.html" class="botao-menu">
+      <i class="fas fa-search"></i> Consultar Cliente
+    </a>
+    <a href="excluirCliente.html" class="botao-menu">
+      <i class="fas fa-user-minus"></i> Excluir Cliente
+    </a>
+  </div>
 </body>
 </html>
