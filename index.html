@@ -3,147 +3,107 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Menu Principal</title>
-  <link rel="icon" href="data:,">
-
+  <title>App Ajudante</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <script type="module" src="js/navegacao.js"></script>
-  <script type="module" src="js/componentes.js"></script>
-
+  <script src="navegacao.js" defer></script>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #f8f8f8;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      text-align: center;
+      background: #f8f8f8;
     }
 
-    .header {
-      background-color: #5e1ca4;
+    header {
+      background-color: #6a1b9a;
       color: white;
-      padding: 10px;
-      font-size: 20px;
+      padding: 14px;
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
     }
 
-    .header > div {
-      flex: 1;
+    header h1 {
+      font-size: 18px;
+      margin: 0 auto;
     }
 
-    .logo {
-      font-weight: bold;
-      text-align: center;
-    }
-
-    .usuario-logado {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 10px;
-      padding-right: 10px;
-    }
-
-    .usuario-logado i {
-      cursor: pointer;
-    }
-
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: start;
-      align-items: center;
-      flex-direction: column;
-      padding-top: 60px;
-    }
-
-    .card {
-      width: 90%;
-      max-width: 460px;
-      background-color: white;
-      border-radius: 12px;
-      padding: 2rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    .btn-menu {
-      background-color: white;
-      border: 2px solid #5e1ca4;
-      border-radius: 8px;
-      padding: 12px 20px;
-      margin: 10px 0;
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-      color: black;
-      font-size: 16px;
-      font-weight: normal;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .btn-menu i {
-      color: #5e1ca4;
+    .status-icon {
+      margin-left: auto;
       margin-right: 10px;
     }
 
-    footer {
+    .card {
+      background-color: white;
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .menu-btn {
+      display: flex;
+      align-items: center;
+      background-color: #f1e7fc;
+      color: #333;
+      border: 2px solid #6a1b9a;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 16px;
+      margin-bottom: 12px;
+      width: 100%;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+
+    .menu-btn i {
+      color: #6a1b9a;
+      margin-right: 12px;
+      font-size: 20px;
+      width: 24px;
       text-align: center;
-      padding: 12px 0;
     }
 
-    .status-online::before,
-    .status-offline::before {
-      content: '';
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      margin-right: 6px;
-      border-radius: 50%;
-      background-color: green;
-    }
-
-    .status-offline::before {
-      background-color: red;
-    }
-
-    #statusConexao {
-      font-size: 0.9em;
+    .menu-btn:hover {
+      background-color: #e9d6fb;
     }
   </style>
 </head>
 <body>
-  <div class="header" id="cabecalho"></div>
-
-  <main>
-    <div class="card">
-      <a href="gerenciarClientes.html" class="btn-menu">
-        <i class="fas fa-users"></i> Gerenciar Clientes
-      </a>
-      <a href="gerenciarMaquinas.html" class="btn-menu">
-        <i class="fas fa-wrench"></i> Gerenciar Máquinas
-      </a>
-      <a href="preFecho.html" class="btn-menu">
-        <i class="fas fa-file-alt"></i> Pré-Fecho
-      </a>
-      <a href="calculoRetencao.html" class="btn-menu">
-        <i class="fas fa-sliders-h"></i> Cálculo de Retenção
-      </a>
+  <header>
+    <h1>App Ajudante</h1>
+    <div id="icone-status" class="status-icon">
+      <i class="fas fa-circle" style="color: gray;"></i>
     </div>
-  </main>
+  </header>
 
-  <footer></footer>
+  <div class="card">
+    <a href="gerenciarClientes.html" class="menu-btn">
+      <i class="fas fa-users"></i> Gerenciar Clientes
+    </a>
+    <a href="gerenciarMaquinas.html" class="menu-btn">
+      <i class="fas fa-wrench"></i> Gerenciar Máquinas
+    </a>
+    <a href="preFecho.html" class="menu-btn">
+      <i class="fas fa-dollar-sign"></i> Pré-Fecho
+    </a>
+    <a href="calculoRetencao.html" class="menu-btn">
+      <i class="fas fa-sliders-h"></i> Cálculo de Retenção
+    </a>
+  </div>
 
-  <script type="module">
-    import { inicializarPagina, monitorarStatusConexao } from './js/navegacao.js';
-    inicializarPagina("Menu Principal");
-    monitorarStatusConexao();
+  <script>
+    // Atualiza ícone do status da conexão
+    function atualizarStatusConexao() {
+      const online = navigator.onLine;
+      const icone = document.getElementById("icone-status").querySelector("i");
+      icone.style.color = online ? "green" : "red";
+    }
+
+    window.addEventListener("load", atualizarStatusConexao);
+    window.addEventListener("online", atualizarStatusConexao);
+    window.addEventListener("offline", atualizarStatusConexao);
   </script>
 </body>
 </html>
