@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gerenciar Clientes</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <script defer src="js/navegacao.js"></script>
+  <script type="module" src="js/navegacao.js"></script>
   <style>
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
+      overflow-x: hidden;
       font-family: Arial, sans-serif;
       background: #f8f8f8;
     }
@@ -73,7 +75,7 @@
       width: 100%;
       cursor: pointer;
       text-decoration: none;
-      font-weight: bold;
+      font-weight: normal;
     }
 
     .menu-btn:nth-child(odd) {
@@ -123,30 +125,23 @@
     </a>
   </div>
 
-  <script>
-    function atualizarStatusConexao() {
-      const online = navigator.onLine;
-      const icone = document.getElementById("icone-status");
-      icone.style.color = online ? "green" : "red";
-    }
-
-    function exibirUsuario() {
-      const usuario = localStorage.getItem("usuarioLogado") || "Usuário";
-      document.getElementById("usuario-logado").innerText = usuario;
-    }
-
-    function logout() {
-      localStorage.removeItem("usuarioLogado");
-      window.location.href = "login.html";
-    }
+  <script type="module">
+    import { atualizarStatusConexao, exibirUsuario, logout } from './js/navegacao.js';
 
     window.addEventListener("load", () => {
       atualizarStatusConexao();
       exibirUsuario();
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/ajudante-app/service-worker.js')
+          .then(() => console.log('SW registrado'))
+          .catch(err => console.error('Erro ao registrar SW:', err));
+      }
     });
 
     window.addEventListener("online", atualizarStatusConexao);
     window.addEventListener("offline", atualizarStatusConexao);
+
+    window.logout = logout;
   </script>
 </body>
 </html>
