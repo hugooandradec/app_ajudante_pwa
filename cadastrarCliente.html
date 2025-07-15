@@ -2,15 +2,16 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cadastrar Cliente</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <script src="navegacao.js" defer></script>
+  <script type="module" src="js/navegacao.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #f8f8f8;
+      background: #f8f8f8;
+      overflow-x: hidden;
     }
 
     header {
@@ -22,23 +23,26 @@
       justify-content: space-between;
     }
 
-    .titulo-esquerda {
+    .header-left {
       display: flex;
       align-items: center;
-      font-size: 16px;
-      font-weight: bold;
+      gap: 12px;
     }
 
-    .titulo-esquerda i {
-      margin-right: 10px;
+    .header-left i {
+      cursor: pointer;
       font-size: 18px;
+    }
+
+    .titulo-pagina {
+      font-size: 18px;
+      font-weight: bold;
     }
 
     .header-right {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 14px;
     }
 
     .status-icon {
@@ -46,7 +50,7 @@
     }
 
     .usuario {
-      text-transform: lowercase;
+      font-size: 14px;
     }
 
     .logout-btn {
@@ -57,44 +61,45 @@
       cursor: pointer;
     }
 
-    .form-container {
-      padding: 20px 16px;
+    main {
+      padding: 20px;
     }
 
     .form-group {
-      margin-bottom: 24px;
+      margin-bottom: 18px;
     }
 
     label {
       display: block;
-      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 6px;
       color: #333;
-      margin-bottom: 4px;
     }
 
-    input[type="text"] {
+    input {
       width: 100%;
-      border: none;
-      border-bottom: 2px solid #6a1b9a;
-      background-color: transparent;
-      padding: 8px 4px;
-      font-size: 15px;
-      outline: none;
+      padding: 10px;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+      box-sizing: border-box;
     }
 
     .btn {
-      width: 100%;
-      font-size: 15px;
-      padding: 12px;
-      border-radius: 3px;
-      border: none;
-      font-weight: bold;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       gap: 8px;
-      cursor: pointer;
+      padding: 12px;
+      width: 100%;
       margin-top: 10px;
+      border: 1px solid #6a1b9a;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .btn i {
+      font-size: 15px;
     }
 
     .btn.salvar {
@@ -103,23 +108,95 @@
     }
 
     .btn.voltar {
-      background-color: #e0e0e0;
-      color: #333;
+      background-color: #ddd;
+      color: #111;
     }
 
-    .btn i {
-      font-size: 16px;
+    .popup-btn {
+      margin-top: 6px;
+      background-color: #eae0f8;
+      color: #6a1b9a;
+      border: 1px solid #6a1b9a;
+    }
+
+    .maquinas-lista {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .maquina-item {
+      background: #eee;
+      padding: 6px 10px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+    }
+
+    .maquina-item button {
+      background: none;
+      border: none;
+      color: #900;
+      margin-left: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .popup-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .popup-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .popup-content input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .popup-content ul {
+      max-height: 200px;
+      overflow-y: auto;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .popup-content ul li {
+      padding: 6px 10px;
+      cursor: pointer;
+      border-bottom: 1px solid #eee;
+    }
+
+    .popup-content ul li:hover {
+      background: #f2e5ff;
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="titulo-esquerda">
-      <i class="fas fa-arrow-left" onclick="window.location.href='menu.html'"></i>
-      Cadastrar Cliente
+    <div class="header-left">
+      <a href="menu.html" style="color: white;"><i class="fas fa-arrow-left"></i></a>
+      <div class="titulo-pagina">Cadastrar Cliente</div>
     </div>
     <div class="header-right">
-      <i class="fas fa-circle status-icon" id="icone-status" style="color: gray;"></i>
+      <i class="fas fa-circle status-icon" id="icone-status"></i>
       <span class="usuario" id="usuario-logado">Usuário</span>
       <button class="logout-btn" onclick="logout()" title="Sair">
         <i class="fas fa-sign-out-alt"></i>
@@ -127,7 +204,7 @@
     </div>
   </header>
 
-  <div class="form-container">
+  <main>
     <div class="form-group">
       <label for="nome">Nome do Cliente</label>
       <input type="text" id="nome" placeholder="Digite o nome do cliente" />
@@ -143,43 +220,127 @@
       <input type="text" id="rota" placeholder="Digite a rota" />
     </div>
 
+    <div class="form-group">
+      <label>Máquinas</label>
+      <button type="button" onclick="abrirPopup()" class="btn popup-btn">
+        <i class="fas fa-plus"></i> Adicionar Máquina
+      </button>
+      <div id="maquinasSelecionadas" class="maquinas-lista"></div>
+    </div>
+
     <button class="btn salvar" onclick="salvarCliente()">
       <i class="fas fa-save"></i> Salvar Cliente
     </button>
-
-    <button class="btn voltar" onclick="window.location.href='menu.html'">
+    <a href="menu.html" class="btn voltar">
       <i class="fas fa-arrow-left"></i> Voltar ao Menu
-    </button>
+    </a>
+  </main>
+
+  <!-- Pop-up -->
+  <div id="popupMaquinas" class="popup-overlay" style="display: none;">
+    <div class="popup-content">
+      <input type="text" id="buscaMaquina" placeholder="Buscar selo..." oninput="filtrarMaquinas()" />
+      <ul id="listaMaquinas"></ul>
+      <button onclick="fecharPopup()" class="btn voltar"><i class="fas fa-times"></i> Fechar</button>
+    </div>
   </div>
 
   <script>
-    function salvarCliente() {
-      // lógica futura
-      alert('Cliente salvo (simulação).');
+    let selosDisponiveis = [];
+    let maquinasSelecionadas = [];
+
+    async function abrirPopup() {
+      try {
+        const res = await fetch(URL_BACKEND, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ acao: 'listarSelos' })
+        });
+        const dados = await res.json();
+        selosDisponiveis = dados.selos || [];
+        document.getElementById("buscaMaquina").value = '';
+        renderizarListaMaquinas(selosDisponiveis);
+        document.getElementById("popupMaquinas").style.display = "flex";
+      } catch (err) {
+        alert("Erro ao buscar selos. Verifique sua conexão.");
+      }
     }
 
-    function atualizarStatusConexao() {
-      const icone = document.getElementById("icone-status");
-      icone.style.color = navigator.onLine ? "green" : "red";
+    function fecharPopup() {
+      document.getElementById("popupMaquinas").style.display = "none";
     }
 
-    function exibirUsuario() {
-      const usuario = localStorage.getItem("usuarioLogado") || "Usuário";
-      document.getElementById("usuario-logado").innerText = usuario.toLowerCase();
+    function filtrarMaquinas() {
+      const termo = document.getElementById("buscaMaquina").value.toLowerCase();
+      const filtradas = selosDisponiveis.filter(s => s.toLowerCase().includes(termo));
+      renderizarListaMaquinas(filtradas);
     }
 
-    function logout() {
-      localStorage.removeItem("usuarioLogado");
-      window.location.href = "login.html";
+    function renderizarListaMaquinas(lista) {
+      const ul = document.getElementById("listaMaquinas");
+      ul.innerHTML = "";
+      lista.forEach(selo => {
+        const li = document.createElement("li");
+        li.textContent = selo;
+        li.onclick = () => adicionarMaquina(selo);
+        ul.appendChild(li);
+      });
     }
 
-    window.addEventListener("load", () => {
-      atualizarStatusConexao();
-      exibirUsuario();
-    });
+    function adicionarMaquina(selo) {
+      if (!maquinasSelecionadas.includes(selo)) {
+        maquinasSelecionadas.push(selo);
+        atualizarMaquinasSelecionadas();
+      }
+    }
 
-    window.addEventListener("online", atualizarStatusConexao);
-    window.addEventListener("offline", atualizarStatusConexao);
+    function removerMaquina(selo) {
+      maquinasSelecionadas = maquinasSelecionadas.filter(s => s !== selo);
+      atualizarMaquinasSelecionadas();
+    }
+
+    function atualizarMaquinasSelecionadas() {
+      const div = document.getElementById("maquinasSelecionadas");
+      div.innerHTML = "";
+      maquinasSelecionadas.forEach(selo => {
+        const span = document.createElement("div");
+        span.className = "maquina-item";
+        span.innerHTML = `${selo} <button onclick="removerMaquina('${selo}')">x</button>`;
+        div.appendChild(span);
+      });
+    }
+
+    async function salvarCliente() {
+      const nome = document.getElementById("nome").value.trim();
+      const endereco = document.getElementById("endereco").value.trim();
+      const rota = document.getElementById("rota").value.trim();
+
+      if (!nome || !endereco || !rota) {
+        alert("Preencha todos os campos.");
+        return;
+      }
+
+      const dados = {
+        acao: "cadastrarCliente",
+        nome,
+        endereco,
+        rota,
+        maquinas: maquinasSelecionadas
+      };
+
+      try {
+        const res = await fetch(URL_BACKEND, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(dados)
+        });
+        const resposta = await res.json();
+        alert(resposta.mensagem || "Cliente salvo com sucesso!");
+        window.location.href = "menu.html";
+      } catch (err) {
+        alert("Erro ao salvar cliente.");
+      }
+    }
   </script>
 </body>
 </html>
