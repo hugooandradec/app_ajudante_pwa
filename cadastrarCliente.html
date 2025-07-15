@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cadastrar Cliente1</title>
+  <title>Cadastrar Cliente</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script type="module" src="js/navegacao.js"></script>
   <script type="module" src="js/sincronizador.js"></script>
@@ -174,7 +174,7 @@
       Cadastrar Cliente
     </div>
     <div class="header-right">
-      <i class="fas fa-circle status-icon" id="icone-status"></i>
+      <i class="fas fa-circle status-icon" id="icone-status" style="color: gray;"></i>
       <span class="usuario" id="usuario-logado">Usuário</span>
       <button class="logout-btn" onclick="logout()" title="Sair">
         <i class="fas fa-sign-out-alt"></i>
@@ -211,7 +211,7 @@
   </div>
 
   <script type="module">
-    import { logout, atualizarStatusConexao, exibirUsuarioLogado } from './js/navegacao.js';
+    import { logout, atualizarStatusConexao, exibirUsuario, monitorarStatusConexao } from './js/navegacao.js';
     import { salvarComSincronizacao, obterSelosDisponiveis } from './js/servicos.js';
 
     let selosDisponiveis = [];
@@ -219,7 +219,8 @@
 
     window.addEventListener("load", async () => {
       atualizarStatusConexao();
-      exibirUsuarioLogado();
+      exibirUsuario();
+      monitorarStatusConexao();
       selosDisponiveis = await obterSelosDisponiveis();
     });
 
