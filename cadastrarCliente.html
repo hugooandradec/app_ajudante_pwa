@@ -2,18 +2,15 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cadastrar Cliente</title>
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="favicon.ico" />
-  <meta name="theme-color" content="#6a1b9a" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script type="module" src="js/navegacao.js"></script>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f8f8f8;
+      background-color: #f8f8f8;
     }
 
     header {
@@ -25,15 +22,18 @@
       justify-content: space-between;
     }
 
-    .header-left {
+    .titulo-esquerda {
+      font-size: 18px;
+      font-weight: bold;
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .titulo-app {
+    .titulo-esquerda a {
+      color: white;
+      text-decoration: none;
       font-size: 18px;
-      font-weight: bold;
     }
 
     .header-right {
@@ -43,7 +43,7 @@
     }
 
     .status-icon {
-      font-size: 14px;
+      font-size: 12px;
     }
 
     .usuario {
@@ -54,138 +54,130 @@
       background: none;
       border: none;
       color: white;
-      font-size: 18px;
+      font-size: 16px;
       cursor: pointer;
     }
 
     .container {
       padding: 20px;
-    }
-
-    .form-group {
-      margin-bottom: 18px;
+      max-width: 600px;
+      margin: auto;
     }
 
     label {
-      display: block;
       font-weight: bold;
-      margin-bottom: 6px;
-      color: #333;
+      margin-top: 10px;
+      display: block;
     }
 
     input[type="text"] {
       width: 100%;
       padding: 10px;
+      margin-bottom: 12px;
       border: 1px solid #ccc;
       border-radius: 6px;
       font-size: 14px;
-    }
-
-    .maquinas-area {
-      margin-bottom: 20px;
-    }
-
-    .maquinas-selecionadas {
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .selo-tag {
-      background-color: #eee;
-      border: 1px solid #ccc;
-      border-radius: 20px;
-      padding: 6px 12px;
-      display: flex;
-      align-items: center;
-      font-size: 14px;
-    }
-
-    .selo-tag .remover-selo {
-      margin-left: 8px;
-      color: red;
-      cursor: pointer;
     }
 
     .btn {
-      display: block;
-      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: 12px;
-      border: none;
       border-radius: 6px;
-      font-size: 16px;
+      font-size: 15px;
+      width: 100%;
       cursor: pointer;
-      margin-bottom: 12px;
+      margin-top: 12px;
     }
 
     .btn.salvar {
       background-color: #6a1b9a;
       color: white;
+      border: none;
     }
 
-    .btn.adicionar {
-      background-color: #e8d8f5;
-      color: #6a1b9a;
+    .btn.maquina {
+      background-color: #f2e5ff;
       border: 1px solid #6a1b9a;
+      color: #6a1b9a;
     }
 
-    .popup {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(0, 0, 0, 0.5);
-      display: none;
-      justify-content: center;
+    .maquinas-lista {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .maquina-item {
+      background-color: #eee;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 14px;
+      display: flex;
       align-items: center;
+    }
+
+    .maquina-item .remover {
+      margin-left: 8px;
+      color: red;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .popup-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       z-index: 999;
     }
 
-    .popup-content {
+    .popup {
       background: white;
       padding: 20px;
       border-radius: 8px;
-      width: 90%;
-      max-width: 400px;
+      max-width: 90%;
+      width: 400px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
 
-    .popup-content input {
+    .popup input {
       width: 100%;
-      margin-bottom: 12px;
       padding: 10px;
+      margin-bottom: 10px;
     }
 
-    .lista-selos {
+    .popup ul {
+      list-style: none;
+      padding: 0;
       max-height: 200px;
       overflow-y: auto;
     }
 
-    .lista-selos div {
+    .popup ul li {
       padding: 8px;
       border-bottom: 1px solid #eee;
       cursor: pointer;
     }
 
-    .lista-selos div:hover {
-      background-color: #f0f0f0;
+    .popup ul li:hover {
+      background: #f2e5ff;
     }
 
-    a.voltar-link {
-      color: white;
-      font-size: 18px;
-      text-decoration: none;
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="header-left">
-      <a href="gerenciarClientes.html" class="voltar-link">
-        <i class="fas fa-arrow-left"></i>
-      </a>
-      <div class="titulo-app">Cadastrar Cliente</div>
+    <div class="titulo-esquerda">
+      <a href="gerenciarClientes.html"><i class="fas fa-arrow-left"></i></a>
+      Cadastrar Cliente
     </div>
     <div class="header-right">
       <i class="fas fa-circle status-icon" id="icone-status" style="color: gray;"></i>
@@ -197,128 +189,132 @@
   </header>
 
   <div class="container">
-    <div class="form-group">
-      <label for="nome">Nome do Cliente</label>
-      <input type="text" id="nome" placeholder="Digite o nome do cliente" />
-    </div>
-    <div class="form-group">
-      <label for="endereco">Endereço</label>
-      <input type="text" id="endereco" placeholder="Digite o endereço" />
-    </div>
-    <div class="form-group">
-      <label for="rota">Rota</label>
-      <input type="text" id="rota" placeholder="Digite a rota" />
-    </div>
+    <label for="nome">Nome do Cliente</label>
+    <input type="text" id="nome" placeholder="Digite o nome do cliente" />
 
-    <div class="maquinas-area">
-      <label>Máquinas</label>
-      <button class="btn adicionar" onclick="abrirPopupMaquinas()">+ Adicionar Máquina</button>
-      <div class="maquinas-selecionadas" id="maquinasSelecionadas"></div>
-    </div>
+    <label for="endereco">Endereço</label>
+    <input type="text" id="endereco" placeholder="Digite o endereço" />
+
+    <label for="rota">Rota</label>
+    <input type="text" id="rota" placeholder="Digite a rota" />
+
+    <label>Máquinas</label>
+    <button class="btn maquina" onclick="abrirPopupMaquinas()">
+      <i class="fas fa-plus"></i> Adicionar Máquina
+    </button>
+    <div class="maquinas-lista" id="lista-maquinas"></div>
 
     <button class="btn salvar" onclick="salvarCliente()">
       <i class="fas fa-save"></i> Salvar Cliente
     </button>
   </div>
 
-  <!-- Pop-up de seleção de máquina -->
-  <div class="popup" id="popupMaquinas">
-    <div class="popup-content">
-      <input type="text" id="buscaMaquina" oninput="filtrarMaquinas()" placeholder="Buscar máquina..." />
-      <div class="lista-selos" id="listaSelos"></div>
+  <!-- Pop-up -->
+  <div class="popup-overlay hidden" id="popup-maquinas">
+    <div class="popup">
+      <input type="text" id="busca-selo" placeholder="Digite para buscar...">
+      <ul id="lista-selos"></ul>
     </div>
   </div>
 
-  <script type="module">
-    import { carregarSelos } from "./js/servicos.js";
-    import { logout, atualizarStatusConexao, exibirUsuarioLogado } from "./js/navegacao.js";
+  <script>
+    const selosDisponiveis = [
+      "A123", "B456", "C789", "X001", "Máquina Alfa",
+      "Beta-001", "Delta 9", "XYZ-400"
+    ];
 
-    let selosDisponiveis = [];
-    let maquinasSelecionadas = [];
+    const maquinasSelecionadas = [];
 
-    window.addEventListener("load", () => {
-      atualizarStatusConexao();
-      exibirUsuarioLogado();
+    function abrirPopupMaquinas() {
+      document.getElementById("popup-maquinas").classList.remove("hidden");
+      document.getElementById("busca-selo").value = "";
+      filtrarSelos("");
+    }
+
+    document.getElementById("busca-selo").addEventListener("input", e => {
+      filtrarSelos(e.target.value.toLowerCase());
     });
 
-    window.addEventListener("online", atualizarStatusConexao);
-    window.addEventListener("offline", atualizarStatusConexao);
-
-    window.logout = logout;
-
-    window.abrirPopupMaquinas = async function () {
-      const popup = document.getElementById("popupMaquinas");
-      popup.style.display = "flex";
-
-      if (selosDisponiveis.length === 0) {
-        selosDisponiveis = await carregarSelos();
-      }
-
-      document.getElementById("buscaMaquina").value = "";
-      exibirSelos(selosDisponiveis);
-    }
-
-    function exibirSelos(selos) {
-      const lista = document.getElementById("listaSelos");
+    function filtrarSelos(filtro) {
+      const lista = document.getElementById("lista-selos");
       lista.innerHTML = "";
-      selos.forEach(selo => {
-        const div = document.createElement("div");
-        div.textContent = selo;
-        div.onclick = () => selecionarMaquina(selo);
-        lista.appendChild(div);
+      selosDisponiveis.forEach(selo => {
+        if (selo.toLowerCase().includes(filtro) && !maquinasSelecionadas.includes(selo)) {
+          const li = document.createElement("li");
+          li.textContent = selo;
+          li.onclick = () => adicionarMaquina(selo);
+          lista.appendChild(li);
+        }
       });
     }
 
-    window.filtrarMaquinas = function () {
-      const termo = document.getElementById("buscaMaquina").value.toLowerCase();
-      const filtrados = selosDisponiveis.filter(s => s.toLowerCase().includes(termo));
-      exibirSelos(filtrados);
+    function adicionarMaquina(selo) {
+      maquinasSelecionadas.push(selo);
+      atualizarListaMaquinas();
+      document.getElementById("popup-maquinas").classList.add("hidden");
     }
 
-    function selecionarMaquina(selo) {
-      if (!maquinasSelecionadas.includes(selo)) {
-        maquinasSelecionadas.push(selo);
-        atualizarMaquinasSelecionadas();
+    function atualizarListaMaquinas() {
+      const lista = document.getElementById("lista-maquinas");
+      lista.innerHTML = "";
+      maquinasSelecionadas.forEach((selo, index) => {
+        const span = document.createElement("span");
+        span.className = "maquina-item";
+        span.innerHTML = `${selo} <span class="remover" onclick="removerMaquina(${index})">×</span>`;
+        lista.appendChild(span);
+      });
+    }
+
+    function removerMaquina(index) {
+      maquinasSelecionadas.splice(index, 1);
+      atualizarListaMaquinas();
+    }
+
+    document.getElementById("popup-maquinas").addEventListener("click", (e) => {
+      if (e.target.id === "popup-maquinas") {
+        document.getElementById("popup-maquinas").classList.add("hidden");
       }
-      document.getElementById("popupMaquinas").style.display = "none";
-    }
+    });
 
-    function atualizarMaquinasSelecionadas() {
-      const container = document.getElementById("maquinasSelecionadas");
-      container.innerHTML = "";
-
-      maquinasSelecionadas.forEach(selo => {
-        const tag = document.createElement("div");
-        tag.className = "selo-tag";
-        tag.innerHTML = `${selo} <span class="remover-selo" onclick="removerMaquina('${selo}')">&times;</span>`;
-        container.appendChild(tag);
-      });
-    }
-
-    window.removerMaquina = function (selo) {
-      maquinasSelecionadas = maquinasSelecionadas.filter(m => m !== selo);
-      atualizarMaquinasSelecionadas();
-    }
-
-    window.salvarCliente = function () {
+    async function salvarCliente() {
       const nome = document.getElementById("nome").value.trim();
       const endereco = document.getElementById("endereco").value.trim();
       const rota = document.getElementById("rota").value.trim();
 
-      if (!nome || !endereco || !rota) {
-        alert("Preencha todos os campos.");
+      if (!nome || !endereco || !rota || maquinasSelecionadas.length === 0) {
+        alert("Preencha todos os campos e adicione ao menos uma máquina.");
         return;
       }
 
-      const cliente = {
-        nome,
-        endereco,
-        rota,
-        maquinas: maquinasSelecionadas
-      };
+      try {
+        const resposta = await fetch("https://ajudante-api.onrender.com/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            acao: "cadastrarCliente",
+            nome,
+            endereco,
+            rota,
+            maquinas: maquinasSelecionadas
+          })
+        });
 
-      console.log("Cliente a salvar:", cliente);
-      // TODO: enviar para backend
+        const resultado = await resposta.json();
+
+        if (resultado.sucesso) {
+          alert("Cliente cadastrado com sucesso!");
+          document.getElementById("nome").value = "";
+          document.getElementById("endereco").value = "";
+          document.getElementById("rota").value = "";
+          maquinasSelecionadas.length = 0;
+          atualizarListaMaquinas();
+        } else {
+          alert("Erro: " + resultado.mensagem);
+        }
+
+      } catch (erro) {
+        alert("Erro ao salvar cliente. Verifique sua conexão.");
+      }
     }
   </script>
 </body>
