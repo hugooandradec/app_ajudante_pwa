@@ -4,14 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cadastrar Cliente</title>
-  <script type="module" src="js/navegacao.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#6a1b9a" />
+  <script type="module" src="js/navegacao.js"></script>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #f8f8f8;
-      overflow-x: hidden;
     }
 
     header {
@@ -23,19 +24,11 @@
       justify-content: space-between;
     }
 
-    .header-left {
+    .titulo-header {
       display: flex;
       align-items: center;
-      gap: 12px;
-    }
-
-    .header-left i {
-      cursor: pointer;
-      font-size: 18px;
-    }
-
-    .titulo-pagina {
-      font-size: 18px;
+      gap: 10px;
+      font-size: 16px;
       font-weight: bold;
     }
 
@@ -43,13 +36,6 @@
       display: flex;
       align-items: center;
       gap: 10px;
-    }
-
-    .status-icon {
-      font-size: 14px;
-    }
-
-    .usuario {
       font-size: 14px;
     }
 
@@ -57,49 +43,41 @@
       background: none;
       border: none;
       color: white;
-      font-size: 18px;
+      font-size: 16px;
       cursor: pointer;
     }
 
-    main {
+    .container {
       padding: 20px;
-    }
-
-    .form-group {
-      margin-bottom: 18px;
     }
 
     label {
       display: block;
+      margin: 12px 0 4px;
       font-weight: bold;
-      margin-bottom: 6px;
       color: #333;
     }
 
-    input {
+    input[type="text"] {
       width: 100%;
       padding: 10px;
-      border: 1px solid #aaa;
-      border-radius: 5px;
-      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
     }
 
     .btn {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #6a1b9a;
+      border-radius: 6px;
+      font-size: 16px;
+      margin-top: 16px;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 12px;
-      width: 100%;
-      margin-top: 10px;
-      border: 1px solid #6a1b9a;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 15px;
-    }
-
-    .btn i {
-      font-size: 15px;
     }
 
     .btn.salvar {
@@ -109,14 +87,13 @@
 
     .btn.voltar {
       background-color: #ddd;
-      color: #111;
+      color: #222;
     }
 
-    .popup-btn {
-      margin-top: 6px;
-      background-color: #eae0f8;
+    .btn.adicionar {
+      background-color: #e6d4f7;
       color: #6a1b9a;
-      border: 1px solid #6a1b9a;
+      margin-top: 0;
     }
 
     .maquinas-lista {
@@ -129,157 +106,147 @@
     .maquina-item {
       background: #eee;
       padding: 6px 10px;
-      border-radius: 4px;
+      border-radius: 6px;
       display: flex;
       align-items: center;
+      gap: 6px;
     }
 
     .maquina-item button {
-      background: none;
       border: none;
-      color: #900;
-      margin-left: 6px;
+      background: none;
+      color: #c00;
       cursor: pointer;
-      font-weight: bold;
     }
 
-    .popup-overlay {
+    /* Modal */
+    .modal {
+      display: none;
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
     }
 
-    .popup-content {
-      background: white;
+    .modal-content {
+      background-color: #fff;
+      margin: 60px auto;
       padding: 20px;
       border-radius: 8px;
       width: 90%;
       max-width: 400px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
 
-    .popup-content input {
+    .modal-content input {
       width: 100%;
       padding: 8px;
-      margin-bottom: 12px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      margin-bottom: 10px;
     }
 
-    .popup-content ul {
+    .modal-content ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
       max-height: 200px;
       overflow-y: auto;
-      padding-left: 0;
-      list-style: none;
+      border-top: 1px solid #ccc;
     }
 
-    .popup-content ul li {
-      padding: 6px 10px;
+    .modal-content li {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
       cursor: pointer;
-      border-bottom: 1px solid #eee;
     }
 
-    .popup-content ul li:hover {
-      background: #f2e5ff;
+    .modal-content li:hover {
+      background-color: #f0f0f0;
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="header-left">
+    <div class="titulo-header">
       <a href="menu.html" style="color: white;"><i class="fas fa-arrow-left"></i></a>
-      <div class="titulo-pagina">Cadastrar Cliente</div>
+      Cadastrar Cliente
     </div>
     <div class="header-right">
-      <i class="fas fa-circle status-icon" id="icone-status"></i>
-      <span class="usuario" id="usuario-logado">Usuário</span>
+      <i class="fas fa-circle status-icon" id="icone-status" style="color: gray;"></i>
+      <span id="usuario-logado">Usuário</span>
       <button class="logout-btn" onclick="logout()" title="Sair">
         <i class="fas fa-sign-out-alt"></i>
       </button>
     </div>
   </header>
 
-  <main>
-    <div class="form-group">
-      <label for="nome">Nome do Cliente</label>
-      <input type="text" id="nome" placeholder="Digite o nome do cliente" />
-    </div>
+  <div class="container">
+    <label for="nome">Nome do Cliente</label>
+    <input type="text" id="nome" placeholder="Digite o nome do cliente" />
 
-    <div class="form-group">
-      <label for="endereco">Endereço</label>
-      <input type="text" id="endereco" placeholder="Digite o endereço" />
-    </div>
+    <label for="endereco">Endereço</label>
+    <input type="text" id="endereco" placeholder="Digite o endereço" />
 
-    <div class="form-group">
-      <label for="rota">Rota</label>
-      <input type="text" id="rota" placeholder="Digite a rota" />
-    </div>
+    <label for="rota">Rota</label>
+    <input type="text" id="rota" placeholder="Digite a rota" />
 
-    <div class="form-group">
-      <label>Máquinas</label>
-      <button type="button" onclick="abrirPopup()" class="btn popup-btn">
-        <i class="fas fa-plus"></i> Adicionar Máquina
-      </button>
-      <div id="maquinasSelecionadas" class="maquinas-lista"></div>
-    </div>
+    <label>Máquinas</label>
+    <button class="btn adicionar" onclick="abrirModalMaquinas()">
+      <i class="fas fa-plus"></i> Adicionar Máquina
+    </button>
 
-    <button class="btn salvar" onclick="salvarCliente()">
+    <div class="maquinas-lista" id="maquinasSelecionadas"></div>
+
+    <button class="btn salvar">
       <i class="fas fa-save"></i> Salvar Cliente
     </button>
     <a href="menu.html" class="btn voltar">
       <i class="fas fa-arrow-left"></i> Voltar ao Menu
     </a>
-  </main>
+  </div>
 
-  <!-- Pop-up -->
-  <div id="popupMaquinas" class="popup-overlay" style="display: none;">
-    <div class="popup-content">
-      <input type="text" id="buscaMaquina" placeholder="Buscar selo..." oninput="filtrarMaquinas()" />
+  <!-- Modal de seleção de máquinas -->
+  <div id="modalMaquinas" class="modal">
+    <div class="modal-content">
+      <input type="text" id="filtroMaquinas" placeholder="Buscar selo da máquina..." oninput="filtrarMaquinas()" />
       <ul id="listaMaquinas"></ul>
-      <button onclick="fecharPopup()" class="btn voltar"><i class="fas fa-times"></i> Fechar</button>
     </div>
   </div>
 
-  <script>
-    let selosDisponiveis = [];
+  <script type="module">
+    import { atualizarStatusConexao, exibirUsuario } from './js/navegacao.js';
+
+    window.addEventListener("load", () => {
+      atualizarStatusConexao();
+      exibirUsuario();
+      window.addEventListener("online", atualizarStatusConexao);
+      window.addEventListener("offline", atualizarStatusConexao);
+    });
+
+    window.logout = function () {
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "login.html";
+    };
+
+    // Simulação de selos (depois será fetch do backend)
+    const selosDisponiveis = [
+      "A123", "B456", "C789", "X001", "Maquina Alfa", "Beta-001", "Delta 9", "XYZ-400"
+    ];
+
     let maquinasSelecionadas = [];
 
-    async function abrirPopup() {
-      try {
-        const res = await fetch(URL_BACKEND, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ acao: 'listarSelos' })
-        });
-        const dados = await res.json();
-        selosDisponiveis = dados.selos || [];
-        document.getElementById("buscaMaquina").value = '';
-        renderizarListaMaquinas(selosDisponiveis);
-        document.getElementById("popupMaquinas").style.display = "flex";
-      } catch (err) {
-        alert("Erro ao buscar selos. Verifique sua conexão.");
-      }
-    }
-
-    function fecharPopup() {
-      document.getElementById("popupMaquinas").style.display = "none";
-    }
-
-    function filtrarMaquinas() {
-      const termo = document.getElementById("buscaMaquina").value.toLowerCase();
-      const filtradas = selosDisponiveis.filter(s => s.toLowerCase().includes(termo));
-      renderizarListaMaquinas(filtradas);
+    window.abrirModalMaquinas = function () {
+      document.getElementById("modalMaquinas").style.display = "block";
+      document.getElementById("filtroMaquinas").value = "";
+      renderizarListaMaquinas(selosDisponiveis);
     }
 
     function renderizarListaMaquinas(lista) {
       const ul = document.getElementById("listaMaquinas");
       ul.innerHTML = "";
-      lista.forEach(selo => {
+      lista.forEach((selo) => {
         const li = document.createElement("li");
         li.textContent = selo;
         li.onclick = () => adicionarMaquina(selo);
@@ -287,58 +254,43 @@
       });
     }
 
+    window.filtrarMaquinas = function () {
+      const termo = document.getElementById("filtroMaquinas").value.toLowerCase();
+      const filtradas = selosDisponiveis.filter(s => s.toLowerCase().includes(termo));
+      renderizarListaMaquinas(filtradas);
+    }
+
     function adicionarMaquina(selo) {
       if (!maquinasSelecionadas.includes(selo)) {
         maquinasSelecionadas.push(selo);
-        atualizarMaquinasSelecionadas();
+        atualizarListaSelecionadas();
       }
+      fecharModal();
     }
 
     function removerMaquina(selo) {
-      maquinasSelecionadas = maquinasSelecionadas.filter(s => s !== selo);
-      atualizarMaquinasSelecionadas();
+      maquinasSelecionadas = maquinasSelecionadas.filter(m => m !== selo);
+      atualizarListaSelecionadas();
     }
 
-    function atualizarMaquinasSelecionadas() {
+    function atualizarListaSelecionadas() {
       const div = document.getElementById("maquinasSelecionadas");
       div.innerHTML = "";
       maquinasSelecionadas.forEach(selo => {
         const span = document.createElement("div");
         span.className = "maquina-item";
-        span.innerHTML = `${selo} <button onclick="removerMaquina('${selo}')">x</button>`;
+        span.innerHTML = `${selo} <button onclick="removerMaquina('${selo}')">&times;</button>`;
         div.appendChild(span);
       });
     }
 
-    async function salvarCliente() {
-      const nome = document.getElementById("nome").value.trim();
-      const endereco = document.getElementById("endereco").value.trim();
-      const rota = document.getElementById("rota").value.trim();
+    function fecharModal() {
+      document.getElementById("modalMaquinas").style.display = "none";
+    }
 
-      if (!nome || !endereco || !rota) {
-        alert("Preencha todos os campos.");
-        return;
-      }
-
-      const dados = {
-        acao: "cadastrarCliente",
-        nome,
-        endereco,
-        rota,
-        maquinas: maquinasSelecionadas
-      };
-
-      try {
-        const res = await fetch(URL_BACKEND, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(dados)
-        });
-        const resposta = await res.json();
-        alert(resposta.mensagem || "Cliente salvo com sucesso!");
-        window.location.href = "menu.html";
-      } catch (err) {
-        alert("Erro ao salvar cliente.");
+    window.onclick = function (event) {
+      if (event.target == document.getElementById("modalMaquinas")) {
+        fecharModal();
       }
     }
   </script>
