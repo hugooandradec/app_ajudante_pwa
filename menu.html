@@ -5,21 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>App Ajudante</title>
   <link rel="manifest" href="manifest.json" />
-  <script src="https://kit.fontawesome.com/6c122a3c97.js" crossorigin="anonymous"></script>
-  <script src="js/navegacao.js" defer></script>
+  <link rel="icon" href="favicon.ico" />
+  <meta name="theme-color" content="#6a1b9a" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="navegacao.js" defer></script>
   <style>
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-      overflow-y: auto;
-      height: 100%;
       font-family: Arial, sans-serif;
-      background-color: #f7f7f7;
-    }
-
-    * {
-      box-sizing: border-box;
+      background: #f8f8f8;
     }
 
     header {
@@ -27,13 +21,13 @@
       color: white;
       padding: 12px 16px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
     }
 
     .titulo-app {
-      font-weight: bold;
       font-size: 18px;
+      font-weight: bold;
     }
 
     .header-right {
@@ -43,7 +37,7 @@
     }
 
     .status-icon {
-      font-size: 10px;
+      font-size: 14px;
     }
 
     .usuario {
@@ -54,39 +48,46 @@
       background: none;
       border: none;
       color: white;
-      font-size: 16px;
+      font-size: 18px;
       cursor: pointer;
     }
 
-    .menu {
-      display: flex;
-      flex-direction: column;
-      margin-top: 20px;
+    .menu-container {
+      margin: 30px 0;
     }
 
-    .menu a {
+    .menu-btn {
       display: flex;
       align-items: center;
-      background-color: #f3e5f5;
-      padding: 14px 20px;
-      text-decoration: none;
-      color: #6a1b9a;
-      font-weight: bold;
+      justify-content: flex-start;
+      color: #333;
+      border-radius: 0;
+      padding: 16px 18px;
       font-size: 16px;
-      border-bottom: 1px solid #e1bee7;
+      width: 100%;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: bold;
     }
 
-    .menu a i {
-      margin-right: 12px;
-      font-size: 18px;
+    .menu-btn:nth-child(even) {
+      background-color: #f2e5ff;
     }
 
-    .menu a:nth-child(even) {
-      background-color: #ede7f6;
+    .menu-btn:nth-child(odd) {
+      background-color: #e8d8f5;
     }
 
-    .menu a:hover {
-      background-color: #e1bee7;
+    .menu-btn:hover {
+      background-color: #decdf4;
+    }
+
+    .menu-btn i {
+      color: #6a1b9a;
+      margin-right: 14px;
+      font-size: 20px;
+      width: 24px;
+      text-align: center;
     }
   </style>
 </head>
@@ -102,11 +103,52 @@
     </div>
   </header>
 
-  <main class="menu">
-    <a href="gerenciarClientes.html"><i class="fas fa-users"></i> Gerenciar Clientes</a>
-    <a href="gerenciarMaquinas.html"><i class="fas fa-wrench"></i> Gerenciar Máquinas</a>
-    <a href="preFecho.html"><i class="fas fa-dollar-sign"></i> Pré-Fecho</a>
-    <a href="calculoRetencao.html"><i class="fas fa-calculator"></i> Cálculo de Retenção</a>
-  </main>
+  <div class="menu-container">
+    <a href="gerenciarClientes.html" class="menu-btn">
+      <i class="fas fa-users"></i> Gerenciar Clientes
+    </a>
+    <a href="gerenciarMaquinas.html" class="menu-btn">
+      <i class="fas fa-wrench"></i> Gerenciar Máquinas
+    </a>
+    <a href="preFecho.html" class="menu-btn">
+      <i class="fas fa-dollar-sign"></i> Pré-Fecho
+    </a>
+    <a href="calculoRetencao.html" class="menu-btn">
+      <i class="fas fa-sliders-h"></i> Cálculo de Retenção
+    </a>
+  </div>
+
+  <script>
+    function atualizarStatusConexao() {
+      const online = navigator.onLine;
+      const icone = document.getElementById("icone-status");
+      icone.style.color = online ? "green" : "red";
+    }
+
+    function exibirUsuario() {
+      const usuario = localStorage.getItem("usuarioLogado") || "Desconhecido";
+      document.getElementById("usuario-logado").innerText = usuario;
+    }
+
+    function logout() {
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "login.html";
+    }
+
+    window.addEventListener("load", () => {
+      atualizarStatusConexao();
+      exibirUsuario();
+
+      // Registrar o service worker
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/ajudante-app/service-worker.js')
+          .then(() => console.log('Service Worker registrado no menu'))
+          .catch(err => console.error('Erro ao registrar SW:', err));
+      }
+    });
+
+    window.addEventListener("online", atualizarStatusConexao);
+    window.addEventListener("offline", atualizarStatusConexao);
+  </script>
 </body>
 </html>
