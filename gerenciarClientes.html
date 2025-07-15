@@ -2,81 +2,151 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gerenciar Clientes</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script defer src="js/navegacao.js"></script>
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f9f9f9;
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
     }
 
-    #botoes {
-      display: flex;
-      flex-direction: column;
-      padding: 16px;
-      gap: 12px;
-    }
-
-    .botao {
+    header {
+      background-color: #6a1b9a;
+      color: white;
+      padding: 12px 16px;
       display: flex;
       align-items: center;
-      padding: 14px;
-      border-radius: 8px;
-      text-decoration: none;
-      color: #6b21a8;
-      font-weight: bold;
-      font-size: 16px;
-      transition: background 0.2s;
+      justify-content: space-between;
     }
 
-    .botao i {
-      margin-right: 12px;
+    .titulo-pagina {
       font-size: 18px;
-      color: #7c3aed;
-      min-width: 20px;
-      text-align: center;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
     }
 
-    .botao:hover {
-      background-color: #ddd6fe;
+    .titulo-pagina i {
+      margin-right: 8px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-icon {
+      font-size: 14px;
+    }
+
+    .usuario {
+      font-size: 14px;
+    }
+
+    .logout-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .menu-container {
+      margin: 30px 0;
+    }
+
+    .menu-btn {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      color: #6a1b9a;
+      background-color: #f2e5ff;
+      border-radius: 0;
+      padding: 16px 18px;
+      font-size: 16px;
+      width: 100%;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .menu-btn:nth-child(odd) {
+      background-color: #e8d8f5;
+    }
+
+    .menu-btn:hover {
+      background-color: #decdf4;
+    }
+
+    .menu-btn i {
+      color: #6a1b9a;
+      margin-right: 14px;
+      font-size: 20px;
+      width: 24px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <div id="cabecalho"></div>
+  <header>
+    <div class="titulo-pagina">
+      <i class="fas fa-arrow-left" onclick="window.location.href='menu.html'"></i>
+      Gerenciar Clientes
+    </div>
+    <div class="header-right">
+      <i class="fas fa-circle status-icon" id="icone-status" style="color: gray;"></i>
+      <span class="usuario" id="usuario-logado">Usuário</span>
+      <button class="logout-btn" onclick="logout()" title="Sair">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
 
-  <div id="botoes"></div>
+  <div class="menu-container">
+    <a href="cadastrarCliente.html" class="menu-btn">
+      <i class="fas fa-user-plus"></i> Cadastrar Cliente
+    </a>
+    <a href="editarCliente.html" class="menu-btn">
+      <i class="fas fa-pen-to-square"></i> Editar Cliente
+    </a>
+    <a href="consultarCliente.html" class="menu-btn">
+      <i class="fas fa-search"></i> Consultar Cliente
+    </a>
+    <a href="excluirCliente.html" class="menu-btn">
+      <i class="fas fa-user-minus"></i> Excluir Cliente
+    </a>
+  </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      renderizarCabecalho("Gerenciar Clientes", "menu.html");
+    function atualizarStatusConexao() {
+      const online = navigator.onLine;
+      const icone = document.getElementById("icone-status");
+      icone.style.color = online ? "green" : "red";
+    }
 
-      const botoes = [
-        { texto: "Cadastrar Cliente", icone: "fa-user-plus", link: "cadastrarCliente.html" },
-        { texto: "Editar Cliente", icone: "fa-pen-to-square", link: "editarCliente.html" },
-        { texto: "Consultar Cliente", icone: "fa-search", link: "consultarCliente.html" },
-        { texto: "Excluir Cliente", icone: "fa-user-minus", link: "excluirCliente.html" }
-      ];
+    function exibirUsuario() {
+      const usuario = localStorage.getItem("usuarioLogado") || "Usuário";
+      document.getElementById("usuario-logado").innerText = usuario;
+    }
 
-      const container = document.getElementById("botoes");
-      if (container) {
-        botoes.forEach((btn, index) => {
-          const corFundo = index % 2 === 0 ? "#f3e8ff" : "#ede9fe";
-          const button = document.createElement("a");
-          button.href = btn.link;
-          button.className = "botao";
-          button.style.backgroundColor = corFundo;
-          button.innerHTML = `
-            <i class="fas ${btn.icone}"></i>
-            <span>${btn.texto}</span>
-          `;
-          container.appendChild(button);
-        });
-      }
+    function logout() {
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "login.html";
+    }
+
+    window.addEventListener("load", () => {
+      atualizarStatusConexao();
+      exibirUsuario();
     });
+
+    window.addEventListener("online", atualizarStatusConexao);
+    window.addEventListener("offline", atualizarStatusConexao);
   </script>
 </body>
 </html>
