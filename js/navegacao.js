@@ -1,4 +1,4 @@
-// Atualiza o ícone de status
+// Atualiza o ícone de status (verde/vermelho)
 export function atualizarStatusConexao() {
   const icone = document.getElementById("icone-status");
   if (icone) {
@@ -28,7 +28,7 @@ export function monitorarStatusConexao() {
   atualizarStatusConexao();
 }
 
-// Renderiza o cabeçalho padrão em páginas que utilizam <div id="cabecalho"></div>
+// Renderiza o cabeçalho padrão dentro de <div id="cabecalho"></div>
 export function renderizarCabecalho(titulo = "") {
   const usuario = localStorage.getItem("usuarioLogado") || "Usuário";
   const cabecalho = document.getElementById("cabecalho");
@@ -53,10 +53,39 @@ export function renderizarCabecalho(titulo = "") {
   atualizarStatusConexao();
 }
 
-// Inicializa uma página com cabeçalho automático (caso queira usar em massa)
+// Inicializa uma página com cabeçalho, status e logout
 export function inicializarPagina(titulo = "") {
   renderizarCabecalho(titulo);
   monitorarStatusConexao();
   exibirUsuario();
   window.logout = logout;
 }
+
+/////////////////////////////////////////////////////////////////////////////
+// 💡 TRUQUE DE DESENVOLVIMENTO: Força atualização com ?v=TIMESTAMP
+(function forcarAtualizacaoDuranteDesenvolvimento() {
+  const isDev = location.hostname.includes("github.io") || location.hostname === "localhost";
+  if (!isDev) return;
+
+  const versao = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 12); // Ex: 202507151745
+
+  // 1. Se a URL atual não tiver ?v= → recarrega com versão
+  const urlAtual = new URL(window.location.href);
+  if (!urlAtual.searchParams.has("v")) {
+    urlAtual.searchParams.set("v", versao);
+    window.location.replace(urlAtual.toString());
+    return;
+  }
+
+  // 2. Após carregar com ?v=, adiciona nos links internos
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('a[href$=".html"]').forEach(link => {
+      const href = link.getAttribute("href");
+      if (!href.includes("?v=")) {
+        const novaUrl = new URL(link.href);
+        novaUrl.searchParams.set("v", versao);
+        link.href = novaUrl.toString();
+      }
+    });
+  });
+})();
