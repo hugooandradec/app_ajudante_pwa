@@ -2,221 +2,184 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cadastrar Cliente</title>
-  <link rel="icon" href="data:,">
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <script src="js/navegacao.js"></script>
-  <script src="js/servicos.js"></script>
-  <script src="js/sincronizador.js"></script>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <script src="navegacao.js" defer></script>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #f8f8f8;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      text-align: center;
     }
 
-    .header {
-      background-color: #5e1ca4;
+    header {
+      background-color: #6a1b9a;
       color: white;
-      padding: 10px;
-      font-size: 20px;
+      padding: 12px 16px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
     }
 
-    .header > div {
-      flex: 1;
-    }
-
-    .logo {
-      font-weight: bold;
-      text-align: center;
-    }
-
-    .usuario-logado {
+    .titulo-esquerda {
       display: flex;
-      justify-content: flex-end;
+      align-items: center;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .titulo-esquerda i {
+      margin-right: 10px;
+      font-size: 18px;
+    }
+
+    .header-right {
+      display: flex;
       align-items: center;
       gap: 10px;
-      padding-right: 10px;
+      font-size: 14px;
     }
 
-    .usuario-logado i {
+    .status-icon {
+      font-size: 14px;
+    }
+
+    .usuario {
+      text-transform: lowercase;
+    }
+
+    .logout-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 18px;
       cursor: pointer;
     }
 
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: start;
-      align-items: center;
-      flex-direction: column;
-      padding-top: 60px;
-    }
-
-    .container {
-      width: 90%;
-      max-width: 500px;
-      background-color: white;
-      border-radius: 12px;
-      padding: 2rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    .form-container {
+      padding: 20px 16px;
     }
 
     .form-group {
-      margin-bottom: 1.5rem;
-      text-align: left;
+      margin-bottom: 24px;
     }
 
-    .form-group label {
+    label {
       display: block;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 4px;
     }
 
-    .form-group input {
+    input[type="text"] {
       width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
+      border: none;
+      border-bottom: 2px solid #6a1b9a;
+      background-color: transparent;
+      padding: 8px 4px;
+      font-size: 15px;
+      outline: none;
     }
 
-    .btn-roxo, .btn-voltar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: normal;
-      padding: 14px;
-      border-radius: 8px;
-      margin: 10px auto;
-      width: 90%;
-      max-width: 400px;
-      font-size: 1.1em;
-      text-decoration: none;
-    }
-
-    .btn-roxo {
-      background-color: white;
-      color: black;
-      border: 2px solid #5e1ca4;
-    }
-
-    .btn-roxo i {
-      color: #5e1ca4;
-      margin-right: 8px;
-    }
-
-    .btn-voltar {
-      background-color: #e0e0e0;
-      color: black;
-      border: 2px solid #5e1ca4;
-    }
-
-    .btn-voltar i {
-      color: #5e1ca4;
-      margin-right: 8px;
-    }
-
-    .mensagem {
-      margin-top: 20px;
+    .btn {
+      width: 100%;
+      font-size: 15px;
+      padding: 12px;
+      border-radius: 3px;
+      border: none;
       font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      margin-top: 10px;
     }
 
-    footer {
-      text-align: center;
-      padding: 12px 0;
+    .btn.salvar {
+      background-color: #6a1b9a;
+      color: white;
     }
 
-    .status-online::before,
-    .status-offline::before {
-      content: '';
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      margin-right: 6px;
-      border-radius: 50%;
-      background-color: green;
+    .btn.voltar {
+      background-color: #e0e0e0;
+      color: #333;
     }
 
-    .status-offline::before {
-      background-color: red;
-    }
-
-    #statusConexao {
-      font-size: 0.9em;
+    .btn i {
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <div></div>
-    <div class="logo">Cadastrar Cliente</div>
-    <div class="usuario-logado">
-      <i class="fas fa-user"></i> <span id="usuarioNome"></span>
-      <i class="fas fa-sign-out-alt" onclick="logout()" title="Sair"></i>
+  <header>
+    <div class="titulo-esquerda">
+      <i class="fas fa-arrow-left" onclick="window.location.href='menu.html'"></i>
+      Cadastrar Cliente
     </div>
+    <div class="header-right">
+      <i class="fas fa-circle status-icon" id="icone-status" style="color: gray;"></i>
+      <span class="usuario" id="usuario-logado">Usuário</span>
+      <button class="logout-btn" onclick="logout()" title="Sair">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="form-container">
+    <div class="form-group">
+      <label for="nome">Nome do Cliente</label>
+      <input type="text" id="nome" placeholder="Digite o nome do cliente" />
+    </div>
+
+    <div class="form-group">
+      <label for="endereco">Endereço</label>
+      <input type="text" id="endereco" placeholder="Digite o endereço" />
+    </div>
+
+    <div class="form-group">
+      <label for="rota">Rota</label>
+      <input type="text" id="rota" placeholder="Digite a rota" />
+    </div>
+
+    <button class="btn salvar" onclick="salvarCliente()">
+      <i class="fas fa-save"></i> Salvar Cliente
+    </button>
+
+    <button class="btn voltar" onclick="window.location.href='menu.html'">
+      <i class="fas fa-arrow-left"></i> Voltar ao Menu
+    </button>
   </div>
 
-  <main>
-    <div class="container">
-      <div class="form-group">
-        <label for="nome">Nome do Cliente</label>
-        <input type="text" id="nome" />
-      </div>
-
-      <div class="form-group">
-        <label for="endereco">Endereço</label>
-        <input type="text" id="endereco" />
-      </div>
-
-      <div class="form-group">
-        <label for="rota">Rota</label>
-        <input type="text" id="rota" />
-      </div>
-
-      <button class="btn-roxo" onclick="salvarCliente()">
-        <i class="fas fa-save"></i> Salvar Cliente
-      </button>
-
-      <a class="btn-voltar" href="index.html">
-        <i class="fas fa-arrow-left"></i> Voltar ao Menu
-      </a>
-
-      <div id="mensagem" class="mensagem"></div>
-    </div>
-  </main>
-
-  <footer></footer>
-
   <script>
-    document.getElementById("usuarioNome").innerText = localStorage.getItem("usuario") || "";
-    monitorarStatusConexao();
-
-    async function salvarCliente() {
-      const nome = document.getElementById("nome").value.trim();
-      const endereco = document.getElementById("endereco").value.trim();
-      const rota = document.getElementById("rota").value.trim();
-
-      if (!validarCamposObrigatorios(["nome", "endereco", "rota"])) return;
-
-      const dados = { nome, endereco, rota };
-      const resposta = await salvarComSincronizacao("cadastrarCliente", dados);
-
-      exibirMensagem(resposta.mensagem, resposta.sucesso ? "sucesso" : "erro");
-
-      if (resposta.sucesso) {
-        limparCampos(["nome", "endereco", "rota"]);
-      }
+    function salvarCliente() {
+      // lógica futura
+      alert('Cliente salvo (simulação).');
     }
+
+    function atualizarStatusConexao() {
+      const icone = document.getElementById("icone-status");
+      icone.style.color = navigator.onLine ? "green" : "red";
+    }
+
+    function exibirUsuario() {
+      const usuario = localStorage.getItem("usuarioLogado") || "Usuário";
+      document.getElementById("usuario-logado").innerText = usuario.toLowerCase();
+    }
+
+    function logout() {
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "login.html";
+    }
+
+    window.addEventListener("load", () => {
+      atualizarStatusConexao();
+      exibirUsuario();
+    });
+
+    window.addEventListener("online", atualizarStatusConexao);
+    window.addEventListener("offline", atualizarStatusConexao);
   </script>
 </body>
 </html>
