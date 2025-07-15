@@ -2,8 +2,11 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cadastrar Cliente</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="favicon.ico" />
+  <meta name="theme-color" content="#6a1b9a" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script type="module" src="js/navegacao.js"></script>
   <style>
@@ -16,24 +19,23 @@
     header {
       background-color: #6a1b9a;
       color: white;
-      padding: 12px 16px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-    }
-
-    .titulo-esquerda {
-      font-size: 18px;
-      font-weight: bold;
-      display: flex;
       align-items: center;
-      gap: 10px;
+      padding: 12px 16px;
     }
 
-    .titulo-esquerda a {
+    .voltar {
       color: white;
-      text-decoration: none;
       font-size: 18px;
+      text-decoration: none;
+      margin-right: 10px;
+    }
+
+    .titulo-header {
+      font-weight: bold;
+      font-size: 18px;
+      flex: 1;
     }
 
     .header-right {
@@ -43,52 +45,53 @@
     }
 
     .status-icon {
-      font-size: 12px;
+      font-size: 14px;
     }
 
     .usuario {
       font-size: 14px;
     }
 
-    .logout-btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .container {
+    main {
       padding: 20px;
-      max-width: 600px;
-      margin: auto;
     }
 
     label {
       font-weight: bold;
-      margin-top: 10px;
       display: block;
+      margin: 16px 0 6px;
     }
 
-    input[type="text"] {
+    input {
       width: 100%;
       padding: 10px;
-      margin-bottom: 12px;
       border: 1px solid #ccc;
       border-radius: 6px;
-      font-size: 14px;
+      box-sizing: border-box;
     }
 
     .btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 12px;
-      border-radius: 6px;
-      font-size: 15px;
-      width: 100%;
-      cursor: pointer;
-      margin-top: 12px;
+      gap: 8px;
+    }
+
+    .btn.adicionar {
+      background-color: #f2e5ff;
+      border: 1px solid #b07de4;
+      color: #6a1b9a;
+    }
+
+    .btn.adicionar:hover {
+      background-color: #e0ccfa;
     }
 
     .btn.salvar {
@@ -97,98 +100,25 @@
       border: none;
     }
 
-    .btn.maquina {
-      background-color: #f2e5ff;
-      border: 1px solid #6a1b9a;
-      color: #6a1b9a;
-    }
-
-    .maquinas-lista {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .maquina-item {
-      background-color: #eee;
-      padding: 6px 10px;
-      border-radius: 20px;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-    }
-
-    .maquina-item .remover {
-      margin-left: 8px;
-      color: red;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .popup-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-    }
-
-    .popup {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      max-width: 90%;
-      width: 400px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    }
-
-    .popup input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-    }
-
-    .popup ul {
-      list-style: none;
-      padding: 0;
-      max-height: 200px;
-      overflow-y: auto;
-    }
-
-    .popup ul li {
-      padding: 8px;
-      border-bottom: 1px solid #eee;
-      cursor: pointer;
-    }
-
-    .popup ul li:hover {
-      background: #f2e5ff;
-    }
-
-    .hidden {
-      display: none;
+    .btn.salvar:hover {
+      background-color: #5a1385;
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="titulo-esquerda">
-      <a href="gerenciarClientes.html"><i class="fas fa-arrow-left"></i></a>
-      Cadastrar Cliente
-    </div>
+    <a href="gerenciarClientes.html" class="voltar"><i class="fas fa-arrow-left"></i></a>
+    <div class="titulo-header">Cadastrar Cliente</div>
     <div class="header-right">
       <i class="fas fa-circle status-icon" id="icone-status" style="color: gray;"></i>
       <span class="usuario" id="usuario-logado">Usuário</span>
-      <button class="logout-btn" onclick="logout()" title="Sair">
+      <button class="logout-btn" onclick="logout()" title="Sair" style="background: none; border: none; color: white; font-size: 18px;">
         <i class="fas fa-sign-out-alt"></i>
       </button>
     </div>
   </header>
 
-  <div class="container">
+  <main>
     <label for="nome">Nome do Cliente</label>
     <input type="text" id="nome" placeholder="Digite o nome do cliente" />
 
@@ -199,123 +129,35 @@
     <input type="text" id="rota" placeholder="Digite a rota" />
 
     <label>Máquinas</label>
-    <button class="btn maquina" onclick="abrirPopupMaquinas()">
+    <button class="btn adicionar" onclick="abrirModalMaquinas()">
       <i class="fas fa-plus"></i> Adicionar Máquina
     </button>
-    <div class="maquinas-lista" id="lista-maquinas"></div>
 
     <button class="btn salvar" onclick="salvarCliente()">
       <i class="fas fa-save"></i> Salvar Cliente
     </button>
-  </div>
+  </main>
 
-  <!-- Pop-up -->
-  <div class="popup-overlay hidden" id="popup-maquinas">
-    <div class="popup">
-      <input type="text" id="busca-selo" placeholder="Digite para buscar...">
-      <ul id="lista-selos"></ul>
-    </div>
-  </div>
+  <script type="module">
+    import { logout, atualizarStatusConexao, exibirUsuario } from "./js/navegacao.js";
 
-  <script>
-    const selosDisponiveis = [
-      "A123", "B456", "C789", "X001", "Máquina Alfa",
-      "Beta-001", "Delta 9", "XYZ-400"
-    ];
-
-    const maquinasSelecionadas = [];
-
-    function abrirPopupMaquinas() {
-      document.getElementById("popup-maquinas").classList.remove("hidden");
-      document.getElementById("busca-selo").value = "";
-      filtrarSelos("");
-    }
-
-    document.getElementById("busca-selo").addEventListener("input", e => {
-      filtrarSelos(e.target.value.toLowerCase());
+    window.addEventListener("load", () => {
+      atualizarStatusConexao();
+      exibirUsuario();
     });
 
-    function filtrarSelos(filtro) {
-      const lista = document.getElementById("lista-selos");
-      lista.innerHTML = "";
-      selosDisponiveis.forEach(selo => {
-        if (selo.toLowerCase().includes(filtro) && !maquinasSelecionadas.includes(selo)) {
-          const li = document.createElement("li");
-          li.textContent = selo;
-          li.onclick = () => adicionarMaquina(selo);
-          lista.appendChild(li);
-        }
-      });
-    }
+    window.addEventListener("online", atualizarStatusConexao);
+    window.addEventListener("offline", atualizarStatusConexao);
 
-    function adicionarMaquina(selo) {
-      maquinasSelecionadas.push(selo);
-      atualizarListaMaquinas();
-      document.getElementById("popup-maquinas").classList.add("hidden");
-    }
+    window.logout = logout;
 
-    function atualizarListaMaquinas() {
-      const lista = document.getElementById("lista-maquinas");
-      lista.innerHTML = "";
-      maquinasSelecionadas.forEach((selo, index) => {
-        const span = document.createElement("span");
-        span.className = "maquina-item";
-        span.innerHTML = `${selo} <span class="remover" onclick="removerMaquina(${index})">×</span>`;
-        lista.appendChild(span);
-      });
-    }
+    window.abrirModalMaquinas = () => {
+      alert("Aqui abriria o modal de seleção de máquinas...");
+    };
 
-    function removerMaquina(index) {
-      maquinasSelecionadas.splice(index, 1);
-      atualizarListaMaquinas();
-    }
-
-    document.getElementById("popup-maquinas").addEventListener("click", (e) => {
-      if (e.target.id === "popup-maquinas") {
-        document.getElementById("popup-maquinas").classList.add("hidden");
-      }
-    });
-
-    async function salvarCliente() {
-      const nome = document.getElementById("nome").value.trim();
-      const endereco = document.getElementById("endereco").value.trim();
-      const rota = document.getElementById("rota").value.trim();
-
-      if (!nome || !endereco || !rota || maquinasSelecionadas.length === 0) {
-        alert("Preencha todos os campos e adicione ao menos uma máquina.");
-        return;
-      }
-
-      try {
-        const resposta = await fetch("https://ajudante-api.onrender.com/", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            acao: "cadastrarCliente",
-            nome,
-            endereco,
-            rota,
-            maquinas: maquinasSelecionadas
-          })
-        });
-
-        const resultado = await resposta.json();
-
-        if (resultado.sucesso) {
-          alert("Cliente cadastrado com sucesso!");
-          document.getElementById("nome").value = "";
-          document.getElementById("endereco").value = "";
-          document.getElementById("rota").value = "";
-          maquinasSelecionadas.length = 0;
-          atualizarListaMaquinas();
-        } else {
-          alert("Erro: " + resultado.mensagem);
-        }
-
-      } catch (erro) {
-        alert("Erro ao salvar cliente. Verifique sua conexão.");
-      }
-    }
+    window.salvarCliente = () => {
+      alert("Aqui seria feita a lógica de salvar cliente...");
+    };
   </script>
 </body>
 </html>
