@@ -18,6 +18,26 @@ export async function enviarDados(acao, dados = {}) {
   }
 }
 
+// Salva os dados com fallback para localStorage em caso de falha
+export async function salvarComSincronizacao(acao, dados) {
+  const payload = { acao, ...dados };
+
+  if (navigator.onLine) {
+    try {
+      const resposta = await enviarDados(acao, dados);
+      if (resposta.sucesso) return { sucesso: true };
+      return { sucesso: false, mensagem: resposta.mensagem };
+    } catch (erro) {
+      console.warn("Erro ao enviar online:", erro);
+    }
+  }
+
+  const pendentes = JSON.parse(localStorage.getItem("pendentes") || "[]");
+  pendentes.push(payload);
+  localStorage.setItem("pendentes", JSON.stringify(pendentes));
+  return { sucesso: false, mensagem: "Salvo localmente. Será sincronizado depois." };
+}
+
 // Exibe mensagem em um elemento com id="mensagem"
 export function exibirMensagem(texto, tipo = 'erro') {
   const msg = document.getElementById("mensagem");
@@ -48,4 +68,17 @@ export function limparCampos(ids = []) {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
+}
+
+// Simulação de selos disponíveis (pode ser substituído por dados reais do backend)
+export async function obterSelosDisponiveis() {
+  try {
+    const resposta = await enviarDados("listarSelos");
+    if (resposta.sucesso && Array.isArray(resposta.selos)) {
+      return resposta.selos;
+    }
+  } catch (e) {
+    console.warn("Erro ao obter selos:", e);
+  }
+  return [];
 }
