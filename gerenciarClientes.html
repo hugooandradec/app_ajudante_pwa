@@ -1,3 +1,4 @@
+<!-- gerenciarClientes.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -165,15 +166,10 @@
       background: #f9f9f9;
     }
 
-    .fechar-popup {
-      text-align: right;
-      margin-bottom: 10px;
-    }
-    .fechar-popup button {
-      background: none;
-      border: none;
-      font-size: 16px;
-      cursor: pointer;
+    #mensagem {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 16px;
     }
   </style>
 </head>
@@ -211,25 +207,33 @@
     <button class="btn salvar" onclick="salvarCliente()">
       <i class="fas fa-save"></i> Salvar Cliente
     </button>
+
+    <div id="mensagem"></div>
   </div>
 
   <div class="popup" id="popupMaquinas">
     <div class="popup-content">
-      <div class="fechar-popup">
-        <button onclick="fecharPopup()">&times;</button>
-      </div>
       <input type="text" id="buscaMaquina" oninput="filtrarSelos()" placeholder="Buscar selo..." />
       <div id="listaSelos"></div>
     </div>
   </div>
 
   <script type="module">
-    import { logout, atualizarStatusConexao, exibirUsuario, monitorarStatusConexao } from './js/navegacao.js';
+    import { logout, atualizarStatusConexao, exibirUsuario } from './js/navegacao.js';
     import { salvarComSincronizacao, obterSelosDisponiveis } from './js/servicos.js';
+
+    function capitalizarPalavras(texto) {
+      return texto.replace(/\b\w+/g, palavra => palavra.charAt(0).toUpperCase() + palavra.slice(1).toLowerCase());
+    }
+
+    function exibirMensagem(texto, tipo = '') {
+      const el = document.getElementById("mensagem");
+      el.textContent = texto;
+      el.style.color = tipo === "sucesso" ? "green" : tipo === "erro" ? "red" : "orange";
+    }
 
     window.logout = logout;
     atualizarStatusConexao();
-    monitorarStatusConexao();
     exibirUsuario();
 
     let selosDisponiveis = [];
@@ -264,7 +268,7 @@
 
     function selecionarMaquina(selo) {
       if (!maquinasSelecionadas.includes(selo)) {
-        maquinasSelecionadas.push(selo.toUpperCase());
+        maquinasSelecionadas.push(selo);
         atualizarMaquinasSelecionadas();
       }
       fecharPopup();
@@ -286,17 +290,13 @@
       atualizarMaquinasSelecionadas();
     };
 
-    function capitalizarPalavras(texto) {
-      return texto.replace(/\b\w/g, l => l.toUpperCase()).replace(/\B\w/g, l => l.toLowerCase());
-    }
-
     window.salvarCliente = async function () {
       const nome = capitalizarPalavras(document.getElementById("nome").value.trim());
       const endereco = capitalizarPalavras(document.getElementById("endereco").value.trim());
       const rota = capitalizarPalavras(document.getElementById("rota").value.trim());
 
       if (!nome || !endereco || !rota) {
-        alert("Preencha todos os campos obrigatórios.");
+        exibirMensagem("Preencha todos os campos obrigatórios.", "erro");
         return;
       }
 
@@ -304,20 +304,22 @@
         nome,
         endereco,
         rota,
-        maquinas: maquinasSelecionadas
+        maquinas: maquinasSelecionadas.map(s => s.toUpperCase())
       };
 
-      const resp = await salvarComSincronizacao("cadastrarCliente", cliente);
+      const resposta = await salvarComSincronizacao("cadastrarCliente", cliente);
 
-      if (resp.sucesso) {
-        alert("✅ Cliente salvo com sucesso!");
+      if (resposta?.sucesso) {
+        exibirMensagem("✅ Cliente salvo com sucesso!", "sucesso");
         document.getElementById("nome").value = "";
         document.getElementById("endereco").value = "";
         document.getElementById("rota").value = "";
         maquinasSelecionadas = [];
         atualizarMaquinasSelecionadas();
+      } else if (resposta?.mensagem?.includes("localmente")) {
+        exibirMensagem("⚠️ Sem conexão. Cliente salvo localmente.", "aviso");
       } else {
-        alert(resp.mensagem || "❌ Erro ao salvar. Dados foram salvos localmente ou não foi possível se conectar.");
+        exibirMensagem("❌ Erro ao salvar. Tente novamente.", "erro");
       }
     };
   </script>
