@@ -4,6 +4,8 @@ export const URL_BACKEND = "https://ajudante-api.onrender.com";
 // Envia uma ação e dados ao backend, retorna resposta JSON
 export async function enviarDados(acao, dados = {}) {
   try {
+	  console.log("🔍 Enviando para API:", JSON.stringify({ acao, dados }, null, 2));
+
     const resposta = await fetch(URL_BACKEND, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
