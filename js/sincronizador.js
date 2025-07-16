@@ -11,9 +11,10 @@ async function sincronizarPendencias() {
   const restantes = [];
 
   for (const item of pendentes) {
-    const resposta = await enviarDados(item.acao, item);
+    const { acao, dados } = item; // ✅ acessa corretamente
+    const resposta = await enviarDados(acao, dados);
     if (!resposta.sucesso) {
-      restantes.push(item); // Mantém se falhar
+      restantes.push(item); // mantém se falhar
     }
   }
 
@@ -25,5 +26,6 @@ async function sincronizarPendencias() {
   }
 }
 
+// Sincroniza quando volta a conexão ou ao carregar a página
 window.addEventListener("online", sincronizarPendencias);
 window.addEventListener("load", sincronizarPendencias);

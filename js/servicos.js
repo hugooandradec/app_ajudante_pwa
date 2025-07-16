@@ -7,7 +7,7 @@ export async function enviarDados(acao, dados = {}) {
     const resposta = await fetch(URL_BACKEND, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ acao, dados })
+      body: JSON.stringify({ acao, dados }) // ✅ estrutura correta
     });
 
     if (!resposta.ok) throw new Error("Erro na resposta da API");
@@ -20,8 +20,6 @@ export async function enviarDados(acao, dados = {}) {
 
 // Salva os dados com fallback para localStorage em caso de falha
 export async function salvarComSincronizacao(acao, dados) {
-  const payload = { acao, ...dados };
-
   if (navigator.onLine) {
     try {
       const resposta = await enviarDados(acao, dados);
@@ -33,8 +31,9 @@ export async function salvarComSincronizacao(acao, dados) {
   }
 
   const pendentes = JSON.parse(localStorage.getItem("pendentes") || "[]");
-  pendentes.push(payload);
+  pendentes.push({ acao, dados }); // ✅ estrutura correta
   localStorage.setItem("pendentes", JSON.stringify(pendentes));
+
   return { sucesso: false, mensagem: "Salvo localmente. Será sincronizado depois." };
 }
 
@@ -52,6 +51,7 @@ export function exibirMensagem(texto, tipo = 'erro') {
   }, 4000);
 }
 
+// Validação de campos obrigatórios
 export function validarCamposObrigatorios(ids = []) {
   for (const id of ids) {
     const valor = document.getElementById(id)?.value.trim();
@@ -63,6 +63,7 @@ export function validarCamposObrigatorios(ids = []) {
   return true;
 }
 
+// Limpa campos
 export function limparCampos(ids = []) {
   ids.forEach(id => {
     const el = document.getElementById(id);
@@ -70,7 +71,7 @@ export function limparCampos(ids = []) {
   });
 }
 
-// Simulação de selos disponíveis (pode ser substituído por dados reais do backend)
+// Obtém selos disponíveis via backend
 export async function obterSelosDisponiveis() {
   try {
     const resposta = await enviarDados("listarSelos");
