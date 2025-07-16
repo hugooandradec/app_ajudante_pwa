@@ -1,6 +1,6 @@
 const CACHE_NAME = 'ajudante-cache-v' + Date.now();
 
-// Última atualização: 2025-07-16 01:40
+// Última atualização: 2025-07-16 23:40
 
 const urlsToCache = [
   '/ajudante-app/',
@@ -23,12 +23,6 @@ const urlsToCache = [
   '/ajudante-app/favicon.ico',
   '/ajudante-app/icon-192.png',
   '/ajudante-app/icon-512.png',
-
-  // JS internos
-  '/ajudante-app/js/navegacao.js',
-  '/ajudante-app/js/componentes.js',
-  '/ajudante-app/js/servicos.js',
-  '/ajudante-app/js/sincronizador.js',
 
   // Font Awesome
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
@@ -55,10 +49,27 @@ self.addEventListener('activate', event => {
   );
 });
 
+// ✅ Lógica inteligente: network-first para .js e .html, cache-first para o resto
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request).then(response =>
-      response || fetch(event.request)
-    )
-  );
+  const { request } = event;
+
+  const isHTMLorJS =
+    request.destination === 'document' || request.destination === 'script' ||
+    request.url.endsWith('.html') || request.url.endsWith('.js');
+
+  if (isHTMLorJS) {
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
+          return response;
+        })
+        .catch(() => caches.match(request))
+    );
+  } else {
+    event.respondWith(
+      caches.match(request).then(response => response || fetch(request))
+    );
+  }
 });
