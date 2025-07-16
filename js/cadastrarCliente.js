@@ -1,7 +1,11 @@
 import { logout, atualizarStatusConexao, exibirUsuario } from './navegacao.js';
 import { salvarComSincronizacao, obterSelosDisponiveis } from './servicos.js';
 
+console.log("🚀 Script cadastrarCliente.js carregado");
+
 window.addEventListener("load", async () => {
+  console.log("🟣 DOM totalmente carregado");
+
   window.logout = logout;
   atualizarStatusConexao();
   exibirUsuario();
@@ -63,9 +67,19 @@ window.addEventListener("load", async () => {
   }
 
   window.salvarCliente = async function () {
-    const nome = capitalizarPalavras(document.getElementById("nome")?.value.trim() || "");
-    const endereco = capitalizarPalavras(document.getElementById("endereco")?.value.trim() || "");
-    const rota = capitalizarPalavras(document.getElementById("rota")?.value.trim() || "");
+    console.log("🖱️ salvarCliente() FOI CHAMADO!");
+
+    const nomeInput = document.getElementById("nome");
+    const enderecoInput = document.getElementById("endereco");
+    const rotaInput = document.getElementById("rota");
+
+    console.log("📋 Campos:", { nomeInput, enderecoInput, rotaInput });
+
+    const nome = capitalizarPalavras(nomeInput?.value.trim() || "");
+    const endereco = capitalizarPalavras(enderecoInput?.value.trim() || "");
+    const rota = capitalizarPalavras(rotaInput?.value.trim() || "");
+
+    console.log("✏️ Valores:", { nome, endereco, rota });
 
     if (!nome || !endereco || !rota) {
       alert("Preencha todos os campos obrigatórios.");
@@ -79,12 +93,14 @@ window.addEventListener("load", async () => {
       maquinas: maquinasSelecionadas
     };
 
+    console.log("✅ Cliente a enviar:", cliente);
+
     const resp = await salvarComSincronizacao("cadastrarCliente", cliente);
     if (resp.sucesso) {
       alert("Cliente salvo!");
-      document.getElementById("nome").value = "";
-      document.getElementById("endereco").value = "";
-      document.getElementById("rota").value = "";
+      nomeInput.value = "";
+      enderecoInput.value = "";
+      rotaInput.value = "";
       maquinasSelecionadas = [];
       atualizarMaquinasSelecionadas();
     } else {
