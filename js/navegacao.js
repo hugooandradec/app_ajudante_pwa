@@ -61,14 +61,19 @@ export function inicializarPagina(titulo = "") {
   window.logout = logout;
 }
 
-// 💡 TRUQUE DE DESENVOLVIMENTO: Força atualização com ?v=TIMESTAMP
+// 💡 TRUQUE DE DESENVOLVIMENTO: Força atualização com ?v=TIMESTAMP no formato ddMMyyyy-HHmm (Brasil)
 (function forcarAtualizacaoDuranteDesenvolvimento() {
   const isDev = location.hostname.includes("github.io") || location.hostname === "localhost";
   if (!isDev) return;
 
-  const versao = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 12); // Ex: 202507151745
+  const dataBrasil = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
+  const dia = String(dataBrasil.getDate()).padStart(2, '0');
+  const mes = String(dataBrasil.getMonth() + 1).padStart(2, '0');
+  const ano = String(dataBrasil.getFullYear());
+  const hora = String(dataBrasil.getHours()).padStart(2, '0');
+  const min = String(dataBrasil.getMinutes()).padStart(2, '0');
+  const versao = `${dia}${mes}${ano}-${hora}${min}`; // Ex: 16072025-0013
 
-  // 1. Se a URL atual não tiver ?v= → recarrega com versão
   const urlAtual = new URL(window.location.href);
   if (!urlAtual.searchParams.has("v")) {
     urlAtual.searchParams.set("v", versao);
@@ -76,9 +81,7 @@ export function inicializarPagina(titulo = "") {
     return;
   }
 
-  // 2. Após carregar com ?v=, adiciona nos links e scripts internos
   document.addEventListener("DOMContentLoaded", () => {
-    // Atualiza <a href=".html">
     document.querySelectorAll('a[href$=".html"]').forEach(link => {
       const href = link.getAttribute("href");
       if (!href.includes("?v=")) {
@@ -88,7 +91,6 @@ export function inicializarPagina(titulo = "") {
       }
     });
 
-    // Atualiza <script type="module">
     document.querySelectorAll('script[type="module"]').forEach(script => {
       const src = script.getAttribute("src");
       if (src && !src.includes("?v=") && src.endsWith(".js")) {
