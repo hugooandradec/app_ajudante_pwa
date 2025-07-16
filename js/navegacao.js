@@ -61,7 +61,6 @@ export function inicializarPagina(titulo = "") {
   window.logout = logout;
 }
 
-/////////////////////////////////////////////////////////////////////////////
 // 💡 TRUQUE DE DESENVOLVIMENTO: Força atualização com ?v=TIMESTAMP
 (function forcarAtualizacaoDuranteDesenvolvimento() {
   const isDev = location.hostname.includes("github.io") || location.hostname === "localhost";
@@ -77,27 +76,26 @@ export function inicializarPagina(titulo = "") {
     return;
   }
 
-  // 2. Após carregar com ?v=, adiciona nos links internos
+  // 2. Após carregar com ?v=, adiciona nos links e scripts internos
   document.addEventListener("DOMContentLoaded", () => {
-  const versao = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 12);
+    // Atualiza <a href=".html">
+    document.querySelectorAll('a[href$=".html"]').forEach(link => {
+      const href = link.getAttribute("href");
+      if (!href.includes("?v=")) {
+        const novaUrl = new URL(link.href);
+        novaUrl.searchParams.set("v", versao);
+        link.href = novaUrl.toString();
+      }
+    });
 
-  // Atualiza <a href=".html">
-  document.querySelectorAll('a[href$=".html"]').forEach(link => {
-    const href = link.getAttribute("href");
-    if (!href.includes("?v=")) {
-      const novaUrl = new URL(link.href);
-      novaUrl.searchParams.set("v", versao);
-      link.href = novaUrl.toString();
-    }
+    // Atualiza <script type="module">
+    document.querySelectorAll('script[type="module"]').forEach(script => {
+      const src = script.getAttribute("src");
+      if (src && !src.includes("?v=") && src.endsWith(".js")) {
+        const novaUrl = new URL(src, window.location.origin);
+        novaUrl.searchParams.set("v", versao);
+        script.src = novaUrl.toString();
+      }
+    });
   });
-
-  // Atualiza <script type="module">
-  document.querySelectorAll('script[type="module"]').forEach(script => {
-    const src = script.getAttribute("src");
-    if (src && !src.includes("?v=") && src.endsWith(".js")) {
-      const novaUrl = new URL(src, window.location.origin);
-      novaUrl.searchParams.set("v", versao);
-      script.src = novaUrl.toString();
-    }
-  });
-});
+})();
