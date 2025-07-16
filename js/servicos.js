@@ -7,7 +7,7 @@ export async function enviarDados(acao, dados = {}) {
     const resposta = await fetch(URL_BACKEND, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ acao, ...dados })
+      body: JSON.stringify({ acao, dados })
     });
 
     if (!resposta.ok) throw new Error("Erro na resposta da API");
