@@ -9,35 +9,48 @@
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f9f9f9;
+      background-color: #f5f5f5;
     }
 
     header {
       background-color: #6a1b9a;
       color: white;
-      padding: 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding: 12px 16px;
     }
 
-    header h1 {
-      font-size: 18px;
-      margin: 0;
+    .titulo-voltar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    #usuario-info {
-      font-size: 14px;
+    .titulo-voltar i {
+      cursor: pointer;
+    }
+
+    .status-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-indicador {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: gray;
     }
 
     main {
-      padding: 20px;
-      max-width: 500px;
-      margin: 0 auto;
+      max-width: 600px;
+      margin: 30px auto;
       background-color: white;
-      margin-top: 30px;
+      padding: 24px;
       border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
 
     .form-group {
@@ -45,8 +58,8 @@
     }
 
     label {
-      display: block;
       font-weight: bold;
+      display: block;
       margin-bottom: 6px;
     }
 
@@ -54,9 +67,9 @@
       width: 100%;
       padding: 10px;
       font-size: 15px;
-      box-sizing: border-box;
       border: 1px solid #ccc;
       border-radius: 6px;
+      box-sizing: border-box;
     }
 
     button {
@@ -75,7 +88,7 @@
     }
 
     #btnExcluir {
-      background-color: #c62828;
+      background-color: #b71c1c;
       color: white;
       display: none;
     }
@@ -103,26 +116,18 @@
       margin-top: 20px;
       font-weight: bold;
     }
-
-    a.btn-voltar {
-      display: inline-block;
-      margin-top: 30px;
-      text-decoration: none;
-      color: #6a1b9a;
-      font-weight: bold;
-    }
-
-    a.btn-voltar i {
-      margin-right: 6px;
-    }
   </style>
 </head>
 <body>
   <header>
-    <h1>Gerenciar Clientes</h1>
-    <div id="usuario-info">
-      <span id="nomeUsuario">Usuário</span>
-      <button onclick="logout()" style="margin-left: 10px; background: transparent; border: none; color: white;">
+    <div class="titulo-voltar">
+      <i class="fas fa-arrow-left" onclick="window.location.href='menu.html'"></i>
+      <h1 style="font-size: 18px; margin: 0;">Gerenciar Clientes</h1>
+    </div>
+    <div class="status-area">
+      <div class="status-indicador" id="statusConexao"></div>
+      <span id="nomeUsuario" style="font-size: 14px;">Usuário</span>
+      <button onclick="logout()" style="background: transparent; border: none; color: white;">
         <i class="fas fa-sign-out-alt"></i>
       </button>
     </div>
@@ -163,10 +168,6 @@
     </form>
 
     <div id="mensagem" class="mensagem"></div>
-
-    <a href="menu.html" class="btn-voltar">
-      <i class="fas fa-arrow-left"></i> Voltar ao Menu
-    </a>
   </main>
 
   <script type="module" src="navegacao.js?v=auto"></script>
