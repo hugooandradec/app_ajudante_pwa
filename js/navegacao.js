@@ -61,17 +61,17 @@ export function inicializarPagina(titulo = "") {
   window.logout = logout;
 }
 
-// 💡 TRUQUE DE DESENVOLVIMENTO: Força atualização com ?v=TIMESTAMP no formato ddMMyyyy-HHmm (Brasil)
+// 💡 TRUQUE DE DESENVOLVIMENTO: Força atualização com ?v=ddMMyyyy-HHmm (horário de Brasília)
 (function forcarAtualizacaoDuranteDesenvolvimento() {
   const isDev = location.hostname.includes("github.io") || location.hostname === "localhost";
   if (!isDev) return;
 
   const dataBrasil = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
-  const dia = String(dataBrasil.getDate()).padStart(2, '0');
-  const mes = String(dataBrasil.getMonth() + 1).padStart(2, '0');
-  const ano = String(dataBrasil.getFullYear());
+  const dia  = String(dataBrasil.getDate()).padStart(2, '0');
+  const mes  = String(dataBrasil.getMonth() + 1).padStart(2, '0');
+  const ano  = String(dataBrasil.getFullYear());
   const hora = String(dataBrasil.getHours()).padStart(2, '0');
-  const min = String(dataBrasil.getMinutes()).padStart(2, '0');
+  const min  = String(dataBrasil.getMinutes()).padStart(2, '0');
   const versao = `${dia}${mes}${ano}-${hora}${min}`; // Ex: 16072025-0013
 
   const urlAtual = new URL(window.location.href);
