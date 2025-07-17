@@ -61,7 +61,7 @@ export function inicializarPagina(titulo = "") {
   window.logout = logout;
 }
 
-// 💡 TRUQUE DE DESENVOLVIMENTO: Força atualização com ?v=ddMMyyyy-HHmm (horário de Brasília)
+// Força reload com versão local (Brasil) no formato ddMMyyyy-HHmm
 (function forcarAtualizacaoDuranteDesenvolvimento() {
   const isDev = location.hostname.includes("github.io") || location.hostname === "localhost";
   if (!isDev) return;
@@ -72,7 +72,7 @@ export function inicializarPagina(titulo = "") {
   const ano  = String(dataBrasil.getFullYear());
   const hora = String(dataBrasil.getHours()).padStart(2, '0');
   const min  = String(dataBrasil.getMinutes()).padStart(2, '0');
-  const versao = `${dia}${mes}${ano}-${hora}${min}`; // Ex: 16072025-0013
+  const versao = `${dia}${mes}${ano}-${hora}${min}`;
 
   const urlAtual = new URL(window.location.href);
   if (!urlAtual.searchParams.has("v")) {
@@ -100,4 +100,72 @@ export function inicializarPagina(titulo = "") {
       }
     });
   });
+})();
+
+// 🟡 Console visual só para Victor
+(function ativarConsoleVisual() {
+  const usuario = localStorage.getItem("usuarioLogado");
+  if (usuario !== "victor") return;
+
+  const div = document.createElement("div");
+  div.id = "console-visual";
+  div.style = `
+    position:fixed;
+    bottom:10px;
+    left:10px;
+    max-width:90%;
+    max-height:40%;
+    overflow:auto;
+    background:#111;
+    color:#0f0;
+    font-family:monospace;
+    font-size:12px;
+    padding:10px;
+    border:1px solid #444;
+    border-radius:8px;
+    z-index:9999;
+    white-space:pre-wrap;
+  `;
+
+  const fechar = document.createElement("button");
+  fechar.innerText = "✖";
+  fechar.style = `
+    position:absolute;
+    top:4px;
+    right:8px;
+    background:none;
+    border:none;
+    color:#888;
+    font-size:14px;
+    cursor:pointer;
+  `;
+  fechar.onclick = () => div.remove();
+  div.appendChild(fechar);
+  document.body.appendChild(div);
+
+  const originalLog = console.log;
+  const originalError = console.error;
+  const originalWarn = console.warn;
+
+  console.log = function (...args) {
+    originalLog.apply(console, args);
+    adicionarLinha("🟢 LOG", args);
+  };
+  console.error = function (...args) {
+    originalError.apply(console, args);
+    adicionarLinha("🔴 ERRO", args);
+  };
+  console.warn = function (...args) {
+    originalWarn.apply(console, args);
+    adicionarLinha("🟡 AVISO", args);
+  };
+
+  function adicionarLinha(tipo, args) {
+    const linha = document.createElement("div");
+    linha.textContent = `${tipo}: ${args.join(" ")}`;
+    div.appendChild(linha);
+    div.scrollTop = div.scrollHeight;
+  }
+
+  console.log("🟣 Console visual ativado.");
 })();
