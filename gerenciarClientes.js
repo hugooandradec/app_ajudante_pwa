@@ -1,110 +1,108 @@
-import { logout, atualizarStatusConexao, exibirUsuario } from './navegacao.js';
-import { salvarComSincronizacao, obterSelosDisponiveis } from './servicos.js';
+import { inicializarPagina } from './navegacao.js';
+import { enviarDados, salvarComSincronizacao, exibirMensagem } from './servicos.js';
 
-console.log("🚀 Script gerenciarCliente.js carregado");
+inicializarPagina("Gerenciar Clientes");
 
-window.addEventListener("load", async () => {
-  console.log("🟣 DOM totalmente carregado");
+let clienteEncontrado = null;
 
-  window.logout = logout;
-  atualizarStatusConexao();
-  exibirUsuario();
+// Capitalização automática
+function capitalizarTexto(texto) {
+  return texto
+    .toLowerCase()
+    .replace(/(?:^|\s)\S/g, l => l.toUpperCase());
+}
 
-  let selosDisponiveis = [];
-  let maquinasSelecionadas = [];
+// Busca cliente ao digitar
+document.getElementById("nome").addEventListener("blur", async () => {
+  const nome = capitalizarTexto(document.getElementById("nome").value.trim());
+  if (!nome) return;
 
-  selosDisponiveis = await obterSelosDisponiveis();
+  const resposta = await enviarDados("buscarCliente", { nome });
+  const cliente = resposta?.dados;
 
-  window.abrirPopupMaquinas = function () {
-    document.getElementById("popupMaquinas").style.display = "flex";
-    document.getElementById("buscaMaquina").value = "";
-    filtrarSelos();
-  };
+  if (cliente) {
+    clienteEncontrado = cliente;
+    preencherCampos(cliente);
+    mostrarModo("editar");
+  } else {
+    clienteEncontrado = null;
+    limparCampos(false);
+    mostrarModo("cadastrar");
+  }
+});
 
-  window.fecharPopup = function () {
-    document.getElementById("popupMaquinas").style.display = "none";
+function preencherCampos(cliente) {
+  document.getElementById("nome").value = cliente.nome || "";
+  document.getElementById("endereco").value = cliente.endereco || "";
+  document.getElementById("rota").value = cliente.rota || "";
+  // aqui você pode preencher máquinas se desejar no futuro
+}
+
+function limparCampos(limparNome = true) {
+  if (limparNome) document.getElementById("nome").value = "";
+  document.getElementById("endereco").value = "";
+  document.getElementById("rota").value = "";
+  document.getElementById("maquinasSelecionadas").innerHTML = "";
+}
+
+function mostrarModo(modo) {
+  const btnSalvar = document.getElementById("btnSalvar");
+  const btnExcluir = document.getElementById("btnExcluir");
+
+  if (modo === "editar") {
+    btnSalvar.innerText = "Salvar Alterações";
+    btnSalvar.style.display = "inline-block";
+    btnExcluir.style.display = "inline-block";
+  } else if (modo === "cadastrar") {
+    btnSalvar.innerText = "Cadastrar Cliente";
+    btnSalvar.style.display = "inline-block";
+    btnExcluir.style.display = "none";
+  }
+}
+
+// Salvar (cadastrar ou editar)
+document.getElementById("formCliente").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const nome = capitalizarTexto(document.getElementById("nome").value.trim());
+  const endereco = capitalizarTexto(document.getElementById("endereco").value.trim());
+  const rota = capitalizarTexto(document.getElementById("rota").value.trim());
+
+  const maquinas = Array.from(document.querySelectorAll("#maquinasSelecionadas li")).map(li => li.textContent);
+
+  if (!nome || !endereco || !rota) {
+    return exibirMensagem("Preencha todos os campos obrigatórios.", false);
   }
 
-  window.filtrarSelos = function () {
-    const termo = document.getElementById("buscaMaquina").value.toLowerCase();
-    const filtrados = selosDisponiveis.filter(s => s.toLowerCase().includes(termo));
-    const lista = document.getElementById("listaSelos");
-    lista.innerHTML = "";
-    filtrados.forEach(selo => {
-      const item = document.createElement("div");
-      item.textContent = selo;
-      item.onclick = () => selecionarMaquina(selo);
-      lista.appendChild(item);
-    });
-  };
+  const acao = clienteEncontrado ? "editarCliente" : "cadastrarCliente";
 
-  function selecionarMaquina(selo) {
-    if (!maquinasSelecionadas.includes(selo)) {
-      maquinasSelecionadas.push(selo);
-      atualizarMaquinasSelecionadas();
-    }
-    fecharPopup();
+  const dados = { nome, endereco, rota, maquinas };
+
+  const sucesso = await salvarComSincronizacao(acao, dados);
+
+  if (sucesso) {
+    exibirMensagem(clienteEncontrado ? "Cliente atualizado!" : "Cliente cadastrado!", true);
+    limparCampos();
+    clienteEncontrado = null;
+    mostrarModo("cadastrar");
   }
+});
 
-  function atualizarMaquinasSelecionadas() {
-    const container = document.getElementById("maquinasSelecionadas");
-    container.innerHTML = "";
-    maquinasSelecionadas.forEach(selo => {
-      const tag = document.createElement("div");
-      tag.className = "selo-tag";
-      tag.innerHTML = `${selo} <span class="remover-selo" onclick="removerMaquina('${selo}')">&times;</span>`;
-      container.appendChild(tag);
-    });
+// Excluir cliente
+document.getElementById("btnExcluir").addEventListener("click", async () => {
+  if (!clienteEncontrado) return;
+
+  const confirmar = confirm(`Deseja realmente excluir o cliente "${clienteEncontrado.nome}"?`);
+  if (!confirmar) return;
+
+  const sucesso = await enviarDados("excluirCliente", { nome: clienteEncontrado.nome });
+
+  if (sucesso?.sucesso) {
+    exibirMensagem("Cliente excluído com sucesso.", true);
+    limparCampos();
+    clienteEncontrado = null;
+    mostrarModo("cadastrar");
+  } else {
+    exibirMensagem("Erro ao excluir cliente.", false);
   }
-
-  window.removerMaquina = function (selo) {
-    maquinasSelecionadas = maquinasSelecionadas.filter(m => m !== selo);
-    atualizarMaquinasSelecionadas();
-  };
-
-  function capitalizarPalavras(texto) {
-    return texto.replace(/\b\w+/g, palavra => palavra.charAt(0).toUpperCase() + palavra.slice(1).toLowerCase());
-  }
-
-  window.salvarCliente = async function () {
-    console.log("🖱️ salvarCliente() FOI CHAMADO!");
-
-    const nomeInput = document.getElementById("nome");
-    const enderecoInput = document.getElementById("endereco");
-    const rotaInput = document.getElementById("rota");
-
-    console.log("📋 Campos:", { nomeInput, enderecoInput, rotaInput });
-
-    const nome = capitalizarPalavras(nomeInput?.value.trim() || "");
-    const endereco = capitalizarPalavras(enderecoInput?.value.trim() || "");
-    const rota = capitalizarPalavras(rotaInput?.value.trim() || "");
-
-    console.log("✏️ Valores:", { nome, endereco, rota });
-
-    if (!nome || !endereco || !rota) {
-      alert("Preencha todos os campos obrigatórios.");
-      return;
-    }
-
-    const cliente = {
-      nome,
-      endereco,
-      rota,
-      maquinas: maquinasSelecionadas
-    };
-
-    console.log("✅ Cliente a enviar:", cliente);
-
-    const resp = await salvarComSincronizacao("cadastrarCliente", cliente);
-    if (resp.sucesso) {
-      alert("Cliente salvo!");
-      nomeInput.value = "";
-      enderecoInput.value = "";
-      rotaInput.value = "";
-      maquinasSelecionadas = [];
-      atualizarMaquinasSelecionadas();
-    } else {
-      alert(resp.mensagem || "Erro ao salvar.");
-    }
-  };
 });
