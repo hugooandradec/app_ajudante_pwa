@@ -1,7 +1,7 @@
 import { logout, atualizarStatusConexao, exibirUsuario } from './navegacao.js';
 import { salvarComSincronizacao, obterSelosDisponiveis } from './servicos.js';
 
-console.log("🚀 Script cadastrarCliente.js carregado");
+console.log("🚀 Script gerenciarCliente.js carregado");
 
 window.addEventListener("load", async () => {
   console.log("🟣 DOM totalmente carregado");
