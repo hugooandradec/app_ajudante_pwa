@@ -1,208 +1,214 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pré-Fecho</title>
-  <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <script src="js/navegacao.js"></script>
-  <script src="js/servicos.js"></script>
-  <style>
-    body {
-      margin: 0; font-family: Arial, sans-serif; background-color: #f8f8f8;
-      display: flex; flex-direction: column; min-height: 100vh; text-align: center;
-    }
-    .header {
-      background-color: #5e1ca4; color: white; padding: 10px;
-      font-size: 20px; display: flex; justify-content: space-between; align-items: center;
-    }
-    .header > div { flex: 1; }
-    .logo { font-weight: bold; text-align: center; }
-    .usuario-logado { display: flex; justify-content: flex-end; align-items: center; gap: 10px; padding-right: 10px; }
-    .usuario-logado i { cursor: pointer; }
-    main {
-      flex: 1; display: flex; justify-content: start;
-      align-items: center; flex-direction: column; padding-top: 60px;
-    }
-    .container {
-      width: 90%; max-width: 700px; background-color: white;
-      border-radius: 12px; padding: 2rem; box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .form-group { margin-bottom: 1.5rem; text-align: left; }
-    .form-group label { display: block; font-weight: bold; margin-bottom: 0.5rem; }
-    .form-group input {
-      width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box;
-    }
-    .maquina-item {
-      border: 1px solid #ddd; padding: 10px; border-radius: 8px; margin-bottom: 1rem;
-      text-align: left;
-    }
-    .maquina-item input {
-      width: 22%; margin: 4px;
-    }
-    .resultado {
-      font-weight: bold; margin-left: 10px; display: inline-block; width: 120px;
-    }
-    #total {
-      font-size: 1.3em; font-weight: bold; margin-top: 20px;
-    }
-    .btn-voltar, .btn-relatorio {
-      background-color: #e0e0e0; color: black; border: 2px solid #5e1ca4;
-      padding: 12px; border-radius: 8px; margin-top: 20px;
-      width: 100%; max-width: 400px; text-decoration: none; display: inline-block;
-    }
-    footer { text-align: center; padding: 12px 0; }
-    .status-online::before, .status-offline::before {
-      content: ''; display: inline-block; width: 10px; height: 10px; margin-right: 6px;
-      border-radius: 50%; background-color: green;
-    }
-    .status-offline::before { background-color: red; }
-    #statusConexao { font-size: 0.9em; }
-    #relatorio { display: none; margin-top: 30px; text-align: left; }
-    #relatorio h3 { text-align: center; }
-    .relatorio-item { margin-bottom: 10px; }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <div></div>
-    <div class="logo">Pré-Fecho</div>
-    <div class="usuario-logado">
-      <i class="fas fa-user"></i> <span id="usuarioNome"></span>
-      <i class="fas fa-sign-out-alt" onclick="logout()" title="Sair"></i>
-    </div>
-  </div>
-  <main>
-    <div class="container">
-      <div class="form-group">
-        <label for="ponto">Nome do Ponto</label>
-        <input type="text" id="ponto" oninput="filtrarPontos()" placeholder="Buscar ponto..." autocomplete="off"/>
-        <ul id="listaPontos" style="list-style:none; padding-left:0;"></ul>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Pré-Fecho</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+      }
+
+      header {
+        background-color: #6a1b9a;
+        color: white;
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .titulo-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+      .acoes-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .status-indicador {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: gray;
+      }
+
+      .container {
+        background-color: white;
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      input[type="text"],
+      input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border: none;
+        border-radius: 6px;
+        margin: 10px 0;
+        cursor: pointer;
+        font-weight: bold;
+        background-color: #6a1b9a;
+        color: white;
+      }
+
+      .maquina {
+        border: 1px solid #ccc;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+      }
+
+      .resultado {
+        font-weight: bold;
+        color: #2e7d32;
+      }
+
+      #relatorio {
+        display: none;
+        margin-top: 2rem;
+      }
+
+      #relatorio div {
+        background-color: #f3f3f3;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="titulo-header">
+        <a href="menu.html" style="color:white;"><i class="fas fa-arrow-left"></i></a>
+        <span>Pré-Fecho</span>
       </div>
-      <div id="listaMaquinas"></div>
-      <div id="total">TOTAL: R$ 0,00</div>
-      <button class="btn-relatorio" onclick="mostrarRelatorio()">Visualizar Relatório</button>
-      <a class="btn-voltar" href="index.html"><i class="fas fa-arrow-left"></i> Voltar ao Menu</a>
+      <div class="acoes-header">
+        <div id="icone-status" class="status-indicador"></div>
+        <span id="usuario-logado" class="nome-usuario">Usuário</span>
+        <button id="btnSair" onclick="logout()" style="background: none;"><i class="fas fa-sign-out-alt" style="color:white;"></i></button>
+      </div>
+    </header>
+
+    <main class="container">
+      <label for="nomeCliente">Nome do Cliente/Ponto:</label>
+      <input type="text" id="nomeCliente" placeholder="Digite o nome do cliente" />
+
+      <button onclick="adicionarMaquina()">+ Adicionar Máquina</button>
+      <div id="maquinasContainer"></div>
+
+      <h3>Total Geral: <span id="totalGeral">R$ 0,00</span></h3>
+
+      <button onclick="visualizarRelatorio()">Visualizar Relatório</button>
       <div id="relatorio"></div>
-    </div>
-  </main>
-  <footer></footer>
-  <script>
-    let dadosMaquinas = [];
-    let pontos = [];
+    </main>
 
-    document.getElementById("usuarioNome").innerText = localStorage.getItem("usuario") || "";
+    <script type="module">
+      const now = new Date();
+      const pad = (n) => n.toString().padStart(2, '0');
+      const versao = `${pad(now.getDate())}${pad(now.getMonth()+1)}${now.getFullYear()}-${pad(now.getHours())}${pad(now.getMinutes())}`;
 
-    function logout() {
-      localStorage.clear();
-      window.location.href = "login.html";
-    }
+      const script = document.createElement("script");
+      script.type = "module";
+      script.src = `./js/navegacao.js?v=${versao}`;
+      document.head.appendChild(script);
+    </script>
 
-    function monitorarStatusConexao() {
-      let status = document.getElementById("statusConexao");
-      if (!status) {
-        status = document.createElement("div");
-        status.id = "statusConexao";
-        document.querySelector("footer")?.appendChild(status);
-      }
-      function atualizar(online) {
-        status.className = online ? "status-online" : "status-offline";
-        status.textContent = online ? "Conectado" : "Desconectado";
-      }
-      window.addEventListener("online", () => atualizar(true));
-      window.addEventListener("offline", () => atualizar(false));
-      atualizar(navigator.onLine);
-    }
+    <script>
+      const maquinas = [];
 
-    monitorarStatusConexao();
-
-    function filtrarPontos() {
-      const termo = document.getElementById("ponto").value.toLowerCase();
-      const lista = document.getElementById("listaPontos");
-      lista.innerHTML = "";
-      const encontrados = pontos.filter(p => p.nome.toLowerCase().includes(termo));
-      encontrados.forEach(p => {
-        const li = document.createElement("li");
-        li.textContent = p.nome;
-        li.style.cursor = "pointer";
-        li.onclick = () => selecionarPonto(p);
-        lista.appendChild(li);
-      });
-    }
-
-    function selecionarPonto(ponto) {
-      document.getElementById("ponto").value = ponto.nome;
-      document.getElementById("listaPontos").innerHTML = "";
-      renderizarMaquinas(ponto.maquinas || []);
-    }
-
-    function renderizarMaquinas(maquinas) {
-      const lista = document.getElementById("listaMaquinas");
-      lista.innerHTML = "";
-      dadosMaquinas = maquinas.map(selo => ({
-        selo, entradaAnt: 0, entradaAtu: 0, saidaAnt: 0, saidaAtu: 0, resultado: 0
-      }));
-      dadosMaquinas.forEach((m, i) => {
+      function adicionarMaquina() {
+        const idx = maquinas.length;
         const div = document.createElement("div");
-        div.className = "maquina-item";
+        div.className = "maquina";
         div.innerHTML = `
-          <strong>${m.selo}</strong><br/>
-          Ent. Ant: <input type="number" id="entradaAnt${i}" oninput="atualizar(${i})" />
-          Ent. Atu: <input type="number" id="entradaAtu${i}" oninput="atualizar(${i})" />
-          Sai. Ant: <input type="number" id="saidaAnt${i}" oninput="atualizar(${i})" />
-          Sai. Atu: <input type="number" id="saidaAtu${i}" oninput="atualizar(${i})" />
-          <span class="resultado" id="resultado${i}">R$ 0,00</span>
+          <h3>Máquina ${idx + 1}</h3>
+          <label>Entrada Anterior:</label>
+          <input type="number" id="entradaAnt_${idx}" oninput="calcularResultado(${idx})" />
+          <label>Entrada Atual:</label>
+          <input type="number" id="entradaAtual_${idx}" oninput="calcularResultado(${idx})" />
+          <label>Saída Anterior:</label>
+          <input type="number" id="saidaAnt_${idx}" oninput="calcularResultado(${idx})" />
+          <label>Saída Atual:</label>
+          <input type="number" id="saidaAtual_${idx}" oninput="calcularResultado(${idx})" />
+          <p class="resultado">Resultado: <span id="resultado_${idx}">R$ 0,00</span></p>
         `;
-        lista.appendChild(div);
-      });
-      calcularTotal();
-    }
+        document.getElementById("maquinasContainer").appendChild(div);
+        maquinas.push(idx);
+      }
 
-    function atualizar(i) {
-      const eA = parseFloat(document.getElementById(`entradaAnt${i}`).value) || 0;
-      const eT = parseFloat(document.getElementById(`entradaAtu${i}`).value) || 0;
-      const sA = parseFloat(document.getElementById(`saidaAnt${i}`).value) || 0;
-      const sT = parseFloat(document.getElementById(`saidaAtu${i}`).value) || 0;
-      const res = (eT - eA) - (sT - sA);
-      dadosMaquinas[i] = { ...dadosMaquinas[i], entradaAnt: eA, entradaAtu: eT, saidaAnt: sA, saidaAtu: sT, resultado: res };
-      document.getElementById(`resultado${i}`).textContent = formatarMoeda(res);
-      calcularTotal();
-    }
+      function calcularResultado(idx) {
+        const ea = parseFloat(document.getElementById(`entradaAnt_${idx}`).value) || 0;
+        const ea2 = parseFloat(document.getElementById(`entradaAtual_${idx}`).value) || 0;
+        const sa = parseFloat(document.getElementById(`saidaAnt_${idx}`).value) || 0;
+        const sa2 = parseFloat(document.getElementById(`saidaAtual_${idx}`).value) || 0;
 
-    function calcularTotal() {
-      const total = dadosMaquinas.reduce((s, m) => s + m.resultado, 0);
-      document.getElementById("total").textContent = "TOTAL: " + formatarMoeda(total);
-    }
+        const resultado = (ea2 - ea) - (sa2 - sa);
+        document.getElementById(`resultado_${idx}`).textContent = resultado.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+        calcularTotal();
+      }
 
-    function formatarMoeda(v) {
-      return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-    }
+      function calcularTotal() {
+        let total = 0;
+        maquinas.forEach((idx) => {
+          const ea = parseFloat(document.getElementById(`entradaAnt_${idx}`).value) || 0;
+          const ea2 = parseFloat(document.getElementById(`entradaAtual_${idx}`).value) || 0;
+          const sa = parseFloat(document.getElementById(`saidaAnt_${idx}`).value) || 0;
+          const sa2 = parseFloat(document.getElementById(`saidaAtual_${idx}`).value) || 0;
+          total += (ea2 - ea) - (sa2 - sa);
+        });
+        document.getElementById("totalGeral").textContent = total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+      }
 
-    function mostrarRelatorio() {
-      const rel = document.getElementById("relatorio");
-      rel.innerHTML = "<h3>Relatório Pré-Fecho</h3>";
-      dadosMaquinas.forEach(m => {
-        rel.innerHTML += `
-          <div class="relatorio-item">
-            <strong>${m.selo}</strong><br/>
-            Entrada: ${m.entradaAnt} → ${m.entradaAtu}<br/>
-            Saída: ${m.saidaAnt} → ${m.saidaAtu}<br/>
-            Resultado: <strong>${formatarMoeda(m.resultado)}</strong><br/><br/>
-          </div>
-        `;
-      });
-      rel.innerHTML += document.getElementById("total").outerHTML;
-      rel.style.display = "block";
-      rel.scrollIntoView({ behavior: "smooth" });
-    }
+      function visualizarRelatorio() {
+        const nome = document.getElementById("nomeCliente").value || "(Sem nome)";
+        let html = `<h2>Relatório Pré-Fecho</h2><p><strong>Cliente:</strong> ${nome}</p>`;
 
-    // mock: carregar pontos (substituir com enviarDados('listarPontos') depois)
-    pontos = [
-      { nome: "Ponto A", maquinas: ["X1", "Y2", "Z3"] },
-      { nome: "Ponto B", maquinas: ["M4", "N5"] }
-    ];
-  </script>
-</body>
+        maquinas.forEach((idx, i) => {
+          const ea = document.getElementById(`entradaAnt_${idx}`).value || "0";
+          const ea2 = document.getElementById(`entradaAtual_${idx}`).value || "0";
+          const sa = document.getElementById(`saidaAnt_${idx}`).value || "0";
+          const sa2 = document.getElementById(`saidaAtual_${idx}`).value || "0";
+          const resultado = document.getElementById(`resultado_${idx}`).textContent;
+
+          html += `
+            <div>
+              <h4>Máquina ${i + 1}</h4>
+              <p>Entrada Anterior: ${ea}</p>
+              <p>Entrada Atual: ${ea2}</p>
+              <p>Saída Anterior: ${sa}</p>
+              <p>Saída Atual: ${sa2}</p>
+              <p><strong>Resultado:</strong> ${resultado}</p>
+            </div>
+          `;
+        });
+
+        html += `<h3>Total Geral: ${document.getElementById("totalGeral").textContent}</h3>`;
+        const relatorioDiv = document.getElementById("relatorio");
+        relatorioDiv.innerHTML = html;
+        relatorioDiv.style.display = "block";
+      }
+    </script>
+  </body>
 </html>
