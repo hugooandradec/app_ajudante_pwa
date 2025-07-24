@@ -1,3 +1,14 @@
+// ✅ Definir URL_BACKEND se não estiver no localStorage
+if (!localStorage.getItem("URL_BACKEND")) {
+  localStorage.setItem("URL_BACKEND", "https://ajudante-api.onrender.com");
+}
+
+// ✅ Garantir função logout disponível globalmente
+window.logout = function logout() {
+  localStorage.removeItem("usuario");
+  window.location.href = "login.html";
+};
+
 // Atualiza o ícone de status (verde/vermelho)
 export function atualizarStatusConexao() {
   const icone = document.getElementById("icone-status");
