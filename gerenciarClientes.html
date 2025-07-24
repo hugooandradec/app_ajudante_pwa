@@ -4,15 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gerenciar Clientes</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
     <link rel="icon" href="data:,">
-    <script type="module" src="./js/navegacao.js"></script>
-    <script type="module" src="./js/gerenciarClientes.js"></script>
     <style>
       body {
         margin: 0;
@@ -59,54 +52,48 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       }
 
-      h2 {
-        margin-top: 0;
+      .form-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 1rem;
       }
 
-      label {
-        display: block;
-        margin-top: 12px;
-        font-weight: bold;
-      }
-
-      input {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        margin-top: 4px;
-      }
-
-      .btn {
-        margin-top: 20px;
-        width: 100%;
+      .form-group input {
+        flex: 1;
         padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+      }
+
+      .form-group button {
+        padding: 10px 16px;
+        background-color: #6a1b9a;
+        color: white;
         border: none;
-        border-radius: 6px;
-        font-size: 16px;
+        border-radius: 8px;
         cursor: pointer;
       }
 
-      .btn.adicionar {
+      .btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border: none;
+        border-radius: 6px;
+        margin: 10px 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
         background-color: #f3e5f5;
         color: #6a1b9a;
         font-weight: bold;
       }
 
-      .btn.salvar {
-        background-color: #6a1b9a;
-        color: white;
-        font-weight: bold;
-      }
-
-      .btn-voltar {
-        color: white;
-        text-decoration: none;
-        font-size: 16px;
-      }
-
-      .btn-voltar i {
-        margin-right: 4px;
+      .btn i {
+        font-size: 18px;
       }
 
       .nome-usuario {
@@ -121,50 +108,87 @@
         cursor: pointer;
         font-size: 16px;
       }
+
+      .mensagem {
+        margin: 1rem 0;
+        font-weight: bold;
+        color: #6a1b9a;
+        text-align: center;
+      }
+
+      .info-cliente {
+        background-color: #f5f5f5;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        text-align: left;
+      }
+
+      .info-cliente p {
+        margin: 4px 0;
+      }
+
+      .acoes-cliente {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+      }
+
+      .acoes-cliente button {
+        padding: 10px 16px;
+        border: none;
+        border-radius: 6px;
+        background-color: #6a1b9a;
+        color: white;
+        cursor: pointer;
+      }
     </style>
   </head>
 
   <body>
     <header>
       <div class="titulo-header">
-        <a class="btn-voltar" href="menu.html"><i class="fas fa-arrow-left"></i></a>
+        <a href="menu.html" style="color:white;"><i class="fas fa-arrow-left"></i></a>
         <span>Gerenciar Clientes</span>
       </div>
       <div class="acoes-header">
         <div id="icone-status" class="status-indicador"></div>
         <span id="usuario-logado" class="nome-usuario">Usuário</span>
-        <button onclick="logout()" id="btnSair" title="Sair">
-          <i class="fas fa-right-from-bracket"></i>
-        </button>
+        <button id="btnSair" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
       </div>
     </header>
 
-    <div class="container">
-      <form id="formCliente">
-        <label for="nome">Nome do Cliente *</label>
-        <input type="text" id="nome" />
+    <main class="container">
+      <div class="form-group">
+        <input type="text" id="buscaCliente" placeholder="Digite o nome do cliente" />
+        <button onclick="buscarCliente()"><i class="fas fa-search"></i></button>
+      </div>
 
-        <label for="endereco">Endereço *</label>
-        <input type="text" id="endereco" />
+      <div id="mensagem" class="mensagem" style="display: none;"></div>
 
-        <label for="rota">Rota *</label>
-        <input type="text" id="rota" />
+      <div id="resultadoCliente" style="display: none;">
+        <div class="info-cliente" id="dadosCliente"></div>
+        <div class="acoes-cliente">
+          <button onclick="editarCliente()">Editar</button>
+          <button onclick="excluirCliente()">Excluir</button>
+        </div>
+      </div>
+    </main>
 
-        <label>Máquinas (opcional)</label>
-        <ul id="maquinasSelecionadas"></ul>
+    <script type="module">
+      const now = new Date();
+      const pad = (n) => n.toString().padStart(2, '0');
+      const dataHora = `${pad(now.getDate())}${pad(now.getMonth() + 1)}${now.getFullYear()}-${pad(now.getHours())}${pad(now.getMinutes())}`;
 
-        <button type="button" class="btn adicionar" onclick="abrirPopupMaquinas()">
-          <i class="fas fa-plus"></i> Adicionar Máquina
-        </button>
+      const scriptNav = document.createElement("script");
+      scriptNav.type = "module";
+      scriptNav.src = `./js/navegacao.js?v=${dataHora}`;
+      document.head.appendChild(scriptNav);
 
-        <button type="submit" class="btn salvar" id="btnSalvar">
-          <i class="fas fa-save"></i> Cadastrar Cliente
-        </button>
-
-        <button type="button" class="btn salvar" id="btnExcluir" style="display:none;">
-          <i class="fas fa-trash"></i> Excluir Cliente
-        </button>
-      </form>
-    </div>
+      const scriptPage = document.createElement("script");
+      scriptPage.type = "module";
+      scriptPage.src = `./js/gerenciarClientes.js?v=${dataHora}`;
+      document.head.appendChild(scriptPage);
+    </script>
   </body>
 </html>
