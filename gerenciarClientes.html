@@ -10,8 +10,9 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-   <script type="module" src="./js/navegacao.js"></script>
-   <script type="module" src="./js/gerenciarClientes.js"></script>
+    <link rel="icon" href="data:,">
+    <script type="module" src="./js/navegacao.js"></script>
+    <script type="module" src="./js/gerenciarClientes.js"></script>
     <style>
       body {
         margin: 0;
@@ -98,23 +99,6 @@
         font-weight: bold;
       }
 
-      .console-visual {
-        position: fixed;
-        bottom: 10px;
-        left: 10px;
-        max-height: 40%;
-        max-width: 95%;
-        overflow-y: auto;
-        background: #000;
-        color: #0f0;
-        font-family: monospace;
-        font-size: 12px;
-        padding: 10px;
-        border-radius: 6px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        z-index: 9999;
-      }
-
       .btn-voltar {
         color: white;
         text-decoration: none;
@@ -143,9 +127,7 @@
   <body>
     <header>
       <div class="titulo-header">
-        <a class="btn-voltar" href="menu.html"
-          ><i class="fas fa-arrow-left"></i
-        ></a>
+        <a class="btn-voltar" href="menu.html"><i class="fas fa-arrow-left"></i></a>
         <span>Gerenciar Clientes</span>
       </div>
       <div class="acoes-header">
@@ -158,23 +140,31 @@
     </header>
 
     <div class="container">
-      <label for="nomeCliente">Nome do Cliente *</label>
-      <input type="text" id="nomeCliente" />
+      <form id="formCliente">
+        <label for="nome">Nome do Cliente *</label>
+        <input type="text" id="nome" />
 
-      <label for="enderecoCliente">Endereço *</label>
-      <input type="text" id="enderecoCliente" />
+        <label for="endereco">Endereço *</label>
+        <input type="text" id="endereco" />
 
-      <label for="rotaCliente">Rota *</label>
-      <input type="text" id="rotaCliente" />
+        <label for="rota">Rota *</label>
+        <input type="text" id="rota" />
 
-      <label>Máquinas (opcional)</label>
-      <button class="btn adicionar" onclick="abrirPopupMaquinas()">
-        <i class="fas fa-plus"></i> Adicionar Máquina
-      </button>
+        <label>Máquinas (opcional)</label>
+        <ul id="maquinasSelecionadas"></ul>
 
-      <button class="btn salvar" onclick="salvarCliente()">
-        <i class="fas fa-save"></i> Salvar Cliente
-      </button>
+        <button type="button" class="btn adicionar" onclick="abrirPopupMaquinas()">
+          <i class="fas fa-plus"></i> Adicionar Máquina
+        </button>
+
+        <button type="submit" class="btn salvar" id="btnSalvar">
+          <i class="fas fa-save"></i> Cadastrar Cliente
+        </button>
+
+        <button type="button" class="btn salvar" id="btnExcluir" style="display:none;">
+          <i class="fas fa-trash"></i> Excluir Cliente
+        </button>
+      </form>
     </div>
   </body>
 </html>
