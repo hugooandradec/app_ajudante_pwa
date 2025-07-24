@@ -2,151 +2,215 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gerenciar Máquinas</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <script defer>
-    function logout() {
-      localStorage.removeItem("usuarioLogado");
-      window.location.href = "login.html";
-    }
+  <link rel="icon" href="data:,">
 
-    function atualizarStatusConexao() {
-      const online = navigator.onLine;
-      const icone = document.getElementById("icone-status");
-      if (icone) icone.style.color = online ? "green" : "red";
-    }
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="js/navegacao.js"></script>
+  <script src="js/servicos.js"></script>
+  <script src="js/sincronizador.js"></script>
 
-    function exibirUsuario() {
-      const usuario = localStorage.getItem("usuarioLogado") || "Usuário";
-      document.getElementById("usuario-logado").innerText = usuario;
-    }
-
-    window.addEventListener("load", () => {
-      atualizarStatusConexao();
-      exibirUsuario();
-    });
-
-    window.addEventListener("online", atualizarStatusConexao);
-    window.addEventListener("offline", atualizarStatusConexao);
-  </script>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f8f8f8;
+      background-color: #f8f8f8;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      text-align: center;
     }
 
-    header {
-      background-color: #6a1b9a;
+    .header {
+      background-color: #5e1ca4;
       color: white;
-      padding: 12px 16px;
+      padding: 10px;
+      font-size: 20px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-    }
-
-    .titulo-pagina {
-      display: flex;
       align-items: center;
+    }
+
+    .header > div {
+      flex: 1;
+    }
+
+    .logo {
       font-weight: bold;
-      font-size: 18px;
+      text-align: center;
     }
 
-    .titulo-pagina i {
-      margin-right: 10px;
-      cursor: pointer;
-    }
-
-    .header-right {
+    .usuario-logado {
       display: flex;
+      justify-content: flex-end;
       align-items: center;
       gap: 10px;
+      padding-right: 10px;
     }
 
-    .status-icon {
-      font-size: 14px;
-    }
-
-    .usuario {
-      font-size: 14px;
-    }
-
-    .logout-btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 18px;
+    .usuario-logado i {
       cursor: pointer;
     }
 
-    .menu-container {
-      margin-top: 30px;
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      flex-direction: column;
+      padding-top: 60px;
     }
 
-    .menu-btn {
+    .container {
+      width: 90%;
+      max-width: 500px;
+      background-color: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    .btn-roxo, .btn-voltar {
       display: flex;
       align-items: center;
-      justify-content: flex-start;
-      background-color: white;
-      color: #000;
-      border: none;
-      width: 100%;
-      padding: 16px 20px;
-      font-size: 16px;
-      text-align: left;
+      justify-content: center;
+      font-weight: normal;
+      padding: 14px;
+      border-radius: 8px;
+      margin: 10px auto;
+      width: 90%;
+      max-width: 400px;
+      font-size: 1.1em;
       text-decoration: none;
     }
 
-    .menu-btn:nth-child(even) {
-      background-color: #f2e5ff;
+    .btn-roxo {
+      background-color: white;
+      color: black;
+      border: 2px solid #5e1ca4;
     }
 
-    .menu-btn:nth-child(odd) {
-      background-color: #e8d8f5;
+    .btn-roxo i {
+      color: #5e1ca4;
+      margin-right: 8px;
     }
 
-    .menu-btn:hover {
-      background-color: #decdf4;
+    .btn-voltar {
+      background-color: #e0e0e0;
+      color: black;
+      border: 2px solid #5e1ca4;
     }
 
-    .menu-btn i {
-      margin-right: 14px;
-      color: #6a1b9a;
-      font-size: 20px;
-      width: 24px;
+    .btn-voltar i {
+      color: #5e1ca4;
+      margin-right: 8px;
+    }
+
+    .mensagem {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    footer {
       text-align: center;
+      padding: 12px 0;
+    }
+
+    .status-online::before,
+    .status-offline::before {
+      content: '';
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 6px;
+      border-radius: 50%;
+      background-color: green;
+    }
+
+    .status-offline::before {
+      background-color: red;
+    }
+
+    #statusConexao {
+      font-size: 0.9em;
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="titulo-pagina">
-      <i class="fas fa-arrow-left" onclick="window.location.href='menu.html'"></i>
-      Gerenciar Máquinas
+  <div class="header">
+    <div></div>
+    <div class="logo">Gerenciar Máquinas</div>
+    <div class="usuario-logado">
+      <i class="fas fa-user"></i> <span id="usuarioNome"></span>
+      <i class="fas fa-sign-out-alt" onclick="logout()" title="Sair"></i>
     </div>
-    <div class="header-right">
-      <i class="fas fa-circle status-icon" id="icone-status" style="color: gray;"></i>
-      <span class="usuario" id="usuario-logado">Usuário</span>
-      <button class="logout-btn" onclick="logout()" title="Sair">
-        <i class="fas fa-sign-out-alt"></i>
-      </button>
-    </div>
-  </header>
-
-  <div class="menu-container">
-    <a href="cadastrarMaquina.html" class="menu-btn">
-      <i class="fas fa-plus"></i> Cadastrar Máquina
-    </a>
-    <a href="editarMaquina.html" class="menu-btn">
-      <i class="fas fa-pen-to-square"></i> Editar Máquina
-    </a>
-    <a href="consultarMaquina.html" class="menu-btn">
-      <i class="fas fa-search"></i> Consultar Máquina
-    </a>
-    <a href="excluirMaquina.html" class="menu-btn">
-      <i class="fas fa-trash"></i> Excluir Máquina
-    </a>
   </div>
+
+  <main>
+    <div class="container" id="formulario">
+      <div class="form-group">
+        <label for="nome">Selo da Máquina</label>
+        <input type="text" id="nome" placeholder="Ex: YZS001" />
+      </div>
+
+      <div class="form-group">
+        <label for="tipo">Tipo</label>
+        <input type="text" id="tipo" placeholder="Dragon" />
+      </div>
+
+      <button class="btn-roxo" onclick="salvarMaquina()">
+        <i class="fas fa-save"></i> Salvar Máquina
+      </button>
+
+      <a class="btn-voltar" href="menu.html">
+        <i class="fas fa-arrow-left"></i> Voltar ao Menu
+      </a>
+
+      <div id="mensagem" class="mensagem"></div>
+    </div>
+  </main>
+
+  <footer></footer>
+
+  <script>
+    document.getElementById("usuarioNome").innerText = localStorage.getItem("usuario") || "";
+    monitorarStatusConexao();
+
+    async function salvarMaquina() {
+      const nome = document.getElementById("nome").value.trim().toUpperCase();
+      const tipo = document.getElementById("tipo").value;
+
+      if (!validarCamposObrigatorios(["nome", "tipo"])) return;
+
+      const dados = { nome, tipo };
+      const resposta = await salvarComSincronizacao("cadastrarMaquina", dados);
+
+      exibirMensagem(resposta.mensagem, resposta.sucesso ? "sucesso" : "erro");
+
+      if (resposta.sucesso) {
+        limparCampos(["nome", "tipo"]);
+      }
+    }
+  </script>
 </body>
 </html>
