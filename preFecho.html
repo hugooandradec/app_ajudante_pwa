@@ -4,13 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pré-Fecho</title>
-  <script defer src="navegacao.js"></script>
+  <script type="module" src="js/navegacao.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      padding: 0;
-      background-color: #f7f7f7;
+      background: #f5f5f5;
     }
 
     header {
@@ -18,31 +17,38 @@
       color: white;
       padding: 1rem;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
     }
 
     header h1 {
-      font-size: 1.3rem;
       margin: 0;
-    }
-
-    .status-conexao {
+      font-size: 1.2rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
 
-    .status-bolinha {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background-color: red;
+    .icone-voltar {
+      font-size: 1.5rem;
+      cursor: pointer;
     }
 
-    .usuario-logado {
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .status {
+      width: 10px;
+      height: 10px;
+      background-color: red;
+      border-radius: 50%;
+    }
+
+    .usuario {
       font-size: 0.9rem;
-      margin-right: 0.5rem;
     }
 
     .container {
@@ -51,135 +57,145 @@
       padding: 1rem;
       background: white;
       border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
     }
 
-    .input-linha {
+    .form-linha {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .form-linha label {
+      font-weight: bold;
+      margin-right: 0.5rem;
+      white-space: nowrap;
+    }
+
+    .form-linha input {
       border: none;
       border-bottom: 2px solid #ccc;
-      padding: 0.4rem;
-      font-size: 1rem;
-      width: 100%;
-      text-align: center;
       outline: none;
+      font-size: 1rem;
+      flex: 1;
       background: transparent;
+      padding: 0.4rem 0;
     }
 
-    .input-linha:focus {
+    .form-linha input:focus {
       border-bottom: 2px solid #6a1b9a;
     }
 
-    .titulo-ponto {
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-    }
-
-    .maquina {
-      margin-bottom: 2rem;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 1rem;
-    }
-
-    .linha-selo {
-      margin-bottom: 1rem;
-      text-align: center;
-    }
-
-    .linha-selo input {
-      max-width: 300px;
-    }
-
-    .grupo-rel {
+    .relogio-box {
       display: flex;
       justify-content: space-between;
-      gap: 1rem;
-      margin-top: 0.5rem;
+      margin-top: 1rem;
+      border-top: 1px solid #ccc;
+      padding-top: 1rem;
+      position: relative;
     }
 
-    .grupo-rel .col {
-      flex: 1;
+    .relogio-box::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      background-color: #ccc;
+    }
+
+    .col {
+      width: 48%;
       text-align: center;
     }
 
-    .grupo-rel label {
-      font-weight: bold;
-      color: #6a1b9a;
+    .col label {
       display: block;
+      color: #6a1b9a;
+      font-weight: bold;
       margin-bottom: 0.2rem;
     }
 
+    .col input {
+      border: none;
+      border-bottom: 2px solid #ccc;
+      outline: none;
+      background: transparent;
+      font-size: 1rem;
+      width: 90%;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .col input:focus {
+      border-bottom: 2px solid #6a1b9a;
+    }
+
     .resultado {
-      margin-top: 1rem;
-      font-size: 1.1rem;
-      font-weight: bold;
       text-align: right;
+      margin-top: 0.5rem;
+      font-weight: bold;
     }
 
-    .resultado.negativo {
-      color: red;
-    }
-
-    .resultado.positivo {
+    .positivo {
       color: green;
     }
 
-    .total {
-      text-align: right;
-      font-size: 1.3rem;
-      font-weight: bold;
-      color: #333;
-      border-top: 2px solid #aaa;
-      padding-top: 1rem;
-      margin-top: 2rem;
+    .negativo {
+      color: red;
     }
 
     .btn {
       width: 100%;
       background: #6a1b9a;
       color: white;
-      padding: 0.8rem;
       border: none;
+      padding: 0.8rem;
       font-size: 1rem;
       border-radius: 5px;
-      cursor: pointer;
       margin-top: 1rem;
+      cursor: pointer;
     }
 
-    .btn:hover {
-      background: #4a136e;
+    .btn-cinza {
+      background: gray;
     }
 
-    #btnRelatorio {
-      background: #999;
-    }
-
-    #btnRelatorio:hover {
-      background: #777;
+    .total {
+      text-align: right;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 1rem;
+      border-top: 2px solid #ddd;
+      padding-top: 0.8rem;
     }
   </style>
 </head>
-<body onload="renderizarCabecalho(); adicionarMaquina()">
-
+<body onload="renderizarCabecalho(); adicionarMaquina();">
   <header>
-    <h1>← Pré-Fecho</h1>
-    <div class="status-conexao">
-      <span class="usuario-logado" id="usuarioLogado">Usuário</span>
-      <span class="status-bolinha" id="statusConexao"></span>
-      <button onclick="logout()" style="margin-left: 0.5rem; background:none; border:none; color:white; cursor:pointer;">Sair</button>
+    <h1><span class="icone-voltar" onclick="window.location.href='menu.html'">←</span> Pré-Fecho</h1>
+    <div class="header-right">
+      <span class="usuario" id="usuarioLogado">Usuário</span>
+      <span class="status" id="statusConexao"></span>
+      <button onclick="logout()" style="background:none;border:none;cursor:pointer;color:white;">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
     </div>
   </header>
 
   <div class="container">
-    <div class="titulo-ponto">Nome do Ponto</div>
-    <input class="input-linha" id="nomePonto" placeholder="Digite o nome do ponto...">
+    <div class="form-linha">
+      <label for="nomePonto">Nome do Ponto:</label>
+      <input type="text" id="nomePonto" placeholder="Ex: Souza" />
+    </div>
   </div>
 
   <div id="containerMaquinas"></div>
 
   <div class="container">
     <button class="btn" onclick="adicionarMaquina()">+ Adicionar Máquina</button>
-    <div id="campoTotal" class="total">TOTAL: R$ 0,00</div>
-    <button class="btn" id="btnRelatorio">Visualizar Relatório</button>
+    <div class="total" id="campoTotal">TOTAL: R$ 0,00</div>
+    <button class="btn btn-cinza" onclick="visualizarRelatorio()">Visualizar Relatório</button>
   </div>
 
   <script>
@@ -190,36 +206,32 @@
     function adicionarMaquina() {
       const id = Date.now();
       const div = document.createElement('div');
-      div.className = 'container maquina';
+      div.className = 'container';
+
       div.innerHTML = `
-        <div class="linha-selo">
-          <input class="input-linha" placeholder="Selo da máquina..." />
+        <div class="form-linha">
+          <label for="selo">Selo da Máquina:</label>
+          <input type="text" placeholder="Digite o selo..." />
         </div>
 
-        <div class="grupo-rel">
+        <div class="relogio-box">
           <div class="col">
             <label>Entrada Ant.</label>
-            <input type="number" class="input-linha entradaAnt" />
+            <input type="number" class="entradaAnt" />
+            <label>Entrada Atual</label>
+            <input type="number" class="entradaAtual" />
           </div>
           <div class="col">
             <label>Saída Ant.</label>
-            <input type="number" class="input-linha saidaAnt" />
-          </div>
-        </div>
-
-        <div class="grupo-rel">
-          <div class="col">
-            <label>Entrada Atual</label>
-            <input type="number" class="input-linha entradaAtual" />
-          </div>
-          <div class="col">
+            <input type="number" class="saidaAnt" />
             <label>Saída Atual</label>
-            <input type="number" class="input-linha saidaAtual" />
+            <input type="number" class="saidaAtual" />
           </div>
         </div>
 
         <div class="resultado" id="resultado-${id}">Resultado: R$ 0,00</div>
       `;
+
       document.getElementById('containerMaquinas').appendChild(div);
 
       const inputs = div.querySelectorAll('input');
@@ -229,11 +241,17 @@
     function calcularResultado(div, id) {
       const entradaAnt = parseInt(div.querySelector('.entradaAnt').value) || 0;
       const saidaAnt = parseInt(div.querySelector('.saidaAnt').value) || 0;
-      const entradaAtual = parseInt(div.querySelector('.entradaAtual').value) || 0;
-      const saidaAtual = parseInt(div.querySelector('.saidaAtual').value) || 0;
+      const entradaAtual = div.querySelector('.entradaAtual').value;
+      const saidaAtual = div.querySelector('.saidaAtual').value;
 
-      const entrada = (entradaAtual - entradaAnt) / 100;
-      const saida = (saidaAtual - saidaAnt) / 100;
+      // Só calcula se os valores atuais forem preenchidos
+      if (entradaAtual === '' || saidaAtual === '') return;
+
+      const entAtual = parseInt(entradaAtual) || 0;
+      const saiAtual = parseInt(saidaAtual) || 0;
+
+      const entrada = (entAtual - entradaAnt) / 100;
+      const saida = (saiAtual - saidaAnt) / 100;
       const resultado = entrada - saida;
 
       const campoResultado = div.querySelector(`#resultado-${id}`);
@@ -247,12 +265,19 @@
       let total = 0;
       const resultados = document.querySelectorAll('.resultado');
       resultados.forEach(r => {
-        const texto = r.textContent.replace('Resultado: R$', '').replace('.', '').replace(',', '.');
+        const texto = r.textContent.replace('Resultado: R$', '').replace(/\./g, '').replace(',', '.');
         const valor = parseFloat(texto) || 0;
         total += valor;
       });
       document.getElementById('campoTotal').textContent = `TOTAL: ${formatarMoeda(total)}`;
     }
+
+    function visualizarRelatorio() {
+      alert("Relatório ainda será implementado 💜");
+    }
   </script>
+
+  <!-- Font Awesome para o ícone de sair -->
+  <script src="https://kit.fontawesome.com/a2e0e6ad1c.js" crossorigin="anonymous"></script>
 </body>
 </html>
