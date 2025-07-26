@@ -54,48 +54,63 @@
       box-shadow: 0 0 8px rgba(0,0,0,0.1);
     }
 
+    .input-linha {
+      border: none;
+      border-bottom: 2px solid #ccc;
+      padding: 0.4rem;
+      font-size: 1rem;
+      width: 100%;
+      text-align: center;
+      outline: none;
+      background: transparent;
+    }
+
+    .input-linha:focus {
+      border-bottom: 2px solid #6a1b9a;
+    }
+
+    .titulo-ponto {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
     .maquina {
       margin-bottom: 2rem;
       border-bottom: 1px solid #ccc;
       padding-bottom: 1rem;
     }
 
-    .maquina h3 {
-      margin-top: 0;
-    }
-
-    .row {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .col {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .col input {
-      border: none;
-      border-bottom: 2px solid #ccc;
-      padding: 0.3rem;
-      font-size: 1rem;
-      width: 100%;
+    .linha-selo {
+      margin-bottom: 1rem;
       text-align: center;
     }
 
-    .col label {
+    .linha-selo input {
+      max-width: 300px;
+    }
+
+    .grupo-rel {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .grupo-rel .col {
+      flex: 1;
+      text-align: center;
+    }
+
+    .grupo-rel label {
       font-weight: bold;
       color: #6a1b9a;
+      display: block;
       margin-bottom: 0.2rem;
     }
 
     .resultado {
       margin-top: 1rem;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: bold;
       text-align: right;
     }
@@ -118,7 +133,7 @@
       margin-top: 2rem;
     }
 
-    .btn-adicionar {
+    .btn {
       width: 100%;
       background: #6a1b9a;
       color: white;
@@ -127,26 +142,19 @@
       font-size: 1rem;
       border-radius: 5px;
       cursor: pointer;
-      margin-bottom: 1rem;
+      margin-top: 1rem;
     }
 
-    .btn-adicionar:hover {
+    .btn:hover {
       background: #4a136e;
     }
 
-    .campo-selo {
-      margin-top: 1rem;
-      text-align: center;
+    #btnRelatorio {
+      background: #999;
     }
 
-    .campo-selo input {
-      font-size: 1rem;
-      padding: 0.4rem;
-      width: 100%;
-      max-width: 300px;
-      text-align: center;
-      border: 1px solid #999;
-      border-radius: 4px;
+    #btnRelatorio:hover {
+      background: #777;
     }
   </style>
 </head>
@@ -161,13 +169,17 @@
     </div>
   </header>
 
-  <div class="container" id="containerMaquinas">
-    <!-- Máquinas vão aqui -->
+  <div class="container">
+    <div class="titulo-ponto">Nome do Ponto</div>
+    <input class="input-linha" id="nomePonto" placeholder="Digite o nome do ponto...">
   </div>
 
+  <div id="containerMaquinas"></div>
+
   <div class="container">
-    <button class="btn-adicionar" onclick="adicionarMaquina()">+ Adicionar Máquina</button>
+    <button class="btn" onclick="adicionarMaquina()">+ Adicionar Máquina</button>
     <div id="campoTotal" class="total">TOTAL: R$ 0,00</div>
+    <button class="btn" id="btnRelatorio">Visualizar Relatório</button>
   </div>
 
   <script>
@@ -178,34 +190,34 @@
     function adicionarMaquina() {
       const id = Date.now();
       const div = document.createElement('div');
-      div.className = 'maquina';
+      div.className = 'container maquina';
       div.innerHTML = `
-        <div class="campo-selo">
-          <label>Selo da máquina:</label>
-          <input type="text" placeholder="Digite o selo..." />
+        <div class="linha-selo">
+          <input class="input-linha" placeholder="Selo da máquina..." />
         </div>
-        <div class="row">
+
+        <div class="grupo-rel">
           <div class="col">
-            <strong>Relógios anteriores</strong>
-            <label>Entrada</label>
-            <input type="number" class="entradaAnt" />
+            <label>Entrada Ant.</label>
+            <input type="number" class="input-linha entradaAnt" />
           </div>
           <div class="col">
-            <label>Saída</label>
-            <input type="number" class="saidaAnt" />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <strong>Relógios atuais</strong>
-            <label>Entrada</label>
-            <input type="number" class="entradaAtual" />
-          </div>
-          <div class="col">
-            <label>Saída</label>
-            <input type="number" class="saidaAtual" />
+            <label>Saída Ant.</label>
+            <input type="number" class="input-linha saidaAnt" />
           </div>
         </div>
+
+        <div class="grupo-rel">
+          <div class="col">
+            <label>Entrada Atual</label>
+            <input type="number" class="input-linha entradaAtual" />
+          </div>
+          <div class="col">
+            <label>Saída Atual</label>
+            <input type="number" class="input-linha saidaAtual" />
+          </div>
+        </div>
+
         <div class="resultado" id="resultado-${id}">Resultado: R$ 0,00</div>
       `;
       document.getElementById('containerMaquinas').appendChild(div);
@@ -242,6 +254,5 @@
       document.getElementById('campoTotal').textContent = `TOTAL: ${formatarMoeda(total)}`;
     }
   </script>
-
 </body>
 </html>
