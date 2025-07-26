@@ -4,215 +4,244 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pré-Fecho</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <script defer src="navegacao.js"></script>
   <style>
     body {
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
+      padding: 0;
+      background-color: #f7f7f7;
     }
+
     header {
       background-color: #6a1b9a;
       color: white;
-      padding: 12px 16px;
+      padding: 1rem;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
     }
-    .titulo-header {
+
+    header h1 {
+      font-size: 1.3rem;
+      margin: 0;
+    }
+
+    .status-conexao {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 18px;
-      font-weight: bold;
+      gap: 0.5rem;
     }
-    .acoes-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .status-indicador {
+
+    .status-bolinha {
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background-color: gray;
+      background-color: red;
     }
+
+    .usuario-logado {
+      font-size: 0.9rem;
+      margin-right: 0.5rem;
+    }
+
     .container {
-      background-color: white;
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      max-width: 700px;
+      margin: 1rem auto;
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
     }
-    .linha-relatorio {
+
+    .maquina {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 1rem;
+    }
+
+    .maquina h3 {
+      margin-top: 0;
+    }
+
+    .row {
       display: flex;
       justify-content: space-between;
-      gap: 10px;
+      gap: 1rem;
+      margin-top: 1rem;
     }
-    .linha-relatorio div {
+
+    .col {
       flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    input[type="text"],
-    input[type="number"] {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
+
+    .col input {
       border: none;
-      border-radius: 6px;
-      margin: 10px 0;
-      cursor: pointer;
+      border-bottom: 2px solid #ccc;
+      padding: 0.3rem;
+      font-size: 1rem;
+      width: 100%;
+      text-align: center;
+    }
+
+    .col label {
       font-weight: bold;
-      background-color: #6a1b9a;
-      color: white;
+      color: #6a1b9a;
+      margin-bottom: 0.2rem;
     }
-    .maquina {
-      border: 1px solid #ccc;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-    }
-    .resultado span {
+
+    .resultado {
+      margin-top: 1rem;
+      font-size: 1.2rem;
       font-weight: bold;
+      text-align: right;
     }
-    .positivo {
-      color: #2e7d32;
-    }
-    .negativo {
+
+    .resultado.negativo {
       color: red;
     }
-    #relatorio {
-      display: none;
+
+    .resultado.positivo {
+      color: green;
+    }
+
+    .total {
+      text-align: right;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #333;
+      border-top: 2px solid #aaa;
+      padding-top: 1rem;
       margin-top: 2rem;
     }
-    #relatorio div {
-      background-color: #f3f3f3;
-      border-radius: 8px;
-      padding: 1rem;
+
+    .btn-adicionar {
+      width: 100%;
+      background: #6a1b9a;
+      color: white;
+      padding: 0.8rem;
+      border: none;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
       margin-bottom: 1rem;
+    }
+
+    .btn-adicionar:hover {
+      background: #4a136e;
+    }
+
+    .campo-selo {
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .campo-selo input {
+      font-size: 1rem;
+      padding: 0.4rem;
+      width: 100%;
+      max-width: 300px;
+      text-align: center;
+      border: 1px solid #999;
+      border-radius: 4px;
     }
   </style>
 </head>
-<body>
+<body onload="renderizarCabecalho(); adicionarMaquina()">
+
   <header>
-    <div class="titulo-header">
-      <a href="menu.html" style="color:white;"><i class="fas fa-arrow-left"></i></a>
-      <span>Pré-Fecho</span>
-    </div>
-    <div class="acoes-header">
-      <div id="icone-status" class="status-indicador"></div>
-      <span id="usuario-logado" class="nome-usuario">Usuário</span>
-      <button id="btnSair" onclick="logout()" style="background: none;"><i class="fas fa-sign-out-alt" style="color:white;"></i></button>
+    <h1>← Pré-Fecho</h1>
+    <div class="status-conexao">
+      <span class="usuario-logado" id="usuarioLogado">Usuário</span>
+      <span class="status-bolinha" id="statusConexao"></span>
+      <button onclick="logout()" style="margin-left: 0.5rem; background:none; border:none; color:white; cursor:pointer;">Sair</button>
     </div>
   </header>
 
-  <main class="container">
-    <label for="nomeCliente">Nome do Cliente/Ponto:</label>
-    <input type="text" id="nomeCliente" placeholder="Digite o nome do cliente" />
+  <div class="container" id="containerMaquinas">
+    <!-- Máquinas vão aqui -->
+  </div>
 
-    <button onclick="adicionarMaquina()">+ Adicionar Máquina</button>
-    <div id="maquinasContainer"></div>
-
-    <h3>Total Geral: <span id="totalGeral">R$ 0,00</span></h3>
-    <button onclick="visualizarRelatorio()">Visualizar Relatório</button>
-    <div id="relatorio"></div>
-  </main>
+  <div class="container">
+    <button class="btn-adicionar" onclick="adicionarMaquina()">+ Adicionar Máquina</button>
+    <div id="campoTotal" class="total">TOTAL: R$ 0,00</div>
+  </div>
 
   <script>
-    const maquinas = [];
-
-    function adicionarMaquina() {
-      const idx = maquinas.length;
-      const div = document.createElement("div");
-      div.className = "maquina";
-      div.innerHTML = `
-        <label for="selo_${idx}">Selo da Máquina:</label>
-        <input type="text" id="selo_${idx}" placeholder="Digite o selo da máquina" />
-        <h4>Relógios anteriores</h4>
-        <div class="linha-relatorio">
-          <div>
-            <label>Entrada:</label>
-            <input type="number" id="entradaAnt_${idx}" oninput="calcularResultado(${idx})"/>
-          </div>
-          <div>
-            <label>Saída:</label>
-            <input type="number" id="saidaAnt_${idx}" oninput="calcularResultado(${idx})"/>
-          </div>
-        </div>
-        <h4>Relógios atuais</h4>
-        <div class="linha-relatorio">
-          <div>
-            <label>Entrada:</label>
-            <input type="number" id="entradaAtual_${idx}" oninput="calcularResultado(${idx})"/>
-          </div>
-          <div>
-            <label>Saída:</label>
-            <input type="number" id="saidaAtual_${idx}" oninput="calcularResultado(${idx})"/>
-          </div>
-        </div>
-        <p class="resultado">Resultado: <span id="resultado_${idx}">R$ 0,00</span></p>
-      `;
-      document.getElementById("maquinasContainer").appendChild(div);
-      maquinas.push(idx);
+    function formatarMoeda(valor) {
+      return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
-    function calcularResultado(idx) {
-      const ea = parseFloat(document.getElementById(`entradaAnt_${idx}`).value) || 0;
-      const ea2 = parseFloat(document.getElementById(`entradaAtual_${idx}`).value) || 0;
-      const sa = parseFloat(document.getElementById(`saidaAnt_${idx}`).value) || 0;
-      const sa2 = parseFloat(document.getElementById(`saidaAtual_${idx}`).value) || 0;
+    function adicionarMaquina() {
+      const id = Date.now();
+      const div = document.createElement('div');
+      div.className = 'maquina';
+      div.innerHTML = `
+        <div class="campo-selo">
+          <label>Selo da máquina:</label>
+          <input type="text" placeholder="Digite o selo..." />
+        </div>
+        <div class="row">
+          <div class="col">
+            <strong>Relógios anteriores</strong>
+            <label>Entrada</label>
+            <input type="number" class="entradaAnt" />
+          </div>
+          <div class="col">
+            <label>Saída</label>
+            <input type="number" class="saidaAnt" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <strong>Relógios atuais</strong>
+            <label>Entrada</label>
+            <input type="number" class="entradaAtual" />
+          </div>
+          <div class="col">
+            <label>Saída</label>
+            <input type="number" class="saidaAtual" />
+          </div>
+        </div>
+        <div class="resultado" id="resultado-${id}">Resultado: R$ 0,00</div>
+      `;
+      document.getElementById('containerMaquinas').appendChild(div);
 
-      const resultado = ((ea2 - ea) - (sa2 - sa)) / 100;
-      const el = document.getElementById(`resultado_${idx}`);
-      el.textContent = resultado.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-      el.className = resultado < 0 ? "negativo" : "positivo";
+      const inputs = div.querySelectorAll('input');
+      inputs.forEach(input => input.addEventListener('input', () => calcularResultado(div, id)));
+    }
+
+    function calcularResultado(div, id) {
+      const entradaAnt = parseInt(div.querySelector('.entradaAnt').value) || 0;
+      const saidaAnt = parseInt(div.querySelector('.saidaAnt').value) || 0;
+      const entradaAtual = parseInt(div.querySelector('.entradaAtual').value) || 0;
+      const saidaAtual = parseInt(div.querySelector('.saidaAtual').value) || 0;
+
+      const entrada = (entradaAtual - entradaAnt) / 100;
+      const saida = (saidaAtual - saidaAnt) / 100;
+      const resultado = entrada - saida;
+
+      const campoResultado = div.querySelector(`#resultado-${id}`);
+      campoResultado.textContent = `Resultado: ${formatarMoeda(resultado)}`;
+      campoResultado.className = 'resultado ' + (resultado < 0 ? 'negativo' : 'positivo');
+
       calcularTotal();
     }
 
     function calcularTotal() {
       let total = 0;
-      maquinas.forEach((idx) => {
-        const ea = parseFloat(document.getElementById(`entradaAnt_${idx}`).value) || 0;
-        const ea2 = parseFloat(document.getElementById(`entradaAtual_${idx}`).value) || 0;
-        const sa = parseFloat(document.getElementById(`saidaAnt_${idx}`).value) || 0;
-        const sa2 = parseFloat(document.getElementById(`saidaAtual_${idx}`).value) || 0;
-        total += ((ea2 - ea) - (sa2 - sa)) / 100;
+      const resultados = document.querySelectorAll('.resultado');
+      resultados.forEach(r => {
+        const texto = r.textContent.replace('Resultado: R$', '').replace('.', '').replace(',', '.');
+        const valor = parseFloat(texto) || 0;
+        total += valor;
       });
-      document.getElementById("totalGeral").textContent = total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-    }
-
-    function visualizarRelatorio() {
-      const nome = document.getElementById("nomeCliente").value || "(Sem nome)";
-      let html = `<h2>Relatório Pré-Fecho</h2><p><strong>Cliente:</strong> ${nome}</p>`;
-      maquinas.forEach((idx, i) => {
-        const selo = document.getElementById(`selo_${idx}`).value || `Máquina ${i+1}`;
-        const ea = document.getElementById(`entradaAnt_${idx}`).value || "0";
-        const ea2 = document.getElementById(`entradaAtual_${idx}`).value || "0";
-        const sa = document.getElementById(`saidaAnt_${idx}`).value || "0";
-        const sa2 = document.getElementById(`saidaAtual_${idx}`).value || "0";
-        const resultado = document.getElementById(`resultado_${idx}`).textContent;
-        html += `
-          <div>
-            <h4>${selo}</h4>
-            <p>Entrada Anterior: ${ea}</p>
-            <p>Entrada Atual: ${ea2}</p>
-            <p>Saída Anterior: ${sa}</p>
-            <p>Saída Atual: ${sa2}</p>
-            <p><strong>Resultado:</strong> ${resultado}</p>
-          </div>
-        `;
-      });
-      html += `<h3>Total Geral: ${document.getElementById("totalGeral").textContent}</h3>`;
-      document.getElementById("relatorio").innerHTML = html;
-      document.getElementById("relatorio").style.display = "block";
+      document.getElementById('campoTotal').textContent = `TOTAL: ${formatarMoeda(total)}`;
     }
   </script>
+
 </body>
 </html>
