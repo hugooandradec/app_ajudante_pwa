@@ -73,7 +73,10 @@ function formatar(valor) {
 window.visualizarRelatorio = function () {
   const ponto = document.getElementById("ponto").value || "—";
   const maquinas = document.querySelectorAll("#maquinas > div");
-  let texto = `Ponto: ${ponto}\n\n`;
+
+  const conteudo = document.getElementById("conteudo-relatorio");
+  conteudo.innerHTML = `<strong>Relatório do Pré-Fecho</strong><br><br><b>Ponto:</b> ${ponto}<br><br>`;
+
   let totalFinal = 0;
 
   maquinas.forEach((div) => {
@@ -95,19 +98,21 @@ window.visualizarRelatorio = function () {
       totalFinal += resultado;
     }
 
-    const resultadoFormatado = formatar(resultado);
+    const cor = resultado < 0 ? "red" : "green";
+    const valorFormatado = formatar(resultado);
 
-    texto += `Selo: ${selo}\n`;
-    texto += `Entrada: ${eAnt} → ${eAtu}\n`;
-    texto += `Saída:   ${sAnt} → ${sAtu}\n`;
-    texto += `Resultado: ${resultadoFormatado}\n\n`;
+    conteudo.innerHTML += `
+      <b>Selo:</b> ${selo}<br>
+      Entrada: ${eAnt} → ${eAtu}<br>
+      Saída: ${sAnt} → ${sAtu}<br>
+      Resultado: <span style="color:${cor}">${valorFormatado}</span><br><br>
+    `;
   });
 
-  texto += `TOTAL: ${formatar(totalFinal)}`;
+  const corTotal = totalFinal < 0 ? "red" : "green";
+  const valorTotalFormatado = formatar(totalFinal);
 
-  const relatorio = document.getElementById("conteudo-relatorio");
-  relatorio.innerText = texto;
-  relatorio.style.color = totalFinal < 0 ? "red" : "green";
+  conteudo.innerHTML += `<b>TOTAL:</b> <span style="color:${corTotal}">${valorTotalFormatado}</span>`;
 
   document.getElementById("modal-relatorio").style.display = "flex";
 };
