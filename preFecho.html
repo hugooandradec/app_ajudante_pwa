@@ -2,346 +2,186 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pré-Fecho</title>
-  <script type="module" src="js/navegacao.js"></script>
+  <script type="module" src="./navegacao.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
       margin: 0;
+      font-family: 'Arial', sans-serif;
       background: #f5f5f5;
     }
-
     header {
       background-color: #6a1b9a;
       color: white;
-      padding: 1rem;
+      padding: 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-
     header h1 {
       margin: 0;
-      font-size: 1.2rem;
+      font-size: 20px;
+    }
+    header .esquerda {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 10px;
     }
-
-    .icone-voltar {
-      font-size: 1.2rem;
-      cursor: pointer;
-    }
-
-    .header-right {
+    header .direita {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 12px;
     }
-
+    .usuario {
+      font-weight: bold;
+    }
     .status {
       width: 10px;
       height: 10px;
-      background-color: red;
       border-radius: 50%;
+      background: red;
     }
-
-    .usuario {
-      font-size: 0.9rem;
+    main {
+      padding: 10px;
     }
-
-    .container {
-      max-width: 700px;
-      margin: 1rem auto;
-      padding: 1rem;
-      background: white;
-      border-radius: 8px;
-    }
-
-    .form-linha {
+    .linha-input {
       display: flex;
       align-items: center;
-      margin-bottom: 1rem;
+      margin-bottom: 16px;
     }
-
-    .form-linha label {
+    .linha-input label {
+      min-width: 130px;
       font-weight: bold;
-      margin-right: 0.5rem;
-      white-space: nowrap;
     }
-
-    .form-linha input {
+    .linha-input input {
+      flex: 1;
       border: none;
       border-bottom: 2px solid #6a1b9a;
       outline: none;
-      font-size: 1rem;
-      flex: 1;
+      padding: 4px;
       background: transparent;
-      padding: 0.4rem 0;
+      font-size: 16px;
     }
-
-    .relogio-box {
+    .container {
+      background: white;
+      padding: 10px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+    }
+    .maquina-bloco {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .relogios {
       display: flex;
       justify-content: space-between;
-      margin-top: 1rem;
-      border-top: 1px solid #ccc;
-      padding-top: 1rem;
-      position: relative;
+      gap: 16px;
     }
-
-    .relogio-box::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 50%;
-      width: 1px;
-      background-color: #ccc;
-    }
-
-    .col {
-      width: 48%;
+    .lado {
+      flex: 1;
       text-align: center;
     }
-
-    .col label {
-      display: block;
-      color: #6a1b9a;
-      font-weight: bold;
-      margin-bottom: 0.2rem;
-    }
-
-    .col input {
+    .lado input {
       border: none;
-      border-bottom: 2px solid #ccc;
+      border-bottom: 1px solid #999;
+      text-align: center;
+      font-size: 16px;
+      width: 100%;
       outline: none;
       background: transparent;
-      font-size: 1rem;
-      width: 90%;
-      text-align: center;
-      margin-bottom: 0.5rem;
     }
-
-    .col input:focus {
-      border-bottom: 2px solid #6a1b9a;
-    }
-
     .resultado {
-      text-align: right;
-      margin-top: 0.5rem;
       font-weight: bold;
+      text-align: right;
+      margin-top: 6px;
     }
-
     .positivo {
       color: green;
     }
-
     .negativo {
       color: red;
     }
-
-    .btn {
+    button {
       width: 100%;
-      background: #6a1b9a;
-      color: white;
+      padding: 12px;
       border: none;
-      padding: 0.8rem;
-      font-size: 1rem;
-      border-radius: 5px;
-      margin-top: 1rem;
-      cursor: pointer;
-    }
-
-    .btn-cinza {
-      background: gray;
-    }
-
-    .total {
-      text-align: right;
-      font-size: 1.2rem;
+      color: white;
       font-weight: bold;
-      margin-top: 1rem;
-      border-top: 2px solid #ddd;
-      padding-top: 0.8rem;
+      font-size: 16px;
+      border-radius: 6px;
+      margin-top: 10px;
+      background-color: #6a1b9a;
     }
-
-    /* Modal popup */
-    .modal {
-      display: none;
+    .cinza {
+      background-color: gray;
+    }
+    .total {
+      font-weight: bold;
+      text-align: right;
+      padding: 12px;
+      font-size: 16px;
+    }
+    #relatorioModal {
       position: fixed;
-      z-index: 1000;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background-color: rgba(0,0,0,0.5);
-      justify-content: center;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: none;
       align-items: center;
+      justify-content: center;
     }
-
-    .modal-content {
+    #relatorioModal .modal {
       background: white;
-      padding: 2rem;
-      border-radius: 10px;
-      max-width: 600px;
-      width: 90%;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 90%;
     }
-
-    .modal-content h2 {
-      margin-top: 0;
-    }
-
-    .modal-content pre {
-      white-space: pre-wrap;
-    }
-
-    .fechar {
-      background: #6a1b9a;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      float: right;
-      cursor: pointer;
-      margin-top: 1rem;
+    #relatorioModal .modal pre {
+      font-size: 14px;
     }
   </style>
 </head>
+<body onload="renderizarCabecalho();">
 
-<body onload="renderizarCabecalho(); adicionarMaquina();">
   <header>
-    <h1><i class="fas fa-arrow-left icone-voltar" onclick="window.location.href='menu.html'"></i> Pré-Fecho</h1>
-    <div class="header-right">
+    <div class="esquerda">
+      <a href="menu.html" style="color: white;"><i class="fas fa-arrow-left"></i></a>
+      <h1>Pré-Fecho</h1>
+    </div>
+    <div class="direita">
       <span class="usuario" id="usuarioLogado">Usuário</span>
       <span class="status" id="statusConexao"></span>
-      <button onclick="logout()" style="background:none;border:none;cursor:pointer;color:white;">
-        <i class="fas fa-sign-out-alt"></i>
-      </button>
+      <a onclick="logout()" style="color: white;"><i class="fas fa-sign-out-alt"></i></a>
     </div>
   </header>
 
-  <div class="container">
-    <div class="form-linha">
+  <main>
+    <div class="linha-input">
       <label for="nomePonto">Nome do Ponto:</label>
-      <input type="text" id="nomePonto" placeholder="Ex: Souza" />
+      <input id="nomePonto" placeholder="Digite o nome..." />
     </div>
-  </div>
 
-  <div id="containerMaquinas"></div>
+    <div id="containerMaquinas"></div>
 
-  <div class="container">
-    <button class="btn" onclick="adicionarMaquina()">+ Adicionar Máquina</button>
+    <button onclick="adicionarMaquina()">+ Adicionar Máquina</button>
+
     <div class="total" id="campoTotal">TOTAL: R$ 0,00</div>
-    <button class="btn btn-cinza" onclick="visualizarRelatorio()">Visualizar Relatório</button>
-  </div>
 
-  <!-- Modal de relatório -->
-  <div class="modal" id="relatorioModal">
-    <div class="modal-content">
-      <h2>Relatório do Pré-Fecho</h2>
+    <button class="cinza" onclick="visualizarRelatorio()">Visualizar Relatório</button>
+  </main>
+
+  <div id="relatorioModal">
+    <div class="modal">
+      <h3>Relatório do Pré-Fecho</h3>
       <pre id="conteudoRelatorio"></pre>
-      <button class="fechar" onclick="document.getElementById('relatorioModal').style.display='none'">Fechar</button>
+      <button onclick="fecharRelatorio()">Fechar</button>
     </div>
   </div>
 
-  <!-- Font Awesome -->
-  <script src="https://kit.fontawesome.com/a2e0e6ad1c.js" crossorigin="anonymous"></script>
-
-  <script>
-    function formatarMoeda(valor) {
-      return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    }
-
-    function adicionarMaquina() {
-      const id = Date.now();
-      const div = document.createElement('div');
-      div.className = 'container';
-
-      div.innerHTML = `
-        <div class="form-linha">
-          <label>Selo da Máquina:</label>
-          <input type="text" placeholder="Digite o selo..." />
-        </div>
-
-        <div class="relogio-box">
-          <div class="col">
-            <label>Entrada Ant.</label>
-            <input type="number" class="entradaAnt" />
-            <label>Entrada Atual</label>
-            <input type="number" class="entradaAtual" />
-          </div>
-          <div class="col">
-            <label>Saída Ant.</label>
-            <input type="number" class="saidaAnt" />
-            <label>Saída Atual</label>
-            <input type="number" class="saidaAtual" />
-          </div>
-        </div>
-
-        <div class="resultado" id="resultado-${id}">Resultado: R$ 0,00</div>
-      `;
-
-      document.getElementById('containerMaquinas').appendChild(div);
-
-      const inputs = div.querySelectorAll('input');
-      inputs.forEach(input => input.addEventListener('input', () => calcularResultado(div, id)));
-    }
-
-    function calcularResultado(div, id) {
-      const entradaAnt = parseInt(div.querySelector('.entradaAnt').value) || 0;
-      const saidaAnt = parseInt(div.querySelector('.saidaAnt').value) || 0;
-      const entradaAtual = div.querySelector('.entradaAtual').value;
-      const saidaAtual = div.querySelector('.saidaAtual').value;
-
-      if (entradaAtual === '' || saidaAtual === '') return;
-
-      const entAtual = parseInt(entradaAtual) || 0;
-      const saiAtual = parseInt(saidaAtual) || 0;
-
-      const entrada = (entAtual - entradaAnt) / 100;
-      const saida = (saiAtual - saidaAnt) / 100;
-      const resultado = entrada - saida;
-
-      const campoResultado = div.querySelector(`#resultado-${id}`);
-      campoResultado.textContent = `Resultado: ${formatarMoeda(resultado)}`;
-      campoResultado.className = 'resultado ' + (resultado < 0 ? 'negativo' : 'positivo');
-
-      calcularTotal();
-    }
-
-    function calcularTotal() {
-      let total = 0;
-      const resultados = document.querySelectorAll('.resultado');
-      resultados.forEach(r => {
-        const texto = r.textContent.replace('Resultado: R$', '').replace(/\./g, '').replace(',', '.');
-        const valor = parseFloat(texto) || 0;
-        total += valor;
-      });
-
-      const totalCampo = document.getElementById('campoTotal');
-      totalCampo.textContent = `TOTAL: ${formatarMoeda(total)}`;
-      totalCampo.className = 'total ' + (total < 0 ? 'negativo' : 'positivo');
-    }
-
-    function visualizarRelatorio() {
-      const nomePonto = document.getElementById('nomePonto').value.trim();
-      const maquinas = document.querySelectorAll('#containerMaquinas .container');
-      let relatorio = `Ponto: ${nomePonto}\n\n`;
-
-      maquinas.forEach((div, i) => {
-        const selo = div.querySelector('input[type="text"]').value;
-        const entradaAnt = div.querySelector('.entradaAnt').value;
-        const entradaAtual = div.querySelector('.entradaAtual').value;
-        const saidaAnt = div.querySelector('.saidaAnt').value;
-        const saidaAtual = div.querySelector('.saidaAtual').value;
-        const resultado = div.querySelector('.resultado').textContent;
-
-        relatorio += `Máquina ${i + 1} - Selo: ${selo}\n`;
-        relatorio += `Entrada: ${entradaAnt} → ${entradaAtual}\n`;
-        relatorio += `Saída:   ${saidaAnt} → ${saidaAtual}\n`;
-        relatorio += `${resultado}\n\n`;
-      });
-
-      document.getElementById('conteudoRelatorio').textContent = relatorio;
-      document.getElementById('relatorioModal').style.display = 'flex';
-    }
-  </script>
+  <script type="module" src="./preFecho.js"></script>
 </body>
 </html>
