@@ -28,7 +28,6 @@ window.adicionarMaquina = function () {
   `;
   container.appendChild(div);
 
-  // Adiciona evento de cálculo automático
   div.querySelectorAll("input").forEach((input) =>
     input.addEventListener("input", atualizarResultados)
   );
@@ -75,21 +74,44 @@ window.visualizarRelatorio = function () {
   const ponto = document.getElementById("ponto").value || "—";
   const maquinas = document.querySelectorAll("#maquinas > div");
   let texto = `Ponto: ${ponto}\n\n`;
+  let totalFinal = 0;
 
-  maquinas.forEach((div, i) => {
+  maquinas.forEach((div) => {
     const selo = div.querySelector(".selo").value || "—";
     const eAnt = div.querySelector(".entrada-ant").value || "→";
     const eAtu = div.querySelector(".entrada-atual").value || "→";
     const sAnt = div.querySelector(".saida-ant").value || "→";
     const sAtu = div.querySelector(".saida-atual").value || "→";
-    const resultadoTexto = div.querySelector(".resultado").innerText.split(":")[1].trim();
+
+    const eAntVal = parseInt(eAnt) || 0;
+    const eAtuVal = parseInt(eAtu) || 0;
+    const sAntVal = parseInt(sAnt) || 0;
+    const sAtuVal = parseInt(sAtu) || 0;
+    const temAtuais = eAtu !== "→" || sAtu !== "→";
+
+    let resultado = 0;
+    if (temAtuais) {
+      resultado = ((eAtuVal - eAntVal) - (sAtuVal - sAntVal)) / 100;
+      totalFinal += resultado;
+    }
+
+    const resultadoFormatado = formatar(resultado);
 
     texto += `Selo: ${selo}\n`;
     texto += `Entrada: ${eAnt} → ${eAtu}\n`;
     texto += `Saída:   ${sAnt} → ${sAtu}\n`;
-    texto += `Resultado: ${resultadoTexto}\n\n`;
+    texto += `Resultado: ${resultadoFormatado}\n\n`;
   });
 
-  document.getElementById("conteudo-relatorio").innerText = texto;
+  texto += `TOTAL: ${formatar(totalFinal)}`;
+
+  const relatorio = document.getElementById("conteudo-relatorio");
+  relatorio.innerText = texto;
+  relatorio.style.color = totalFinal < 0 ? "red" : "green";
+
   document.getElementById("modal-relatorio").style.display = "flex";
+};
+
+window.fecharRelatorio = function () {
+  document.getElementById("modal-relatorio").style.display = "none";
 };
