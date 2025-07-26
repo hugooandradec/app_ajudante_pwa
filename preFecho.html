@@ -2,158 +2,98 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pré-Fecho</title>
-  <script type="module" src="./js/preFecho.js" defer></script>
-  <script type="module" src="./js/navegacao.js" defer></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f7f7f7;
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
     }
-
-    #cabecalho {
-      margin-bottom: 16px;
+    .container {
+      padding: 16px;
     }
-
-    label {
-      font-weight: bold;
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    input[type="text"], input[type="number"] {
+    input {
       border: none;
       border-bottom: 2px solid #6a1b9a;
-      outline: none;
       width: 100%;
+      padding: 6px;
       font-size: 16px;
-      margin-bottom: 12px;
-      background-color: transparent;
-      padding: 4px 0;
-    }
-
-    .maquina {
-      background-color: #fff;
-      border-radius: 8px;
-      padding: 16px;
-      margin-top: 16px;
-      box-shadow: 0 0 4px rgba(0,0,0,0.1);
-    }
-
-    .campo-selo {
+      background: transparent;
+      outline: none;
       margin-bottom: 12px;
     }
-
-    .relogios {
+    .linha-relatorios {
       display: flex;
       justify-content: space-between;
       gap: 16px;
-      margin-bottom: 8px;
-    }
-
-    .relogios div {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+      padding: 8px 0;
       border-bottom: 1px solid #ccc;
-      padding-bottom: 4px;
     }
-
-    .relogios div h4 {
-      color: #6a1b9a;
-      margin: 4px 0;
+    .linha-relatorios input {
       text-align: center;
-      font-size: 14px;
     }
-
     .resultado {
       font-weight: bold;
       text-align: right;
-      margin-top: 8px;
+      padding-top: 8px;
     }
-
+    .resultado.positivo {
+      color: green;
+    }
+    .resultado.negativo {
+      color: red;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 4px;
+    }
     .btn-roxo {
       background-color: #6a1b9a;
       color: white;
-      border: none;
-      padding: 12px;
-      width: 100%;
-      font-size: 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 16px;
     }
-
     .btn-cinza {
-      background-color: #999;
+      background-color: gray;
       color: white;
-      border: none;
-      padding: 12px;
-      width: 100%;
-      font-size: 16px;
-      border-radius: 6px;
-      cursor: pointer;
       margin-top: 12px;
     }
-
-    #total-valor {
-      text-align: right;
-      font-weight: bold;
-      font-size: 18px;
-      margin-top: 12px;
-    }
-
-    .popup-relatorio {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.6);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-
-    .popup-conteudo {
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 500px;
-    }
-
-    .popup-conteudo h3 {
-      margin-top: 0;
-    }
-
-    .popup-conteudo button {
-      background-color: #6a1b9a;
-      color: white;
-      padding: 10px 16px;
-      border: none;
-      border-radius: 6px;
-      float: right;
-      margin-top: 16px;
+    #cabecalho {
+      margin-bottom: 16px;
     }
   </style>
 </head>
-<body onload="inicializarPagina('Pré-Fecho')">
+<body>
   <div id="cabecalho"></div>
 
-  <main>
-    <label for="nome-ponto">Nome do Ponto:</label>
-    <input type="text" id="nome-ponto" placeholder="Digite o nome..." />
+  <div class="container">
+    <label for="ponto"><b>Nome do Ponto:</b></label>
+    <input type="text" id="ponto" placeholder="Digite o nome..." />
 
-    <div id="lista-maquinas"></div>
+    <div id="maquinas"></div>
 
-    <button class="btn-roxo" id="adicionar-maquina-btn">+ Adicionar Máquina</button>
+    <button class="btn-roxo" onclick="adicionarMaquina()">+ Adicionar Máquina</button>
 
-    <p id="total-valor">TOTAL: R$ 0,00</p>
+    <div class="resultado" id="total">TOTAL: R$ 0,00</div>
 
-    <button class="btn-cinza" id="btnRelatorio">Visualizar Relatório</button>
-  </main>
+    <button class="btn-cinza" onclick="visualizarRelatorio()">Visualizar Relatório</button>
+  </div>
+
+  <!-- Modal Relatório -->
+  <div id="modal-relatorio" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#00000080; z-index:1000; align-items:center; justify-content:center;">
+    <div style="background:white; padding:24px; max-width:600px; width:90%; border-radius:8px;">
+      <h3>Relatório do Pré-Fecho</h3>
+      <pre id="conteudo-relatorio" style="white-space:pre-wrap; font-family:monospace;"></pre>
+      <button onclick="document.getElementById('modal-relatorio').style.display='none'" class="btn-roxo">Fechar</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="./js/navegacao.js" defer></script>
+  <script type="module" src="./js/preFecho.js" defer></script>
 </body>
 </html>
